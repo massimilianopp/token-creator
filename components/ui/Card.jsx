@@ -3,8 +3,8 @@ export function Card({ children, className = "" }) {
     <div className={className} style={{
       background: "var(--card)",
       border: "1px solid var(--border)",
-      borderRadius: 16,
-      padding: "20px",
+      borderRadius: 12,
+      padding: 24,
     }}>
       {children}
     </div>
@@ -14,23 +14,23 @@ export function Card({ children, className = "" }) {
 export function SectionTitle({ children }) {
   return (
     <p style={{
-      fontSize: 10,
-      fontWeight: 700,
-      letterSpacing: "0.18em",
+      fontSize: 11,
+      fontWeight: 500,
+      letterSpacing: "0.06em",
       textTransform: "uppercase",
-      color: "var(--gold)",
-      marginBottom: 16,
+      color: "var(--muted)",
+      marginBottom: 20,
     }}>
       {children}
     </p>
   );
 }
 
-export function Input({ label, hint, ...props }) {
+export function Input({ label, hint, error, ...props }) {
   return (
     <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       {label && (
-        <span style={{ fontSize: 11, fontWeight: 600, color: "var(--muted)", letterSpacing: "0.08em" }}>
+        <span style={{ fontSize: 13, fontWeight: 500, color: "var(--muted)" }}>
           {label}
         </span>
       )}
@@ -39,86 +39,61 @@ export function Input({ label, hint, ...props }) {
         style={{
           width: "100%",
           background: "var(--surface)",
-          border: "1px solid var(--border)",
-          borderRadius: 10,
-          padding: "12px 14px",
+          border: `1px solid ${error ? "var(--red)" : "var(--border)"}`,
+          borderRadius: 8,
+          padding: "10px 14px",
           fontSize: 14,
           color: "var(--text)",
           outline: "none",
-          fontFamily: "'Syne', sans-serif",
-          transition: "border-color 0.2s",
+          fontFamily: "'Geist', sans-serif",
+          transition: "border-color 0.15s",
         }}
-        onFocus={e => e.target.style.borderColor = "var(--gold)"}
-        onBlur={e => e.target.style.borderColor = "var(--border)"}
+        onFocus={e => { if (!error) e.target.style.borderColor = "var(--border-focus)"; }}
+        onBlur={e => { if (!error) e.target.style.borderColor = "var(--border)"; }}
       />
-      {hint && (
-        <span style={{ fontSize: 11, color: "var(--dim)" }}>{hint}</span>
-      )}
+      {hint && <span style={{ fontSize: 12, color: "var(--dim)" }}>{hint}</span>}
+      {error && <span style={{ fontSize: 12, color: "var(--red)" }}>{error}</span>}
     </label>
   );
 }
 
-export function Select({ label, children, ...props }) {
-  return (
-    <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      {label && (
-        <span style={{ fontSize: 11, fontWeight: 600, color: "var(--muted)", letterSpacing: "0.08em" }}>
-          {label}
-        </span>
-      )}
-      <select
-        {...props}
-        style={{
-          width: "100%",
-          background: "var(--surface)",
-          border: "1px solid var(--border)",
-          borderRadius: 10,
-          padding: "12px 14px",
-          fontSize: 14,
-          color: "var(--text)",
-          outline: "none",
-          fontFamily: "'Syne', sans-serif",
-        }}
-      >
-        {children}
-      </select>
-    </label>
-  );
-}
-
-export function Button({ children, loading, disabled, onClick, variant = "primary" }) {
+export function Button({ children, loading, disabled, onClick, variant = "primary", size = "md" }) {
   const isPrimary = variant === "primary";
+  const isGhost = variant === "ghost";
+  const isDanger = variant === "danger";
+
+  const padding = size === "sm" ? "8px 16px" : "12px 20px";
+  const fontSize = size === "sm" ? 13 : 14;
+
   return (
     <button
       onClick={onClick}
       disabled={loading || disabled}
       style={{
         width: "100%",
-        padding: "16px 24px",
-        borderRadius: 12,
-        fontSize: 15,
-        fontWeight: 700,
-        fontFamily: "'Syne', sans-serif",
-        letterSpacing: "0.02em",
+        padding,
+        borderRadius: 8,
+        fontSize,
+        fontWeight: 500,
+        fontFamily: "'Geist', sans-serif",
+        letterSpacing: "0.01em",
         cursor: loading || disabled ? "not-allowed" : "pointer",
-        opacity: loading || disabled ? 0.4 : 1,
-        transition: "all 0.2s",
-        border: isPrimary ? "none" : "1px solid var(--border-bright)",
-        background: isPrimary
-          ? "linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%)"
-          : "transparent",
-        color: isPrimary ? "#000000" : "var(--muted)",
-        boxShadow: isPrimary && !disabled ? "0 0 30px var(--gold-glow)" : "none",
+        opacity: disabled ? 0.4 : 1,
+        transition: "all 0.15s",
+        border: isPrimary ? "none" : isDanger ? "1px solid var(--red-border)" : "1px solid var(--border)",
+        background: isPrimary ? "var(--accent)" : isDanger ? "var(--red-dim)" : "transparent",
+        color: isPrimary ? "#000000" : isDanger ? "var(--red)" : "var(--muted)",
       }}
       onMouseEnter={e => {
-        if (!loading && !disabled) {
-          if (isPrimary) e.currentTarget.style.transform = "translateY(-1px)";
-          else { e.currentTarget.style.borderColor = "var(--gold)"; e.currentTarget.style.color = "var(--gold)"; }
-        }
+        if (loading || disabled) return;
+        if (isPrimary) e.currentTarget.style.background = "#e5e5e5";
+        else if (isDanger) e.currentTarget.style.borderColor = "var(--red)";
+        else { e.currentTarget.style.borderColor = "var(--dim)"; e.currentTarget.style.color = "var(--text)"; }
       }}
       onMouseLeave={e => {
-        e.currentTarget.style.transform = "translateY(0)";
-        if (!isPrimary) { e.currentTarget.style.borderColor = "var(--border-bright)"; e.currentTarget.style.color = "var(--muted)"; }
+        if (isPrimary) e.currentTarget.style.background = "var(--accent)";
+        else if (isDanger) e.currentTarget.style.borderColor = "var(--red-border)";
+        else { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--muted)"; }
       }}
     >
       {loading ? "Processing..." : children}
@@ -132,18 +107,18 @@ export function LogConsole({ logs }) {
     <div style={{
       background: "var(--surface)",
       border: "1px solid var(--border)",
-      borderRadius: 12,
-      padding: "16px",
-      fontFamily: "'JetBrains Mono', monospace",
+      borderRadius: 8,
+      padding: 16,
+      fontFamily: "'Geist Mono', monospace",
       fontSize: 12,
       display: "flex",
       flexDirection: "column",
-      gap: 6,
+      gap: 4,
     }}>
       {logs.map((l, i) => (
-        <div key={i} style={{ display: "flex", gap: 8 }}>
-          <span style={{ color: "var(--gold)" }}>▶</span>
-          <span style={{ color: "var(--muted)" }}>{l}</span>
+        <div key={i} style={{ display: "flex", gap: 10, color: "var(--muted)" }}>
+          <span style={{ color: "var(--dim)", userSelect: "none" }}>›</span>
+          <span>{l}</span>
         </div>
       ))}
     </div>
@@ -153,9 +128,9 @@ export function LogConsole({ logs }) {
 export function ResultBox({ children }) {
   return (
     <div style={{
-      background: "rgba(16,185,129,0.04)",
-      border: "1px solid rgba(16,185,129,0.15)",
-      borderRadius: 12,
+      background: "var(--green-dim)",
+      border: "1px solid var(--green-border)",
+      borderRadius: 8,
       padding: 16,
       display: "flex",
       flexDirection: "column",
@@ -170,15 +145,41 @@ export function ErrorBox({ message }) {
   if (!message) return null;
   return (
     <div style={{
-      background: "rgba(239,68,68,0.04)",
-      border: "1px solid rgba(239,68,68,0.2)",
-      borderRadius: 12,
-      padding: 14,
-      fontFamily: "'JetBrains Mono', monospace",
-      fontSize: 12,
+      background: "var(--red-dim)",
+      border: "1px solid var(--red-border)",
+      borderRadius: 8,
+      padding: 12,
+      fontSize: 13,
       color: "var(--red)",
+      fontFamily: "'Geist Mono', monospace",
     }}>
       {message}
     </div>
   );
+}
+
+export function Badge({ children, variant = "default" }) {
+  const styles = {
+    default: { background: "var(--surface)", color: "var(--muted)", border: "1px solid var(--border)" },
+    success: { background: "var(--green-dim)", color: "var(--green)", border: "1px solid var(--green-border)" },
+    warning: { background: "rgba(245,158,11,0.06)", color: "var(--amber)", border: "1px solid rgba(245,158,11,0.2)" },
+  };
+  return (
+    <span style={{
+      display: "inline-flex",
+      alignItems: "center",
+      padding: "3px 8px",
+      borderRadius: 4,
+      fontSize: 11,
+      fontWeight: 500,
+      letterSpacing: "0.04em",
+      ...styles[variant],
+    }}>
+      {children}
+    </span>
+  );
+}
+
+export function Divider() {
+  return <div style={{ height: 1, background: "var(--border)", margin: "4px 0" }} />;
 }

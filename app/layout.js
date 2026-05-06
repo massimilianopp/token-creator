@@ -4,16 +4,15 @@ import Providers from "@/components/Providers";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="fr">
+    <html lang="en">
       <body style={{ paddingBottom: 80 }}>
         <div style={{
-          maxWidth: 520,
+          maxWidth: 480,
           margin: "0 auto",
           minHeight: "100vh",
           background: "var(--bg)",
           borderLeft: "1px solid var(--border)",
           borderRight: "1px solid var(--border)",
-          position: "relative",
         }}>
           <Providers>
             {children}

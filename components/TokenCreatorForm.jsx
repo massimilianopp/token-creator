@@ -3,18 +3,18 @@
 import { useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useTokenCreator } from "../hooks/useTokenCreator";
-import { Card, SectionTitle, Input, Button, ErrorBox } from "@/components/ui/Card";
+import { Card, SectionTitle, Input, Button, ErrorBox, Badge, Divider } from "@/components/ui/Card";
 
 const STEPS = [
-  { key: "uploading", label: "Uploading image → IPFS", emoji: "📤" },
-  { key: "minting",   label: "Creating Solana Mint", emoji: "🔨" },
-  { key: "metadata",  label: "Metaplex metadata", emoji: "📝" },
-  { key: "done",      label: "Token ready", emoji: "✅" },
+  { key: "uploading", label: "Uploading to IPFS" },
+  { key: "minting",   label: "Creating mint" },
+  { key: "metadata",  label: "Writing metadata" },
+  { key: "done",      label: "Token ready" },
 ];
 
 export default function TokenCreatorForm() {
   const { publicKey } = useWallet();
-  const { createToken, revokeAuthorities, status, mintAddress, result, reset } = useTokenCreator();
+  const { createToken, revokeAuthorities, status, mintAddress, reset } = useTokenCreator();
 
   const [form, setForm] = useState({
     name: "", symbol: "", description: "", imageFile: null,
@@ -25,6 +25,7 @@ export default function TokenCreatorForm() {
   const [error, setError] = useState(null);
   const [revoked, setRevoked] = useState(false);
   const [revoking, setRevoking] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const devTokens = Math.floor(form.totalSupply * form.devAllocation / 100);
   const poolTokens = form.totalSupply - devTokens;
@@ -55,123 +56,55 @@ export default function TokenCreatorForm() {
   };
 
   const handleReset = () => {
-    reset(); setError(null); setPreview(null); setRevoked(false);
+    reset(); setError(null); setPreview(null); setRevoked(false); setShowAdvanced(false);
     setForm({ name: "", symbol: "", description: "", imageFile: null, totalSupply: 1_000_000_000, decimals: 6, devAllocation: 15, revokeMint: false, revokeFreeze: false });
   };
 
+  // ── Not connected ──
   if (!publicKey) {
     return (
-      <Card>
-        <div className="flex flex-col items-center gap-3 py-8">
-          <span className="text-4xl">👻</span>
-          <p className="text-sm" style={{ color: "var(--muted)" }}>Connect your wallet to continue</p>
-        </div>
-      </Card>
-    );
-  }
-
-  if (status === "done") {
-    const solscanUrl = `https://solscan.io/token/${mintAddress}`;
-    const publicUrl = `/token/${mintAddress}`;
-    return (
-      <div className="flex flex-col gap-4">
-        <Card>
-          <div className="flex flex-col items-center gap-2 pb-4 mb-4" style={{ borderBottom: "1px solid var(--border)" }}>
-            {preview && (
-              <img 
-                src={preview} 
-                alt="logo" 
-                className="rounded-full" 
-                style={{ 
-                  width: "64px", 
-                  height: "64px", 
-                  objectFit: "cover", // Assure que l'image ne s'écrase pas
-                  aspectRatio: "1/1",  // Force le carré
-                  border: "2px solid var(--gold)" 
-                }} 
-              />
-            )}
-            <h2 className="text-xl font-extrabold">{form.name}</h2>
-            <span className="text-xs px-2 py-0.5 rounded-full font-mono font-bold" style={{ background: "rgba(99,102,241,0.1)", color: "var(--gold)" }}>${form.symbol}</span>
-          </div>
-
-          <SectionTitle>Mint address</SectionTitle>
-          <div className="font-mono text-xs break-all rounded-xl px-4 py-3 mb-4" style={{ background: "var(--surface)", color: "var(--gold)", border: "1px solid var(--border)" }}>
-            {mintAddress}
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 mb-4">
-            {[
-              { label: "Supply", value: (form.totalSupply / 1e9).toFixed(0) + "B" },
-              { label: "Dev", value: form.devAllocation + "%" },
-              { label: "Pool", value: (100 - form.devAllocation) + "%" },
-            ].map(s => (
-              <div key={s.label} className="rounded-xl p-3 text-center" style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
-                <div className="text-xs mb-1" style={{ color: "var(--muted)" }}>{s.label}</div>
-                <div className="text-sm font-bold">{s.value}</div>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex gap-2 mb-3">
-            <a href={solscanUrl} target="_blank" rel="noopener noreferrer" className="flex-1 text-center text-xs py-3 rounded-xl font-semibold transition-all" style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "#94a3b8" }}>
-              Solscan ↗
-            </a>
-            <a href={publicUrl} className="flex-1 text-center text-xs py-3 rounded-xl font-semibold transition-all" style={{ background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.3)", color: "var(--gold)" }}>
-              Public page ↗
-            </a>
-          </div>
-
-          {!revoked && (form.revokeMint || form.revokeFreeze) && (
-            <div className="flex flex-col gap-2">
-              <div className="rounded-xl px-4 py-3 text-xs" style={{ background: "rgba(234,179,8,0.05)", border: "1px solid rgba(234,179,8,0.2)", color: "#ca8a04" }}>
-                ⚠️ Set up vesting before revoking — Streamflow requires an active mint authority.
-              </div>
-              <button
-                onClick={handleRevoke}
-                disabled={revoking}
-                className="w-full text-center text-xs py-3 rounded-xl font-semibold transition-all"
-                style={{
-                  background: revoking ? "var(--surface)" : "rgba(239,68,68,0.08)",
-                  border: "1px solid rgba(239,68,68,0.3)",
-                  color: revoking ? "var(--muted)" : "#ef4444",
-                  cursor: revoking ? "not-allowed" : "pointer",
-                }}
-              >
-                {revoking ? "Revoking..." : "🔒 Revoke authorities"}
-              </button>
-            </div>
-          )}
-
-          {revoked && (
-            <div className="text-center text-xs py-2 rounded-xl" style={{ background: "rgba(16,185,129,0.05)", border: "1px solid rgba(16,185,129,0.2)", color: "#10b981" }}>
-              ✓ Authorities revoked — fully decentralized token
-            </div>
-          )}
-        </Card>
-
-        <Button onClick={handleReset} variant="ghost">+ Create another token</Button>
+      <div style={{ padding: "48px 0", textAlign: "center" }}>
+        <p style={{ fontSize: 14, color: "var(--muted)" }}>Connect your wallet to continue</p>
       </div>
     );
   }
 
+  // ── Creating ──
   if (isCreating) {
     return (
       <Card>
-        <SectionTitle>Creating token...</SectionTitle>
-        <div className="flex flex-col gap-2">
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {STEPS.map((step, i) => {
             const isDone = i < currentStepIndex;
             const isCurrent = i === currentStepIndex;
             return (
-              <div key={step.key} className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all" style={{
-                background: isDone ? "rgba(16,185,129,0.05)" : isCurrent ? "rgba(99,102,241,0.08)" : "var(--surface)",
-                border: isDone ? "1px solid rgba(16,185,129,0.2)" : isCurrent ? "1px solid rgba(99,102,241,0.3)" : "1px solid var(--border)",
+              <div key={step.key} style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                padding: "12px 16px",
+                borderRadius: 8,
+                background: isDone ? "var(--green-dim)" : isCurrent ? "var(--surface)" : "transparent",
+                border: isDone ? "1px solid var(--green-border)" : isCurrent ? "1px solid var(--border)" : "1px solid transparent",
               }}>
-                <span className="text-base">{isDone ? "✅" : isCurrent ? "⏳" : step.emoji}</span>
-                <span className="text-sm font-medium" style={{ color: isDone ? "#10b981" : isCurrent ? "var(--gold)" : "#334155" }}>
+                <div style={{
+                  width: 6, height: 6, borderRadius: "50%", flexShrink: 0,
+                  background: isDone ? "var(--green)" : isCurrent ? "var(--text)" : "var(--dim)",
+                }} />
+                <span style={{
+                  fontSize: 13,
+                  color: isDone ? "var(--green)" : isCurrent ? "var(--text)" : "var(--dim)",
+                }}>
                   {step.label}
                 </span>
+                {isCurrent && (
+                  <span style={{ marginLeft: "auto", fontSize: 11, color: "var(--muted)" }}>
+                    processing...
+                  </span>
+                )}
+                {isDone && (
+                  <span style={{ marginLeft: "auto", fontSize: 11, color: "var(--green)" }}>done</span>
+                )}
               </div>
             );
           })}
@@ -180,110 +113,211 @@ export default function TokenCreatorForm() {
     );
   }
 
+  // ── Done ──
+  if (status === "done") {
+    const solscanUrl = `https://solscan.io/token/${mintAddress}`;
+    const publicUrl = `/token/${mintAddress}`;
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <Card>
+          {/* Token header */}
+          <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24 }}>
+            {preview && (
+              <img src={preview} alt="logo" style={{ width: 56, height: 56, borderRadius: "50%", objectFit: "cover", border: "1px solid var(--border)" }} />
+            )}
+            <div>
+              <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 4 }}>{form.name}</h2>
+              <span style={{ fontSize: 12, fontFamily: "'Geist Mono', monospace", color: "var(--muted)" }}>${form.symbol}</span>
+            </div>
+            <div style={{ marginLeft: "auto" }}>
+              <Badge variant="success">Created</Badge>
+            </div>
+          </div>
+
+          <Divider />
+
+          {/* Mint address */}
+          <div style={{ margin: "20px 0" }}>
+            <p style={{ fontSize: 11, color: "var(--muted)", marginBottom: 8, fontWeight: 500, letterSpacing: "0.04em", textTransform: "uppercase" }}>Mint address</p>
+            <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px", fontFamily: "'Geist Mono', monospace", fontSize: 12, color: "var(--text)", wordBreak: "break-all" }}>
+              {mintAddress}
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 20 }}>
+            {[
+              { label: "Supply", value: (form.totalSupply / 1e9).toFixed(0) + "B" },
+              { label: "Dev", value: form.devAllocation + "%" },
+              { label: "Pool", value: (100 - form.devAllocation) + "%" },
+            ].map(s => (
+              <div key={s.label} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 12px", textAlign: "center" }}>
+                <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>{s.label}</div>
+                <div style={{ fontSize: 14, fontWeight: 600 }}>{s.value}</div>
+              </div>
+            ))}
+          </div>
+
+          <Divider />
+
+          {/* Links */}
+          <div style={{ display: "flex", gap: 8, marginTop: 20, marginBottom: form.revokeMint || form.revokeFreeze ? 16 : 0 }}>
+            <a href={solscanUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: "center", fontSize: 13, padding: "10px 0", borderRadius: 8, textDecoration: "none", background: "var(--surface)", border: "1px solid var(--border)", color: "var(--muted)" }}>
+              Solscan ↗
+            </a>
+            <a href={publicUrl} style={{ flex: 1, textAlign: "center", fontSize: 13, padding: "10px 0", borderRadius: 8, textDecoration: "none", background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)", fontWeight: 500 }}>
+              Public page ↗
+            </a>
+          </div>
+
+          {/* Revoke */}
+          {!revoked && (form.revokeMint || form.revokeFreeze) && (
+            <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+              <p style={{ fontSize: 12, color: "var(--muted)", padding: "10px 12px", borderRadius: 8, background: "var(--surface)", border: "1px solid var(--border)" }}>
+                Complete vesting setup before revoking authorities.
+              </p>
+              <Button variant="danger" onClick={handleRevoke} loading={revoking}>
+                Revoke authorities
+              </Button>
+            </div>
+          )}
+
+          {revoked && (
+            <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 8, background: "var(--green-dim)", border: "1px solid var(--green-border)", fontSize: 13, color: "var(--green)", textAlign: "center" }}>
+              Authorities revoked — fully decentralized
+            </div>
+          )}
+        </Card>
+
+        <Button onClick={handleReset} variant="ghost">Create another token</Button>
+      </div>
+    );
+  }
+
+  // ── Form ──
   return (
-    <div className="flex flex-col gap-4">
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+
+      {/* Logo — prominent, like Pump.fun */}
       <Card>
-        <SectionTitle>Token identity</SectionTitle>
-        <div className="flex flex-col gap-4">
-          <div className="flex gap-3">
-            <div className="flex-1">
-              <Input label="Name *" placeholder="Ex: SolPepe" value={form.name} onChange={set("name")} />
+        <label style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, cursor: "pointer", padding: "8px 0" }}>
+          {preview ? (
+            <img src={preview} alt="logo" style={{ width: 80, height: 80, borderRadius: "50%", objectFit: "cover", border: "1px solid var(--border)" }} />
+          ) : (
+            <div style={{ width: 80, height: 80, borderRadius: "50%", background: "var(--surface)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: "var(--dim)" }}>
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+              </svg>
             </div>
-            <div style={{ width: 110 }}>
-              <Input label="Symbol *" placeholder="PEPE" maxLength={8} value={form.symbol} onChange={e => setForm(f => ({ ...f, symbol: e.target.value.toUpperCase() }))} />
+          )}
+          <div style={{ textAlign: "center" }}>
+            <p style={{ fontSize: 13, color: preview ? "var(--text)" : "var(--muted)", fontWeight: 500 }}>
+              {preview ? "Logo uploaded" : "Upload logo"}
+            </p>
+            <p style={{ fontSize: 11, color: "var(--dim)", marginTop: 2 }}>PNG, JPG — max 5MB</p>
+          </div>
+          <input type="file" accept="image/*" style={{ display: "none" }} onChange={handleImage} />
+        </label>
+      </Card>
+
+      {/* Identity */}
+      <Card>
+        <SectionTitle>Identity</SectionTitle>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ display: "flex", gap: 8 }}>
+            <div style={{ flex: 1 }}>
+              <Input label="Name" placeholder="My Token" value={form.name} onChange={set("name")} />
+            </div>
+            <div style={{ width: 96 }}>
+              <Input label="Symbol" placeholder="MTK" maxLength={8} value={form.symbol} onChange={e => setForm(f => ({ ...f, symbol: e.target.value.toUpperCase() }))} />
             </div>
           </div>
-          <Input label="Description" placeholder="Describe your token..." value={form.description} onChange={set("description")} />
-          <div className="flex flex-col gap-1.5">
-            <span className="text-xs font-semibold" style={{ color: "var(--muted)" }}>Logo *</span>
-            <label className="flex items-center gap-4 rounded-xl px-4 py-4 cursor-pointer transition-all" style={{ border: "1px dashed #2d2d4a", background: "var(--surface)" }}>
-              {preview
-                ? <img 
-                    src={preview} 
-                    alt="logo" 
-                    className="rounded-full" 
-                    style={{ 
-                      width: "48px", 
-                      height: "48px", 
-                      objectFit: "cover", 
-                      aspectRatio: "1/1",
-                      border: "2px solid var(--gold)" 
-                    }} 
-                  />
-                : <div className="w-12 h-12 rounded-full flex items-center justify-center text-2xl" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>🪙</div>
-              }
-              <div>
-                <div className="text-sm font-semibold" style={{ color: preview ? "var(--gold)" : "var(--muted)" }}>
-                  {preview ? "Logo uploaded ✓" : "Click to upload"}
+          <Input label="Description" placeholder="What is this token for?" value={form.description} onChange={set("description")} />
+        </div>
+      </Card>
+
+      {/* Advanced — collapsed by default */}
+      <div style={{ border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
+        <button onClick={() => setShowAdvanced(v => !v)} style={{
+          width: "100%", padding: "14px 20px", background: "var(--card)", border: "none",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          cursor: "pointer", fontFamily: "'Geist', sans-serif",
+        }}>
+          <span style={{ fontSize: 13, fontWeight: 500, color: "var(--muted)" }}>Advanced settings</span>
+          <span style={{ fontSize: 11, color: "var(--dim)", transform: showAdvanced ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>▼</span>
+        </button>
+
+        {showAdvanced && (
+          <div style={{ padding: "0 20px 20px", background: "var(--card)", display: "flex", flexDirection: "column", gap: 16, borderTop: "1px solid var(--border)" }}>
+            <div style={{ height: 16 }} />
+
+            {/* Supply + decimals */}
+            <div style={{ display: "flex", gap: 8 }}>
+              <Input label="Total supply" type="number" value={form.totalSupply} onChange={e => setVal("totalSupply")(Number(e.target.value))} />
+              <div style={{ width: 140, display: "flex", flexDirection: "column", gap: 6 }}>
+                <span style={{ fontSize: 13, fontWeight: 500, color: "var(--muted)" }}>Decimals</span>
+                <select value={form.decimals} onChange={e => setVal("decimals")(Number(e.target.value))} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px", fontSize: 14, color: "var(--text)", outline: "none", fontFamily: "'Geist', sans-serif" }}>
+                  <option value={6}>6 — USDC</option>
+                  <option value={9}>9 — SOL</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Dev allocation */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
+                <span style={{ color: "var(--muted)", fontWeight: 500 }}>Dev allocation</span>
+                <span style={{ color: "var(--text)", fontWeight: 600 }}>{form.devAllocation}%</span>
+              </div>
+              <input type="range" min={0} max={30} value={form.devAllocation} style={{ width: "100%", accentColor: "var(--text)", cursor: "pointer" }} onChange={e => setVal("devAllocation")(Number(e.target.value))} />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px" }}>
+                  <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>Your wallet</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, fontFamily: "'Geist Mono', monospace" }}>{devTokens.toLocaleString()}</div>
                 </div>
-                <div className="text-xs mt-0.5" style={{ color: "#334155" }}>PNG, JPG — max 5MB</div>
+                <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px" }}>
+                  <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>Public pool</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, fontFamily: "'Geist Mono', monospace" }}>{poolTokens.toLocaleString()}</div>
+                </div>
               </div>
-              <input type="file" accept="image/*" className="hidden" onChange={handleImage} />
-            </label>
-          </div>
-        </div>
-      </Card>
+            </div>
 
-      <Card>
-        <SectionTitle>Tokenomics</SectionTitle>
-        <div className="flex flex-col gap-4">
-          <div className="flex gap-3">
-            <Input label="Total supply" type="number" value={form.totalSupply} onChange={e => setVal("totalSupply")(Number(e.target.value))} />
-            <div className="flex flex-col gap-1.5" style={{ width: 160 }}>
-              <span className="text-xs font-semibold" style={{ color: "var(--muted)" }}>Decimals</span>
-              <select className="rounded-xl px-4 py-3 text-sm outline-none" style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "#f1f5f9" }} value={form.decimals} onChange={e => setVal("decimals")(Number(e.target.value))}>
-                <option value={6}>6 — USDC style</option>
-                <option value={9}>9 — SOL style</option>
-              </select>
+            {/* Anti-rug */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <span style={{ fontSize: 11, fontWeight: 500, color: "var(--muted)", letterSpacing: "0.06em", textTransform: "uppercase" }}>Anti-rug</span>
+              {[
+                { key: "revokeMint", label: "Revoke Mint Authority", sub: "Fixed supply forever" },
+                { key: "revokeFreeze", label: "Revoke Freeze Authority", sub: "Wallets cannot be frozen" },
+              ].map(opt => (
+                <label key={opt.key} style={{
+                  display: "flex", alignItems: "center", gap: 12, cursor: "pointer",
+                  padding: "12px 14px", borderRadius: 8,
+                  background: form[opt.key] ? "var(--green-dim)" : "var(--surface)",
+                  border: form[opt.key] ? "1px solid var(--green-border)" : "1px solid var(--border)",
+                }}>
+                  <input type="checkbox" checked={form[opt.key]} style={{ width: 15, height: 15, accentColor: "var(--green)", cursor: "pointer" }} onChange={e => setForm(f => ({ ...f, [opt.key]: e.target.checked }))} />
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 500 }}>{opt.label}</div>
+                    <div style={{ fontSize: 11, color: "var(--green)", marginTop: 2 }}>{opt.sub}</div>
+                  </div>
+                </label>
+              ))}
             </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-between text-xs">
-              <span style={{ color: "var(--muted)" }}>Dev allocation</span>
-              <span style={{ color: "var(--gold)" }} className="font-bold">{form.devAllocation}%</span>
-            </div>
-            <input type="range" min={0} max={30} value={form.devAllocation} className="w-full cursor-pointer" style={{ accentColor: "var(--gold)" }} onChange={e => setVal("devAllocation")(Number(e.target.value))} />
-            <div className="grid grid-cols-2 gap-2">
-              <div className="rounded-xl p-3" style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
-                <div className="text-xs mb-1" style={{ color: "var(--gold)" }}>👤 Your wallet</div>
-                <div className="text-sm font-bold font-mono">{devTokens.toLocaleString()}</div>
-              </div>
-              <div className="rounded-xl p-3" style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
-                <div className="text-xs mb-1" style={{ color: "var(--gold)" }}>🏊 Public pool</div>
-                <div className="text-sm font-bold font-mono">{poolTokens.toLocaleString()}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Card>
 
-      <Card>
-        <SectionTitle>🛡️ Anti-rug</SectionTitle>
-        <div className="flex flex-col gap-3">
-          {[
-            { key: "revokeMint", label: "Revoke Mint Authority", sub: "Fixed supply forever" },
-            { key: "revokeFreeze", label: "Revoke Freeze Authority", sub: "Wallets cannot be frozen" },
-          ].map(opt => (
-            <label key={opt.key} className="flex items-center gap-3 cursor-pointer rounded-xl px-4 py-3 transition-all" style={{ background: form[opt.key] ? "rgba(16,185,129,0.05)" : "var(--surface)", border: form[opt.key] ? "1px solid rgba(16,185,129,0.2)" : "1px solid var(--border)" }}>
-              <input type="checkbox" checked={form[opt.key]} className="w-4 h-4 cursor-pointer" style={{ accentColor: "#10b981" }} onChange={e => setForm(f => ({ ...f, [opt.key]: e.target.checked }))} />
-              <div>
-                <div className="text-sm font-medium">{opt.label}</div>
-                <div className="text-xs mt-0.5" style={{ color: "#10b981" }}>{opt.sub}</div>
-              </div>
-            </label>
-          ))}
-        </div>
-        <div className="flex justify-between text-xs mt-4 pt-4" style={{ borderTop: "1px solid var(--border)", color: "var(--muted)" }}>
-          <span>Estimated fees</span>
-          <span style={{ color: "#94a3b8" }}>~0.012 SOL</span>
-        </div>
-      </Card>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "var(--dim)", paddingTop: 8, borderTop: "1px solid var(--border)" }}>
+              <span>Estimated fees</span>
+              <span>~0.062 SOL</span>
+            </div>
+          </div>
+        )}
+      </div>
 
       <ErrorBox message={error} />
 
       <Button onClick={handleSubmit} disabled={!canSubmit} loading={isCreating}>
-        🚀 Create {form.symbol || "token"}
+        Create token
       </Button>
+
     </div>
   );
 }

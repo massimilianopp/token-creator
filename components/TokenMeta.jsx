@@ -1,10 +1,17 @@
 "use client";
 
+function fmt(n, prefix = "") {
+  if (n == null) return "—";
+  if (n >= 1_000_000) return `${prefix}${(n / 1_000_000).toFixed(2)}M`;
+  if (n >= 1_000) return `${prefix}${(n / 1_000).toFixed(2)}K`;
+  return `${prefix}${n.toFixed(2)}`;
+}
+
 function StatCard({ label, value }) {
   return (
-    <div className="bg-gray-900 rounded-xl p-4 flex flex-col gap-1">
-      <span className="text-xs text-gray-500">{label}</span>
-      <span className="text-sm font-semibold text-white">{value ?? "—"}</span>
+    <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "12px 14px" }}>
+      <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4, fontWeight: 500, letterSpacing: "0.04em", textTransform: "uppercase" }}>{label}</div>
+      <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>{value ?? "—"}</div>
     </div>
   );
 }
@@ -13,90 +20,70 @@ function SocialLink({ href, label }) {
   if (!href) return null;
   const url = href.startsWith("http") ? href : `https://${href}`;
   return (
-    <a href={url} target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1 rounded-full transition">
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, padding: "5px 12px", borderRadius: 6, background: "var(--surface)", border: "1px solid var(--border)", color: "var(--muted)", textDecoration: "none", transition: "all 0.15s" }}>
       {label}
     </a>
   );
 }
 
-function fmt(n, prefix = "") {
-  if (n == null) return null;
-  if (n >= 1_000_000) return `${prefix}${(n / 1_000_000).toFixed(2)}M`;
-  if (n >= 1_000) return `${prefix}${(n / 1_000).toFixed(2)}K`;
-  return `${prefix}${n.toFixed(2)}`;
-}
-
-export default function TokenMeta({
-  name, symbol, image, description, links,
-  supply, decimals,
-  price, priceChange24h, marketCap, volume24h, liquidity,
-  topHolders,
-}) {
-  const priceChangeColor =
-    priceChange24h == null
-      ? "text-gray-400"
-      : priceChange24h >= 0
-      ? "text-green-400"
-      : "text-red-400";
+export default function TokenMeta({ name, symbol, image, description, links, supply, decimals, price, priceChange24h, marketCap, volume24h, liquidity, topHolders }) {
+  const priceUp = priceChange24h != null && priceChange24h >= 0;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
 
       {/* Header */}
-      <div className="flex items-center gap-4">
+      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
         {image && (
-          <img src={image} alt={name} className="w-16 h-16 rounded-full object-cover border border-gray-700" />
+          <img src={image} alt={name} style={{ width: 56, height: 56, borderRadius: "50%", objectFit: "cover", border: "1px solid var(--border)" }} />
         )}
-        <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-bold text-white">
-            {name ?? "—"}{" "}
-            <span className="text-gray-400 text-lg font-normal">{symbol ?? ""}</span>
-          </h1>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 4 }}>
+            <h1 style={{ fontSize: 20, fontWeight: 600, color: "var(--text)" }}>{name ?? "—"}</h1>
+            <span style={{ fontSize: 13, color: "var(--muted)", fontFamily: "'Geist Mono', monospace" }}>{symbol}</span>
+          </div>
           {description && (
-            <p className="text-sm text-gray-400 max-w-xl">{description}</p>
+            <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.5, marginBottom: 8 }}>{description}</p>
           )}
-          <div className="flex gap-2 mt-1 flex-wrap">
-            <SocialLink href={links?.website} label="🌐 Website" />
-            <SocialLink href={links?.twitter} label="🐦 Twitter" />
-            <SocialLink href={links?.telegram} label="✈️ Telegram" />
-            <SocialLink href={links?.discord} label="💬 Discord" />
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            <SocialLink href={links?.website} label="Website" />
+            <SocialLink href={links?.twitter} label="Twitter" />
+            <SocialLink href={links?.telegram} label="Telegram" />
+            <SocialLink href={links?.discord} label="Discord" />
           </div>
         </div>
       </div>
 
       {/* Price */}
-      <div className="flex items-center gap-4">
-        <span className="text-3xl font-bold text-white">
-          {price != null ? `$${price.toFixed(6)}` : "Price unavailable"}
+      <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+        <span style={{ fontSize: 28, fontWeight: 700, fontFamily: "'Geist Mono', monospace", color: "var(--text)" }}>
+          {price != null ? `$${price.toFixed(6)}` : "—"}
         </span>
         {priceChange24h != null && (
-          <span className={`text-sm font-semibold ${priceChangeColor}`}>
-            {priceChange24h >= 0 ? "▲" : "▼"} {Math.abs(priceChange24h).toFixed(2)}% (24h)
+          <span style={{ fontSize: 13, fontWeight: 500, color: priceUp ? "var(--green)" : "var(--red)" }}>
+            {priceUp ? "+" : ""}{priceChange24h.toFixed(2)}%
           </span>
         )}
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <StatCard label="Market Cap" value={fmt(marketCap, "$")} />
+      {/* Stats grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+        <StatCard label="Market cap" value={fmt(marketCap, "$")} />
         <StatCard label="Volume 24h" value={fmt(volume24h, "$")} />
         <StatCard label="Liquidity" value={fmt(liquidity, "$")} />
         <StatCard label="Supply" value={fmt(supply)} />
-        <StatCard label="Decimals" value={decimals} />
       </div>
 
-      {/* Top Holders */}
+      {/* Top holders */}
       {topHolders?.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wide">
-            Top Holders
-          </h2>
-          <div className="flex flex-col gap-1">
+        <div>
+          <p style={{ fontSize: 11, color: "var(--muted)", marginBottom: 12, fontWeight: 500, letterSpacing: "0.04em", textTransform: "uppercase" }}>Top Holders</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
             {topHolders.map((h, i) => (
-              <div key={h.address} className="flex items-center justify-between text-xs bg-gray-900 rounded-lg px-3 py-2">
-                <span className="text-gray-500 w-5">{i + 1}</span>
-                <span className="font-mono text-gray-300 flex-1 mx-2 truncate">{h.address}</span>
-                <span className="text-white font-semibold">{h.pct}%</span>
+              <div key={h.address} style={{ display: "flex", alignItems: "center", gap: 12, padding: "8px 12px", borderRadius: 8, background: "var(--surface)", border: "1px solid var(--border)" }}>
+                <span style={{ fontSize: 11, color: "var(--dim)", fontFamily: "'Geist Mono', monospace", width: 16 }}>{i + 1}</span>
+                <span style={{ fontSize: 11, fontFamily: "'Geist Mono', monospace", color: "var(--muted)", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{h.address}</span>
+                <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text)", flexShrink: 0 }}>{h.pct}%</span>
               </div>
             ))}
           </div>

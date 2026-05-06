@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useVesting } from "../hooks/useVesting";
-import { Card, SectionTitle, Input, Button, ErrorBox, ResultBox } from "@/components/ui/Card";
+import { Card, SectionTitle, Input, Button, ErrorBox, Badge, Divider } from "@/components/ui/Card";
 
 export default function VestingForm({ mintAddress, decimals, devTokens, symbol }) {
   const { publicKey } = useWallet();
@@ -59,111 +59,128 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
     }
   };
 
+  // ── Not connected ──
   if (!publicKey) {
     return (
-      <Card>
-        <div className="flex flex-col items-center gap-3 py-8">
-          <span className="text-4xl">🔒</span>
-          <p className="text-sm" style={{ color: "var(--muted)" }}>Connect your wallet to continue</p>
-        </div>
-      </Card>
-    );
-  }
-
-  if (status === "done") {
-    return (
-      <div className="flex flex-col gap-4">
-        <Card>
-          <div className="flex flex-col items-center gap-2 pb-4 mb-4" style={{ borderBottom: "1px solid var(--border)" }}>
-            <span className="text-5xl">🔒</span>
-            <h2 className="text-xl font-extrabold">Vesting active!</h2>
-            <p className="text-sm" style={{ color: "var(--muted)" }}>
-              {form.amount.toLocaleString()} tokens locked via Streamflow
-            </p>
-          </div>
-
-          <SectionTitle>Stream ID</SectionTitle>
-          <div className="font-mono text-xs break-all rounded-xl px-4 py-3 mb-4" style={{ background: "var(--surface)", color: "var(--gold)", border: "1px solid var(--border)" }}>
-            {streamId}
-          </div>
-
-          <a href="https://app.streamflow.finance/" target="_blank" rel="noopener noreferrer" className="block text-center text-xs py-3 rounded-xl font-semibold mb-2 transition-all" style={{ background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.3)", color: "var(--gold)" }}>
-            View on Streamflow ↗
-          </a>
-        </Card>
-        <Button onClick={reset} variant="ghost">+ Create another stream</Button>
+      <div style={{ padding: "48px 0", textAlign: "center" }}>
+        <p style={{ fontSize: 14, color: "var(--muted)" }}>Connect your wallet to continue</p>
       </div>
     );
   }
 
+  // ── Done ──
+  if (status === "done") {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <Card>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+            <div>
+              <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 4 }}>Stream active</h2>
+              <p style={{ fontSize: 13, color: "var(--muted)" }}>{form.amount.toLocaleString()} tokens locked</p>
+            </div>
+            <Badge variant="success">Live</Badge>
+          </div>
+
+          <Divider />
+
+          <div style={{ margin: "20px 0" }}>
+            <p style={{ fontSize: 11, color: "var(--muted)", marginBottom: 8, fontWeight: 500, letterSpacing: "0.04em", textTransform: "uppercase" }}>Stream ID</p>
+            <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px", fontFamily: "'Geist Mono', monospace", fontSize: 12, color: "var(--text)", wordBreak: "break-all" }}>
+              {streamId}
+            </div>
+          </div>
+
+          <a href="https://app.streamflow.finance/" target="_blank" rel="noopener noreferrer" style={{ display: "block", textAlign: "center", fontSize: 13, padding: "10px 0", borderRadius: 8, textDecoration: "none", background: "var(--surface)", border: "1px solid var(--border)", color: "var(--muted)" }}>
+            View on Streamflow ↗
+          </a>
+        </Card>
+
+        <Button onClick={reset} variant="ghost">Create another stream</Button>
+      </div>
+    );
+  }
+
+  // ── Form ──
   return (
-    <div className="flex flex-col gap-4">
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
 
       {/* Token */}
       <Card>
-        <SectionTitle>Token to lock</SectionTitle>
-        <div className="flex flex-col gap-4">
-          <Input label="Mint address *" placeholder="Token address from step 1" value={form.mintAddress} onChange={set("mintAddress")} />
-          <Input label="Stream name" placeholder={`Dev Allocation - ${form.symbol || "MyToken"}`} value={form.name} onChange={set("name")} />
-          <div className="flex gap-3">
-            <Input label="Tokens to lock *" type="number" value={form.amount} onChange={e => setVal("amount")(Number(e.target.value))} />
-            <div className="flex flex-col gap-1.5" style={{ width: 130 }}>
-              <span className="text-xs font-semibold" style={{ color: "var(--muted)" }}>Decimals</span>
-              <select className="rounded-xl px-4 py-3 text-sm outline-none" style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "#f1f5f9" }} value={form.decimals} onChange={e => setVal("decimals")(Number(e.target.value))}>
+        <SectionTitle>Token</SectionTitle>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <Input label="Mint address" placeholder="Token address from step 1" value={form.mintAddress} onChange={set("mintAddress")} />
+          <div style={{ display: "flex", gap: 8 }}>
+            <div style={{ flex: 1 }}>
+              <Input label="Amount to lock" type="number" value={form.amount} onChange={e => setVal("amount")(Number(e.target.value))} />
+            </div>
+            <div style={{ width: 110, display: "flex", flexDirection: "column", gap: 6 }}>
+              <span style={{ fontSize: 13, fontWeight: 500, color: "var(--muted)" }}>Decimals</span>
+              <select value={form.decimals} onChange={e => setVal("decimals")(Number(e.target.value))} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px", fontSize: 14, color: "var(--text)", outline: "none", fontFamily: "'Geist', sans-serif" }}>
                 <option value={6}>6</option>
                 <option value={9}>9</option>
               </select>
             </div>
           </div>
+          <Input label="Stream name" placeholder={`Dev Allocation - ${form.symbol || "MyToken"}`} value={form.name} onChange={set("name")} />
         </div>
       </Card>
 
       {/* Schedule */}
       <Card>
         <SectionTitle>Schedule</SectionTitle>
-        <div className="flex flex-col gap-5">
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           <Input label="Start date" type="date" min={today} value={form.startDate} onChange={set("startDate")} />
 
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-between text-xs">
-              <span style={{ color: "var(--muted)" }}>Cliff</span>
-              <span style={{ color: "var(--gold)" }} className="font-bold">
-                {form.cliffMonths === 0 ? "Disabled" : `${form.cliffMonths} month${form.cliffMonths > 1 ? "s" : ""}`}
+          {/* Cliff */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ fontSize: 13, fontWeight: 500, color: "var(--muted)" }}>Cliff period</span>
+              <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>
+                {form.cliffMonths === 0 ? "None" : `${form.cliffMonths}mo`}
               </span>
             </div>
-            <input type="range" min={0} max={12} value={form.cliffMonths} className="w-full cursor-pointer" style={{ accentColor: "var(--gold)" }} onChange={e => setVal("cliffMonths")(Number(e.target.value))} />
-            <p className="text-xs" style={{ color: "#334155" }}>
+            <input type="range" min={0} max={12} value={form.cliffMonths} style={{ width: "100%", accentColor: "var(--text)", cursor: "pointer" }} onChange={e => setVal("cliffMonths")(Number(e.target.value))} />
+            <p style={{ fontSize: 12, color: "var(--dim)" }}>
               {form.cliffMonths === 0
-                ? "Immediate linear unlock"
-                : `No unlock for ${form.cliffMonths} month${form.cliffMonths > 1 ? "s" : ""}, then full release`}
+                ? "Tokens unlock linearly from start date"
+                : `No tokens released for ${form.cliffMonths} month${form.cliffMonths > 1 ? "s" : ""}, then full release`}
             </p>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-between text-xs">
-              <span style={{ color: "var(--muted)" }}>Total duration</span>
-              <span style={{ color: "var(--gold)" }} className="font-bold">{form.vestingMonths} month{form.vestingMonths > 1 ? "s" : ""}</span>
+          {/* Duration */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ fontSize: 13, fontWeight: 500, color: "var(--muted)" }}>Duration</span>
+              <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>
+                {form.vestingMonths} month{form.vestingMonths > 1 ? "s" : ""}
+              </span>
             </div>
-            <input type="range" min={1} max={36} value={form.vestingMonths} className="w-full cursor-pointer" style={{ accentColor: "var(--gold)" }} onChange={e => setVal("vestingMonths")(Number(e.target.value))} />
+            <input type="range" min={1} max={36} value={form.vestingMonths} style={{ width: "100%", accentColor: "var(--text)", cursor: "pointer" }} onChange={e => setVal("vestingMonths")(Number(e.target.value))} />
           </div>
         </div>
       </Card>
 
-      {/* Preview */}
+      {/* Summary */}
       <Card>
-        <SectionTitle>📅 Summary</SectionTitle>
-        <div className="flex flex-col gap-2 text-xs font-mono" style={{ color: "var(--muted)" }}>
+        <SectionTitle>Summary</SectionTitle>
+        <div style={{ display: "flex", flexDirection: "column", fontFamily: "'Geist Mono', monospace", fontSize: 12 }}>
           {[
-            { label: "Start", value: form.startDate, color: "#94a3b8" },
+            { label: "Start", value: form.startDate },
             form.cliffMonths > 0
-              ? { label: "Cliff", value: `${form.cliffMonths}mo — ${form.amount.toLocaleString()} tokens`, color: "var(--gold)" }
-              : { label: "Unlock / month", value: `~${monthlyUnlock.toLocaleString()}`, color: "var(--gold)" },
-            { label: "End", value: endDate, color: "#94a3b8" },
-            { label: "Total locked", value: `${form.amount.toLocaleString()} tokens`, color: "#10b981" },
-          ].map((row, i) => (
-            <div key={i} className="flex justify-between items-center py-2" style={{ borderBottom: i < 3 ? "1px solid var(--border)" : "none" }}>
-              <span>▸ {row.label}</span>
-              <span style={{ color: row.color }} className="font-bold">{row.value}</span>
+              ? { label: "Cliff release", value: `${form.cliffMonths}mo — ${form.amount.toLocaleString()}` }
+              : { label: "Monthly unlock", value: `~${monthlyUnlock.toLocaleString()}` },
+            { label: "End date", value: endDate },
+            { label: "Total locked", value: `${form.amount.toLocaleString()}`, highlight: true },
+          ].map((row, i, arr) => (
+            <div key={i} style={{
+              display: "flex", justifyContent: "space-between", alignItems: "center",
+              padding: "10px 0",
+              borderBottom: i < arr.length - 1 ? "1px solid var(--border)" : "none",
+            }}>
+              <span style={{ color: "var(--muted)" }}>{row.label}</span>
+              <span style={{ color: row.highlight ? "var(--green)" : "var(--text)", fontWeight: row.highlight ? 600 : 400 }}>
+                {row.value}
+              </span>
             </div>
           ))}
         </div>
@@ -172,13 +189,18 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
       {/* Recipient */}
       <Card>
         <SectionTitle>Recipient</SectionTitle>
-        <label className="flex items-center gap-3 cursor-pointer rounded-xl px-4 py-3 mb-3 transition-all" style={{ background: form.useOwnWallet ? "var(--gold-dim)" : "var(--surface)", border: form.useOwnWallet ? "1px solid rgba(201,168,76,0.2)" : "1px solid var(--border)" }}>
-          <input type="checkbox" checked={form.useOwnWallet} className="w-4 h-4 cursor-pointer" style={{ accentColor: "var(--gold)" }} onChange={e => setForm(f => ({ ...f, useOwnWallet: e.target.checked }))} />
-          <span className="text-sm font-medium">Send to my own wallet</span>
+        <label style={{
+          display: "flex", alignItems: "center", gap: 12, cursor: "pointer",
+          padding: "12px 14px", borderRadius: 8, marginBottom: 12,
+          background: form.useOwnWallet ? "var(--surface)" : "transparent",
+          border: "1px solid var(--border)",
+        }}>
+          <input type="checkbox" checked={form.useOwnWallet} style={{ width: 15, height: 15, accentColor: "var(--text)", cursor: "pointer" }} onChange={e => setForm(f => ({ ...f, useOwnWallet: e.target.checked }))} />
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Send to my own wallet</span>
         </label>
 
         {form.useOwnWallet ? (
-          <div className="font-mono text-xs rounded-xl px-4 py-3 truncate" style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--muted)" }}>
+          <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px", fontFamily: "'Geist Mono', monospace", fontSize: 11, color: "var(--muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {publicKey.toBase58()}
           </div>
         ) : (
@@ -189,17 +211,16 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
       <ErrorBox message={error} />
 
       {isCreating && (
-        <Card>
-          <div className="flex items-center gap-3 rounded-xl px-4 py-3" style={{ background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.3)" }}>
-            <span>⏳</span>
-            <span className="text-sm" style={{ color: "var(--gold)" }}>Creating Streamflow stream...</span>
-          </div>
-        </Card>
+        <div style={{ padding: "12px 16px", borderRadius: 8, background: "var(--surface)", border: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--text)", animation: "pulse 1.5s infinite" }} />
+          <span style={{ fontSize: 13, color: "var(--muted)" }}>Creating Streamflow stream...</span>
+        </div>
       )}
 
       <Button onClick={handleSubmit} disabled={!canSubmit} loading={isCreating}>
-        🔒 Lock tokens
+        Lock tokens
       </Button>
+
     </div>
   );
 }

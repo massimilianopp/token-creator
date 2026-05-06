@@ -10,9 +10,9 @@ const WalletMultiButton = dynamic(
 );
 
 const NAV_ITEMS = [
-  { href: "/", label: "Token", emoji: "🪙" },
-  { href: "/vesting", label: "Vesting", emoji: "🔒" },
-  { href: "/pool", label: "Pool", emoji: "💧" },
+  { href: "/", label: "Token", number: "01" },
+  { href: "/vesting", label: "Vesting", number: "02" },
+  { href: "/pool", label: "Pool", number: "03" },
 ];
 
 export default function BottomNav() {
@@ -22,55 +22,63 @@ export default function BottomNav() {
   return (
     <nav style={{
       position: "fixed",
-      bottom: 0,
-      left: 0,
-      right: 0,
+      bottom: 0, left: 0, right: 0,
       zIndex: 99999,
-      background: "#02020a",
+      background: "var(--bg)",
       borderTop: "1px solid var(--border)",
-      height: 64,
+      height: 60,
     }}>
       <div style={{
-        maxWidth: 520,
+        maxWidth: 480,
         margin: "0 auto",
         height: "100%",
         display: "flex",
         alignItems: "center",
         padding: "0 16px",
-        gap: 8,
-        background: "var(--surface)",
+        gap: 4,
+        background: "var(--bg)",
         borderLeft: "1px solid var(--border)",
         borderRight: "1px solid var(--border)",
       }}>
         {NAV_ITEMS.map((item) => {
           const isActive = pathname === item.href;
           return (
-            <Link
-              key={item.href}
-              href={item.href}
-              style={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 2,
-                padding: "6px 4px",
-                borderRadius: 10,
-                background: isActive ? "rgba(201,168,76,0.2)" : "transparent",
-                border: isActive ? "1px solid var(--gold)" : "1px solid transparent",
-                textDecoration: "none",
-                color: isActive ? "var(--gold)" : "var(--muted)",
-                fontSize: 11,
-                fontWeight: 600,
-              }}
-            >
-              <span style={{ fontSize: 18 }}>{item.emoji}</span>
-              {item.label}
+            <Link key={item.href} href={item.href} style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 2,
+              padding: "6px 4px",
+              borderRadius: 8,
+              textDecoration: "none",
+              background: isActive ? "var(--surface)" : "transparent",
+              border: isActive ? "1px solid var(--border)" : "1px solid transparent",
+              transition: "all 0.15s",
+            }}>
+              <span style={{
+                fontSize: 9,
+                fontFamily: "'Geist Mono', monospace",
+                fontWeight: 500,
+                color: isActive ? "var(--muted)" : "var(--dim)",
+                letterSpacing: "0.06em",
+              }}>
+                {item.number}
+              </span>
+              <span style={{
+                fontSize: 12,
+                fontWeight: 500,
+                color: isActive ? "var(--text)" : "var(--muted)",
+                fontFamily: "'Geist', sans-serif",
+              }}>
+                {item.label}
+              </span>
             </Link>
           );
         })}
-        <div style={{ flexShrink: 0 }}>
+
+        <div style={{ flexShrink: 0, marginLeft: 4 }}>
           <WalletMultiButton />
         </div>
       </div>

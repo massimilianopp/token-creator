@@ -1,24 +1,19 @@
 "use client";
-
-import dynamic from "next/dynamic";
 import VestingForm from "@/components/VestingForm";
-
-const WalletMultiButton = dynamic(
-  () => import("@solana/wallet-adapter-react-ui").then((m) => m.WalletMultiButton),
-  { ssr: false }
-);
 
 export default function VestingPage() {
   return (
-    <main className="min-h-screen px-4 py-8 max-w-lg mx-auto flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-extrabold" style={{ background: "linear-gradient(135deg, var(--gold), var(--gold))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            Vesting
-          </h1>
-          <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>Streamflow · Module 2</p>
-        </div>
-
+    <main style={{ padding: "32px 24px 0" }}>
+      <div style={{ marginBottom: 32 }}>
+        <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 8 }}>
+          Step 02 · Optional
+        </p>
+        <h1 style={{ fontSize: 24, fontWeight: 600, letterSpacing: "-0.02em", marginBottom: 6, color: "var(--text)" }}>
+          Vesting
+        </h1>
+        <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.5 }}>
+          Lock your dev allocation via Streamflow
+        </p>
       </div>
       <VestingForm />
     </main>
