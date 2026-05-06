@@ -1,30 +1,25 @@
-"use client";
-import { useMemo } from "react";
-import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react";
-import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
-import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
-import { clusterApiUrl } from "@solana/web3.js";
+import "./globals.css";
 import "@solana/wallet-adapter-react-ui/styles.css";
+import Providers from "@/components/Providers";
 
 export default function RootLayout({ children }) {
-  const endpoint = process.env.NEXT_PUBLIC_RPC_ENDPOINT || clusterApiUrl("devnet");
-  const wallets = useMemo(() => [
-    new PhantomWalletAdapter(),
-    new SolflareWalletAdapter(),
-  ], []);
-
   return (
     <html lang="fr">
-      <body>
-        <ConnectionProvider endpoint={endpoint}>
-          <WalletProvider wallets={wallets} autoConnect>
-            <WalletModalProvider>
-              {children}
-            </WalletModalProvider>
-          </WalletProvider>
-        </ConnectionProvider>
-      </body>
+      <body className="bg-grid min-h-screen" style={{ paddingBottom: 120 }}>
+  <div style={{
+    maxWidth: 520,
+    margin: "0 auto",
+    minHeight: "100vh",
+    background: "#080810",
+    borderLeft: "1px solid #1e1e30",
+    borderRight: "1px solid #1e1e30",
+    position: "relative",
+  }}>
+    <Providers>
+      {children}
+    </Providers>
+  </div>
+</body>
     </html>
   );
 }
