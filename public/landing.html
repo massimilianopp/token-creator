@@ -15,12 +15,12 @@
     --card: #0f0f1c;
     --border: #1a1a2e;
     --border-bright: #2a2a48;
-    --indigo: #6366f1;
-    --violet: #8b5cf6;
+    --indigo: var(--gold);
+    --violet: var(--gold);
     --cyan: #22d3ee;
     --green: #10b981;
     --text: #f1f5f9;
-    --muted: #64748b;
+    --muted: var(--muted);
     --dim: #2d3748;
   }
 
@@ -358,7 +358,7 @@
   .tag-indigo {
     background: rgba(99,102,241,0.1);
     color: var(--indigo);
-    border: 1px solid rgba(99,102,241,0.2);
+    border: 1px solid rgba(201,168,76,0.2);
   }
 
   .tag-violet {
@@ -476,7 +476,7 @@
     height: 40px;
     border-radius: 10px;
     background: rgba(99,102,241,0.1);
-    border: 1px solid rgba(99,102,241,0.2);
+    border: 1px solid rgba(201,168,76,0.2);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -712,7 +712,7 @@
         <p class="pricing-desc">A small percentage of your token deposit, taken at the time of pool creation. SOL and USDC are not affected — only the token side.</p>
       </div>
 
-      <div class="pricing-card" style="background: rgba(99,102,241,0.04); border-color: rgba(99,102,241,0.2);">
+      <div class="pricing-card" style="background: rgba(99,102,241,0.04); border-color: rgba(201,168,76,0.2);">
         <span class="pricing-icon">📊</span>
         <div class="pricing-module">Module 4</div>
         <div class="pricing-name">Public token page</div>

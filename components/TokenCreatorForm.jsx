@@ -64,7 +64,7 @@ export default function TokenCreatorForm() {
       <Card>
         <div className="flex flex-col items-center gap-3 py-8">
           <span className="text-4xl">👻</span>
-          <p className="text-sm" style={{ color: "#64748b" }}>Connect your wallet to continue</p>
+          <p className="text-sm" style={{ color: "var(--muted)" }}>Connect your wallet to continue</p>
         </div>
       </Card>
     );
@@ -76,7 +76,7 @@ export default function TokenCreatorForm() {
     return (
       <div className="flex flex-col gap-4">
         <Card>
-          <div className="flex flex-col items-center gap-2 pb-4 mb-4" style={{ borderBottom: "1px solid #1e1e30" }}>
+          <div className="flex flex-col items-center gap-2 pb-4 mb-4" style={{ borderBottom: "1px solid var(--border)" }}>
             {preview && (
               <img 
                 src={preview} 
@@ -87,16 +87,16 @@ export default function TokenCreatorForm() {
                   height: "64px", 
                   objectFit: "cover", // Assure que l'image ne s'écrase pas
                   aspectRatio: "1/1",  // Force le carré
-                  border: "2px solid #6366f1" 
+                  border: "2px solid var(--gold)" 
                 }} 
               />
             )}
             <h2 className="text-xl font-extrabold">{form.name}</h2>
-            <span className="text-xs px-2 py-0.5 rounded-full font-mono font-bold" style={{ background: "rgba(99,102,241,0.1)", color: "#6366f1" }}>${form.symbol}</span>
+            <span className="text-xs px-2 py-0.5 rounded-full font-mono font-bold" style={{ background: "rgba(99,102,241,0.1)", color: "var(--gold)" }}>${form.symbol}</span>
           </div>
 
           <SectionTitle>Mint address</SectionTitle>
-          <div className="font-mono text-xs break-all rounded-xl px-4 py-3 mb-4" style={{ background: "#0d0d14", color: "#6366f1", border: "1px solid #1e1e30" }}>
+          <div className="font-mono text-xs break-all rounded-xl px-4 py-3 mb-4" style={{ background: "var(--surface)", color: "var(--gold)", border: "1px solid var(--border)" }}>
             {mintAddress}
           </div>
 
@@ -106,18 +106,18 @@ export default function TokenCreatorForm() {
               { label: "Dev", value: form.devAllocation + "%" },
               { label: "Pool", value: (100 - form.devAllocation) + "%" },
             ].map(s => (
-              <div key={s.label} className="rounded-xl p-3 text-center" style={{ background: "#0d0d14", border: "1px solid #1e1e30" }}>
-                <div className="text-xs mb-1" style={{ color: "#64748b" }}>{s.label}</div>
+              <div key={s.label} className="rounded-xl p-3 text-center" style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
+                <div className="text-xs mb-1" style={{ color: "var(--muted)" }}>{s.label}</div>
                 <div className="text-sm font-bold">{s.value}</div>
               </div>
             ))}
           </div>
 
           <div className="flex gap-2 mb-3">
-            <a href={solscanUrl} target="_blank" rel="noopener noreferrer" className="flex-1 text-center text-xs py-3 rounded-xl font-semibold transition-all" style={{ background: "#0d0d14", border: "1px solid #1e1e30", color: "#94a3b8" }}>
+            <a href={solscanUrl} target="_blank" rel="noopener noreferrer" className="flex-1 text-center text-xs py-3 rounded-xl font-semibold transition-all" style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "#94a3b8" }}>
               Solscan ↗
             </a>
-            <a href={publicUrl} className="flex-1 text-center text-xs py-3 rounded-xl font-semibold transition-all" style={{ background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.3)", color: "#6366f1" }}>
+            <a href={publicUrl} className="flex-1 text-center text-xs py-3 rounded-xl font-semibold transition-all" style={{ background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.3)", color: "var(--gold)" }}>
               Public page ↗
             </a>
           </div>
@@ -132,9 +132,9 @@ export default function TokenCreatorForm() {
                 disabled={revoking}
                 className="w-full text-center text-xs py-3 rounded-xl font-semibold transition-all"
                 style={{
-                  background: revoking ? "#0d0d14" : "rgba(239,68,68,0.08)",
+                  background: revoking ? "var(--surface)" : "rgba(239,68,68,0.08)",
                   border: "1px solid rgba(239,68,68,0.3)",
-                  color: revoking ? "#64748b" : "#ef4444",
+                  color: revoking ? "var(--muted)" : "#ef4444",
                   cursor: revoking ? "not-allowed" : "pointer",
                 }}
               >
@@ -165,11 +165,11 @@ export default function TokenCreatorForm() {
             const isCurrent = i === currentStepIndex;
             return (
               <div key={step.key} className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all" style={{
-                background: isDone ? "rgba(16,185,129,0.05)" : isCurrent ? "rgba(99,102,241,0.08)" : "#0d0d14",
-                border: isDone ? "1px solid rgba(16,185,129,0.2)" : isCurrent ? "1px solid rgba(99,102,241,0.3)" : "1px solid #1e1e30",
+                background: isDone ? "rgba(16,185,129,0.05)" : isCurrent ? "rgba(99,102,241,0.08)" : "var(--surface)",
+                border: isDone ? "1px solid rgba(16,185,129,0.2)" : isCurrent ? "1px solid rgba(99,102,241,0.3)" : "1px solid var(--border)",
               }}>
                 <span className="text-base">{isDone ? "✅" : isCurrent ? "⏳" : step.emoji}</span>
-                <span className="text-sm font-medium" style={{ color: isDone ? "#10b981" : isCurrent ? "#6366f1" : "#334155" }}>
+                <span className="text-sm font-medium" style={{ color: isDone ? "#10b981" : isCurrent ? "var(--gold)" : "#334155" }}>
                   {step.label}
                 </span>
               </div>
@@ -195,8 +195,8 @@ export default function TokenCreatorForm() {
           </div>
           <Input label="Description" placeholder="Describe your token..." value={form.description} onChange={set("description")} />
           <div className="flex flex-col gap-1.5">
-            <span className="text-xs font-semibold" style={{ color: "#64748b" }}>Logo *</span>
-            <label className="flex items-center gap-4 rounded-xl px-4 py-4 cursor-pointer transition-all" style={{ border: "1px dashed #2d2d4a", background: "#0d0d14" }}>
+            <span className="text-xs font-semibold" style={{ color: "var(--muted)" }}>Logo *</span>
+            <label className="flex items-center gap-4 rounded-xl px-4 py-4 cursor-pointer transition-all" style={{ border: "1px dashed #2d2d4a", background: "var(--surface)" }}>
               {preview
                 ? <img 
                     src={preview} 
@@ -207,13 +207,13 @@ export default function TokenCreatorForm() {
                       height: "48px", 
                       objectFit: "cover", 
                       aspectRatio: "1/1",
-                      border: "2px solid #6366f1" 
+                      border: "2px solid var(--gold)" 
                     }} 
                   />
-                : <div className="w-12 h-12 rounded-full flex items-center justify-center text-2xl" style={{ background: "#12121c", border: "1px solid #1e1e30" }}>🪙</div>
+                : <div className="w-12 h-12 rounded-full flex items-center justify-center text-2xl" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>🪙</div>
               }
               <div>
-                <div className="text-sm font-semibold" style={{ color: preview ? "#6366f1" : "#64748b" }}>
+                <div className="text-sm font-semibold" style={{ color: preview ? "var(--gold)" : "var(--muted)" }}>
                   {preview ? "Logo uploaded ✓" : "Click to upload"}
                 </div>
                 <div className="text-xs mt-0.5" style={{ color: "#334155" }}>PNG, JPG — max 5MB</div>
@@ -230,8 +230,8 @@ export default function TokenCreatorForm() {
           <div className="flex gap-3">
             <Input label="Total supply" type="number" value={form.totalSupply} onChange={e => setVal("totalSupply")(Number(e.target.value))} />
             <div className="flex flex-col gap-1.5" style={{ width: 160 }}>
-              <span className="text-xs font-semibold" style={{ color: "#64748b" }}>Decimals</span>
-              <select className="rounded-xl px-4 py-3 text-sm outline-none" style={{ background: "#0d0d14", border: "1px solid #1e1e30", color: "#f1f5f9" }} value={form.decimals} onChange={e => setVal("decimals")(Number(e.target.value))}>
+              <span className="text-xs font-semibold" style={{ color: "var(--muted)" }}>Decimals</span>
+              <select className="rounded-xl px-4 py-3 text-sm outline-none" style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "#f1f5f9" }} value={form.decimals} onChange={e => setVal("decimals")(Number(e.target.value))}>
                 <option value={6}>6 — USDC style</option>
                 <option value={9}>9 — SOL style</option>
               </select>
@@ -239,17 +239,17 @@ export default function TokenCreatorForm() {
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex justify-between text-xs">
-              <span style={{ color: "#64748b" }}>Dev allocation</span>
-              <span style={{ color: "#6366f1" }} className="font-bold">{form.devAllocation}%</span>
+              <span style={{ color: "var(--muted)" }}>Dev allocation</span>
+              <span style={{ color: "var(--gold)" }} className="font-bold">{form.devAllocation}%</span>
             </div>
-            <input type="range" min={0} max={30} value={form.devAllocation} className="w-full cursor-pointer" style={{ accentColor: "#6366f1" }} onChange={e => setVal("devAllocation")(Number(e.target.value))} />
+            <input type="range" min={0} max={30} value={form.devAllocation} className="w-full cursor-pointer" style={{ accentColor: "var(--gold)" }} onChange={e => setVal("devAllocation")(Number(e.target.value))} />
             <div className="grid grid-cols-2 gap-2">
-              <div className="rounded-xl p-3" style={{ background: "#0d0d14", border: "1px solid #1e1e30" }}>
-                <div className="text-xs mb-1" style={{ color: "#6366f1" }}>👤 Your wallet</div>
+              <div className="rounded-xl p-3" style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
+                <div className="text-xs mb-1" style={{ color: "var(--gold)" }}>👤 Your wallet</div>
                 <div className="text-sm font-bold font-mono">{devTokens.toLocaleString()}</div>
               </div>
-              <div className="rounded-xl p-3" style={{ background: "#0d0d14", border: "1px solid #1e1e30" }}>
-                <div className="text-xs mb-1" style={{ color: "#8b5cf6" }}>🏊 Public pool</div>
+              <div className="rounded-xl p-3" style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
+                <div className="text-xs mb-1" style={{ color: "var(--gold)" }}>🏊 Public pool</div>
                 <div className="text-sm font-bold font-mono">{poolTokens.toLocaleString()}</div>
               </div>
             </div>
@@ -264,7 +264,7 @@ export default function TokenCreatorForm() {
             { key: "revokeMint", label: "Revoke Mint Authority", sub: "Fixed supply forever" },
             { key: "revokeFreeze", label: "Revoke Freeze Authority", sub: "Wallets cannot be frozen" },
           ].map(opt => (
-            <label key={opt.key} className="flex items-center gap-3 cursor-pointer rounded-xl px-4 py-3 transition-all" style={{ background: form[opt.key] ? "rgba(16,185,129,0.05)" : "#0d0d14", border: form[opt.key] ? "1px solid rgba(16,185,129,0.2)" : "1px solid #1e1e30" }}>
+            <label key={opt.key} className="flex items-center gap-3 cursor-pointer rounded-xl px-4 py-3 transition-all" style={{ background: form[opt.key] ? "rgba(16,185,129,0.05)" : "var(--surface)", border: form[opt.key] ? "1px solid rgba(16,185,129,0.2)" : "1px solid var(--border)" }}>
               <input type="checkbox" checked={form[opt.key]} className="w-4 h-4 cursor-pointer" style={{ accentColor: "#10b981" }} onChange={e => setForm(f => ({ ...f, [opt.key]: e.target.checked }))} />
               <div>
                 <div className="text-sm font-medium">{opt.label}</div>
@@ -273,7 +273,7 @@ export default function TokenCreatorForm() {
             </label>
           ))}
         </div>
-        <div className="flex justify-between text-xs mt-4 pt-4" style={{ borderTop: "1px solid #1e1e30", color: "#64748b" }}>
+        <div className="flex justify-between text-xs mt-4 pt-4" style={{ borderTop: "1px solid var(--border)", color: "var(--muted)" }}>
           <span>Estimated fees</span>
           <span style={{ color: "#94a3b8" }}>~0.012 SOL</span>
         </div>

@@ -27,7 +27,7 @@ export default function BottomNav() {
       right: 0,
       zIndex: 99999,
       background: "#02020a",
-      borderTop: "1px solid #1e1e30",
+      borderTop: "1px solid var(--border)",
       height: 64,
     }}>
       <div style={{
@@ -38,9 +38,9 @@ export default function BottomNav() {
         alignItems: "center",
         padding: "0 16px",
         gap: 8,
-        background: "#0d0d14",
-        borderLeft: "1px solid #1e1e30",
-        borderRight: "1px solid #1e1e30",
+        background: "var(--surface)",
+        borderLeft: "1px solid var(--border)",
+        borderRight: "1px solid var(--border)",
       }}>
         {NAV_ITEMS.map((item) => {
           const isActive = pathname === item.href;
@@ -57,10 +57,10 @@ export default function BottomNav() {
                 gap: 2,
                 padding: "6px 4px",
                 borderRadius: 10,
-                background: isActive ? "rgba(99,102,241,0.2)" : "transparent",
-                border: isActive ? "1px solid #6366f1" : "1px solid transparent",
+                background: isActive ? "rgba(201,168,76,0.2)" : "transparent",
+                border: isActive ? "1px solid var(--gold)" : "1px solid transparent",
                 textDecoration: "none",
-                color: isActive ? "#6366f1" : "#64748b",
+                color: isActive ? "var(--gold)" : "var(--muted)",
                 fontSize: 11,
                 fontWeight: 600,
               }}

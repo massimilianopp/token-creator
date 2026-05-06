@@ -50,12 +50,12 @@ export default function PoolForm() {
           <ResultBox>
             <p className="text-xs font-bold" style={{ color: "#10b981" }}>Pool created ✓</p>
             <div className="flex flex-col gap-1 text-xs font-mono">
-              <span style={{ color: "#64748b" }}>Pool</span>
-              <a href={poolUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#6366f1" }} className="truncate">{result.poolAddress}</a>
-              <span style={{ color: "#64748b" }} className="mt-1">Position NFT</span>
+              <span style={{ color: "var(--muted)" }}>Pool</span>
+              <a href={poolUrl} target="_blank" rel="noopener noreferrer" style={{ color: "var(--gold)" }} className="truncate">{result.poolAddress}</a>
+              <span style={{ color: "var(--muted)" }} className="mt-1">Position NFT</span>
               <span style={{ color: "#94a3b8" }} className="truncate">{result.positionMint}</span>
-              <span style={{ color: "#64748b" }} className="mt-1">Tx</span>
-              <a href={txUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#6366f1" }} className="truncate">{result.txSignature}</a>
+              <span style={{ color: "var(--muted)" }} className="mt-1">Tx</span>
+              <a href={txUrl} target="_blank" rel="noopener noreferrer" style={{ color: "var(--gold)" }} className="truncate">{result.txSignature}</a>
             </div>
           </ResultBox>
         );

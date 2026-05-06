@@ -64,7 +64,7 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
       <Card>
         <div className="flex flex-col items-center gap-3 py-8">
           <span className="text-4xl">🔒</span>
-          <p className="text-sm" style={{ color: "#64748b" }}>Connect your wallet to continue</p>
+          <p className="text-sm" style={{ color: "var(--muted)" }}>Connect your wallet to continue</p>
         </div>
       </Card>
     );
@@ -74,20 +74,20 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
     return (
       <div className="flex flex-col gap-4">
         <Card>
-          <div className="flex flex-col items-center gap-2 pb-4 mb-4" style={{ borderBottom: "1px solid #1e1e30" }}>
+          <div className="flex flex-col items-center gap-2 pb-4 mb-4" style={{ borderBottom: "1px solid var(--border)" }}>
             <span className="text-5xl">🔒</span>
             <h2 className="text-xl font-extrabold">Vesting active!</h2>
-            <p className="text-sm" style={{ color: "#64748b" }}>
+            <p className="text-sm" style={{ color: "var(--muted)" }}>
               {form.amount.toLocaleString()} tokens locked via Streamflow
             </p>
           </div>
 
           <SectionTitle>Stream ID</SectionTitle>
-          <div className="font-mono text-xs break-all rounded-xl px-4 py-3 mb-4" style={{ background: "#0d0d14", color: "#8b5cf6", border: "1px solid #1e1e30" }}>
+          <div className="font-mono text-xs break-all rounded-xl px-4 py-3 mb-4" style={{ background: "var(--surface)", color: "var(--gold)", border: "1px solid var(--border)" }}>
             {streamId}
           </div>
 
-          <a href="https://app.streamflow.finance/" target="_blank" rel="noopener noreferrer" className="block text-center text-xs py-3 rounded-xl font-semibold mb-2 transition-all" style={{ background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.3)", color: "#8b5cf6" }}>
+          <a href="https://app.streamflow.finance/" target="_blank" rel="noopener noreferrer" className="block text-center text-xs py-3 rounded-xl font-semibold mb-2 transition-all" style={{ background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.3)", color: "var(--gold)" }}>
             View on Streamflow ↗
           </a>
         </Card>
@@ -108,8 +108,8 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
           <div className="flex gap-3">
             <Input label="Tokens to lock *" type="number" value={form.amount} onChange={e => setVal("amount")(Number(e.target.value))} />
             <div className="flex flex-col gap-1.5" style={{ width: 130 }}>
-              <span className="text-xs font-semibold" style={{ color: "#64748b" }}>Decimals</span>
-              <select className="rounded-xl px-4 py-3 text-sm outline-none" style={{ background: "#0d0d14", border: "1px solid #1e1e30", color: "#f1f5f9" }} value={form.decimals} onChange={e => setVal("decimals")(Number(e.target.value))}>
+              <span className="text-xs font-semibold" style={{ color: "var(--muted)" }}>Decimals</span>
+              <select className="rounded-xl px-4 py-3 text-sm outline-none" style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "#f1f5f9" }} value={form.decimals} onChange={e => setVal("decimals")(Number(e.target.value))}>
                 <option value={6}>6</option>
                 <option value={9}>9</option>
               </select>
@@ -126,12 +126,12 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
 
           <div className="flex flex-col gap-2">
             <div className="flex justify-between text-xs">
-              <span style={{ color: "#64748b" }}>Cliff</span>
-              <span style={{ color: "#8b5cf6" }} className="font-bold">
+              <span style={{ color: "var(--muted)" }}>Cliff</span>
+              <span style={{ color: "var(--gold)" }} className="font-bold">
                 {form.cliffMonths === 0 ? "Disabled" : `${form.cliffMonths} month${form.cliffMonths > 1 ? "s" : ""}`}
               </span>
             </div>
-            <input type="range" min={0} max={12} value={form.cliffMonths} className="w-full cursor-pointer" style={{ accentColor: "#8b5cf6" }} onChange={e => setVal("cliffMonths")(Number(e.target.value))} />
+            <input type="range" min={0} max={12} value={form.cliffMonths} className="w-full cursor-pointer" style={{ accentColor: "var(--gold)" }} onChange={e => setVal("cliffMonths")(Number(e.target.value))} />
             <p className="text-xs" style={{ color: "#334155" }}>
               {form.cliffMonths === 0
                 ? "Immediate linear unlock"
@@ -141,10 +141,10 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
 
           <div className="flex flex-col gap-2">
             <div className="flex justify-between text-xs">
-              <span style={{ color: "#64748b" }}>Total duration</span>
-              <span style={{ color: "#6366f1" }} className="font-bold">{form.vestingMonths} month{form.vestingMonths > 1 ? "s" : ""}</span>
+              <span style={{ color: "var(--muted)" }}>Total duration</span>
+              <span style={{ color: "var(--gold)" }} className="font-bold">{form.vestingMonths} month{form.vestingMonths > 1 ? "s" : ""}</span>
             </div>
-            <input type="range" min={1} max={36} value={form.vestingMonths} className="w-full cursor-pointer" style={{ accentColor: "#6366f1" }} onChange={e => setVal("vestingMonths")(Number(e.target.value))} />
+            <input type="range" min={1} max={36} value={form.vestingMonths} className="w-full cursor-pointer" style={{ accentColor: "var(--gold)" }} onChange={e => setVal("vestingMonths")(Number(e.target.value))} />
           </div>
         </div>
       </Card>
@@ -152,16 +152,16 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
       {/* Preview */}
       <Card>
         <SectionTitle>📅 Summary</SectionTitle>
-        <div className="flex flex-col gap-2 text-xs font-mono" style={{ color: "#64748b" }}>
+        <div className="flex flex-col gap-2 text-xs font-mono" style={{ color: "var(--muted)" }}>
           {[
             { label: "Start", value: form.startDate, color: "#94a3b8" },
             form.cliffMonths > 0
-              ? { label: "Cliff", value: `${form.cliffMonths}mo — ${form.amount.toLocaleString()} tokens`, color: "#8b5cf6" }
-              : { label: "Unlock / month", value: `~${monthlyUnlock.toLocaleString()}`, color: "#6366f1" },
+              ? { label: "Cliff", value: `${form.cliffMonths}mo — ${form.amount.toLocaleString()} tokens`, color: "var(--gold)" }
+              : { label: "Unlock / month", value: `~${monthlyUnlock.toLocaleString()}`, color: "var(--gold)" },
             { label: "End", value: endDate, color: "#94a3b8" },
             { label: "Total locked", value: `${form.amount.toLocaleString()} tokens`, color: "#10b981" },
           ].map((row, i) => (
-            <div key={i} className="flex justify-between items-center py-2" style={{ borderBottom: i < 3 ? "1px solid #1e1e30" : "none" }}>
+            <div key={i} className="flex justify-between items-center py-2" style={{ borderBottom: i < 3 ? "1px solid var(--border)" : "none" }}>
               <span>▸ {row.label}</span>
               <span style={{ color: row.color }} className="font-bold">{row.value}</span>
             </div>
@@ -172,13 +172,13 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
       {/* Recipient */}
       <Card>
         <SectionTitle>Recipient</SectionTitle>
-        <label className="flex items-center gap-3 cursor-pointer rounded-xl px-4 py-3 mb-3 transition-all" style={{ background: form.useOwnWallet ? "rgba(99,102,241,0.05)" : "#0d0d14", border: form.useOwnWallet ? "1px solid rgba(99,102,241,0.2)" : "1px solid #1e1e30" }}>
-          <input type="checkbox" checked={form.useOwnWallet} className="w-4 h-4 cursor-pointer" style={{ accentColor: "#6366f1" }} onChange={e => setForm(f => ({ ...f, useOwnWallet: e.target.checked }))} />
+        <label className="flex items-center gap-3 cursor-pointer rounded-xl px-4 py-3 mb-3 transition-all" style={{ background: form.useOwnWallet ? "var(--gold-dim)" : "var(--surface)", border: form.useOwnWallet ? "1px solid rgba(201,168,76,0.2)" : "1px solid var(--border)" }}>
+          <input type="checkbox" checked={form.useOwnWallet} className="w-4 h-4 cursor-pointer" style={{ accentColor: "var(--gold)" }} onChange={e => setForm(f => ({ ...f, useOwnWallet: e.target.checked }))} />
           <span className="text-sm font-medium">Send to my own wallet</span>
         </label>
 
         {form.useOwnWallet ? (
-          <div className="font-mono text-xs rounded-xl px-4 py-3 truncate" style={{ background: "#0d0d14", border: "1px solid #1e1e30", color: "#64748b" }}>
+          <div className="font-mono text-xs rounded-xl px-4 py-3 truncate" style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--muted)" }}>
             {publicKey.toBase58()}
           </div>
         ) : (
@@ -192,7 +192,7 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
         <Card>
           <div className="flex items-center gap-3 rounded-xl px-4 py-3" style={{ background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.3)" }}>
             <span>⏳</span>
-            <span className="text-sm" style={{ color: "#6366f1" }}>Creating Streamflow stream...</span>
+            <span className="text-sm" style={{ color: "var(--gold)" }}>Creating Streamflow stream...</span>
           </div>
         </Card>
       )}

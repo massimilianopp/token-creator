@@ -1,6 +1,11 @@
 export function Card({ children, className = "" }) {
   return (
-    <div className={`card-border rounded-2xl p-5 ${className}`}>
+    <div className={className} style={{
+      background: "var(--card)",
+      border: "1px solid var(--border)",
+      borderRadius: 16,
+      padding: "20px",
+    }}>
       {children}
     </div>
   );
@@ -8,7 +13,14 @@ export function Card({ children, className = "" }) {
 
 export function SectionTitle({ children }) {
   return (
-    <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: "#6366f1" }}>
+    <p style={{
+      fontSize: 10,
+      fontWeight: 700,
+      letterSpacing: "0.18em",
+      textTransform: "uppercase",
+      color: "var(--gold)",
+      marginBottom: 16,
+    }}>
       {children}
     </p>
   );
@@ -16,35 +28,56 @@ export function SectionTitle({ children }) {
 
 export function Input({ label, hint, ...props }) {
   return (
-    <label className="flex flex-col gap-1.5">
-      {label && <span className="text-xs font-semibold" style={{ color: "#64748b" }}>{label}</span>}
+    <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      {label && (
+        <span style={{ fontSize: 11, fontWeight: 600, color: "var(--muted)", letterSpacing: "0.08em" }}>
+          {label}
+        </span>
+      )}
       <input
         {...props}
-        className="w-full rounded-xl px-4 py-3 text-sm outline-none transition-all font-mono"
         style={{
-          background: "#0d0d14",
-          border: "1px solid #1e1e30",
-          color: "#f1f5f9",
+          width: "100%",
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
+          borderRadius: 10,
+          padding: "12px 14px",
+          fontSize: 14,
+          color: "var(--text)",
+          outline: "none",
+          fontFamily: "'Syne', sans-serif",
+          transition: "border-color 0.2s",
         }}
-        onFocus={e => e.target.style.borderColor = "#6366f1"}
-        onBlur={e => e.target.style.borderColor = "#1e1e30"}
+        onFocus={e => e.target.style.borderColor = "var(--gold)"}
+        onBlur={e => e.target.style.borderColor = "var(--border)"}
       />
-      {hint && <span className="text-xs" style={{ color: "#334155" }}>{hint}</span>}
+      {hint && (
+        <span style={{ fontSize: 11, color: "var(--dim)" }}>{hint}</span>
+      )}
     </label>
   );
 }
 
 export function Select({ label, children, ...props }) {
   return (
-    <label className="flex flex-col gap-1.5">
-      {label && <span className="text-xs font-semibold" style={{ color: "#64748b" }}>{label}</span>}
+    <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      {label && (
+        <span style={{ fontSize: 11, fontWeight: 600, color: "var(--muted)", letterSpacing: "0.08em" }}>
+          {label}
+        </span>
+      )}
       <select
         {...props}
-        className="w-full rounded-xl px-4 py-3 text-sm outline-none transition-all"
         style={{
-          background: "#0d0d14",
-          border: "1px solid #1e1e30",
-          color: "#f1f5f9",
+          width: "100%",
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
+          borderRadius: 10,
+          padding: "12px 14px",
+          fontSize: 14,
+          color: "var(--text)",
+          outline: "none",
+          fontFamily: "'Syne', sans-serif",
         }}
       >
         {children}
@@ -54,24 +87,41 @@ export function Select({ label, children, ...props }) {
 }
 
 export function Button({ children, loading, disabled, onClick, variant = "primary" }) {
-  const styles = {
-    primary: { background: "linear-gradient(135deg, #6366f1, #8b5cf6)", color: "#fff", border: "none" },
-    ghost: { background: "transparent", color: "#6366f1", border: "1px solid #6366f1" },
-  };
-
+  const isPrimary = variant === "primary";
   return (
     <button
       onClick={onClick}
       disabled={loading || disabled}
-      className="w-full rounded-xl px-4 py-3 text-sm font-bold transition-all"
       style={{
-        ...styles[variant],
-        opacity: loading || disabled ? 0.5 : 1,
+        width: "100%",
+        padding: "16px 24px",
+        borderRadius: 12,
+        fontSize: 15,
+        fontWeight: 700,
+        fontFamily: "'Syne', sans-serif",
+        letterSpacing: "0.02em",
         cursor: loading || disabled ? "not-allowed" : "pointer",
-        boxShadow: variant === "primary" && !disabled ? "0 0 20px rgba(99,102,241,0.3)" : "none",
+        opacity: loading || disabled ? 0.4 : 1,
+        transition: "all 0.2s",
+        border: isPrimary ? "none" : "1px solid var(--border-bright)",
+        background: isPrimary
+          ? "linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%)"
+          : "transparent",
+        color: isPrimary ? "#000000" : "var(--muted)",
+        boxShadow: isPrimary && !disabled ? "0 0 30px var(--gold-glow)" : "none",
+      }}
+      onMouseEnter={e => {
+        if (!loading && !disabled) {
+          if (isPrimary) e.currentTarget.style.transform = "translateY(-1px)";
+          else { e.currentTarget.style.borderColor = "var(--gold)"; e.currentTarget.style.color = "var(--gold)"; }
+        }
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.transform = "translateY(0)";
+        if (!isPrimary) { e.currentTarget.style.borderColor = "var(--border-bright)"; e.currentTarget.style.color = "var(--muted)"; }
       }}
     >
-      {loading ? "En cours..." : children}
+      {loading ? "Processing..." : children}
     </button>
   );
 }
@@ -79,11 +129,21 @@ export function Button({ children, loading, disabled, onClick, variant = "primar
 export function LogConsole({ logs }) {
   if (!logs?.length) return null;
   return (
-    <div className="rounded-xl p-4 font-mono text-xs flex flex-col gap-1.5" style={{ background: "#050508", border: "1px solid #1e1e30" }}>
+    <div style={{
+      background: "var(--surface)",
+      border: "1px solid var(--border)",
+      borderRadius: 12,
+      padding: "16px",
+      fontFamily: "'JetBrains Mono', monospace",
+      fontSize: 12,
+      display: "flex",
+      flexDirection: "column",
+      gap: 6,
+    }}>
       {logs.map((l, i) => (
-        <div key={i} className="flex gap-2">
-          <span style={{ color: "#6366f1" }}>▶</span>
-          <span style={{ color: "#94a3b8" }}>{l}</span>
+        <div key={i} style={{ display: "flex", gap: 8 }}>
+          <span style={{ color: "var(--gold)" }}>▶</span>
+          <span style={{ color: "var(--muted)" }}>{l}</span>
         </div>
       ))}
     </div>
@@ -92,7 +152,15 @@ export function LogConsole({ logs }) {
 
 export function ResultBox({ children }) {
   return (
-    <div className="rounded-xl p-4 flex flex-col gap-3" style={{ background: "rgba(16,185,129,0.05)", border: "1px solid rgba(16,185,129,0.2)" }}>
+    <div style={{
+      background: "rgba(16,185,129,0.04)",
+      border: "1px solid rgba(16,185,129,0.15)",
+      borderRadius: 12,
+      padding: 16,
+      display: "flex",
+      flexDirection: "column",
+      gap: 12,
+    }}>
       {children}
     </div>
   );
@@ -101,7 +169,15 @@ export function ResultBox({ children }) {
 export function ErrorBox({ message }) {
   if (!message) return null;
   return (
-    <div className="rounded-xl p-4 font-mono text-xs" style={{ background: "rgba(239,68,68,0.05)", border: "1px solid rgba(239,68,68,0.2)", color: "#ef4444" }}>
+    <div style={{
+      background: "rgba(239,68,68,0.04)",
+      border: "1px solid rgba(239,68,68,0.2)",
+      borderRadius: 12,
+      padding: 14,
+      fontFamily: "'JetBrains Mono', monospace",
+      fontSize: 12,
+      color: "var(--red)",
+    }}>
       {message}
     </div>
   );

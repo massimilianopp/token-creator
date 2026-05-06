@@ -1,29 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg: #050508;
-  --surface: #0d0d14;
-  --card: #12121c;
-  --border: #1e1e30;
-  --border-bright: #2d2d4a;
-  --primary: #6366f1;
-  --primary-glow: rgba(99, 102, 241, 0.3);
-  --violet: #8b5cf6;
-  --cyan: #22d3ee;
+  --bg: #000000;
+  --surface: #0a0a0a;
+  --card: #111111;
+  --card-hover: #161616;
+  --border: #1f1f1f;
+  --border-bright: #2a2a2a;
+  --gold: #C9A84C;
+  --gold-light: #E8C97A;
+  --gold-dim: rgba(201,168,76,0.15);
+  --gold-glow: rgba(201,168,76,0.2);
+  --white: #FFFFFF;
+  --text: #F5F5F5;
+  --muted: #666666;
+  --dim: #333333;
   --green: #10b981;
   --red: #ef4444;
-  --text: #f1f5f9;
-  --text-muted: #64748b;
-  --text-dim: #334155;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html, body {
   background: var(--bg);
@@ -32,56 +32,43 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Scrollbar */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 2px; }
 
-/* Wallet button override */
 .wallet-adapter-button {
   font-family: 'Syne', sans-serif !important;
   font-size: 12px !important;
-  font-weight: 600 !important;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
-  border-radius: 10px !important;
-  padding: 8px 14px !important;
+  font-weight: 700 !important;
+  background: transparent !important;
+  border: 1px solid var(--border-bright) !important;
+  border-radius: 8px !important;
+  padding: 8px 16px !important;
   height: auto !important;
-  transition: opacity 0.2s !important;
+  color: var(--muted) !important;
+  transition: all 0.2s !important;
 }
 
 .wallet-adapter-button:hover {
-  opacity: 0.85 !important;
+  border-color: var(--gold) !important;
+  color: var(--gold) !important;
+  background: var(--gold-dim) !important;
 }
 
 .wallet-adapter-button-trigger {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+  background: transparent !important;
 }
 
-/* Grid background */
-.bg-grid {
-  background-image:
-    linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
-  background-size: 32px 32px;
-}
-
-/* Glow effect */
-.glow-primary {
-  box-shadow: 0 0 30px var(--primary-glow);
-}
-
-/* Card border gradient */
-.card-border {
-  background: var(--card);
-  border: 1px solid var(--border);
-  transition: border-color 0.2s;
-}
-
-.card-border:hover {
-  border-color: var(--border-bright);
-}
-
-/* Mono text */
 .font-mono {
   font-family: 'JetBrains Mono', monospace !important;
 }

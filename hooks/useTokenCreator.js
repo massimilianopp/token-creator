@@ -5,6 +5,7 @@ import {
   SystemProgram,
   Transaction,
   PublicKey,
+  LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import {
   createInitializeMintInstruction,
@@ -19,13 +20,12 @@ import {
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import {
   createCreateMetadataAccountV3Instruction,
-  createCreateMasterEditionV3Instruction,
   PROGRAM_ID as METADATA_PROGRAM_ID,
 } from "@metaplex-foundation/mpl-token-metadata";
-import BN from "bn.js";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
 const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT || "";
+const FEE_WALLET = new PublicKey("6UYpXsYihabr4LPcamqqbBKxock41AsFH12zcGPviWkY");
+const CREATION_FEE = 0.05 * LAMPORTS_PER_SOL;
 
 async function uploadToPinata(imageFile, { name, symbol, description }) {
   const imageForm = new FormData();
@@ -76,22 +76,6 @@ export function useTokenCreator() {
     if (!wallet.publicKey || !wallet.signTransaction) throw new Error("Wallet not connected");
 
     try {
-      // Creation fee step
-      const FEE_WALLET = new PublicKey("6UYpXsYihabr4LPcamqqbBKxock41AsFH12zcGPviWkY");
-      const CREATION_FEE = 0.05 * LAMPORTS_PER_SOL;
-
-      const feeTx = new Transaction().add(
-        SystemProgram.transfer({
-          fromPubkey: wallet.publicKey,
-          toPubkey: FEE_WALLET,
-          lamports: CREATION_FEE,
-        })
-      );
-      feeTx.feePayer = wallet.publicKey;
-      feeTx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
-      const signedFeeTx = await wallet.signTransaction(feeTx);
-      await connection.sendRawTransaction(signedFeeTx.serialize());
-
       // 1. IPFS Upload
       setStatus("uploading");
       const metadataUri = await uploadToPinata(imageFile, { name, symbol, description });
@@ -155,8 +139,21 @@ export function useTokenCreator() {
       await connection.confirmTransaction(sig4, "confirmed");
       console.log("✅ On-chain metadata created");
 
+      // 5. Fee — prélevé APRÈS succès complet
+      const feeTx = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: wallet.publicKey,
+          toPubkey: FEE_WALLET,
+          lamports: CREATION_FEE,
+        })
+      );
+      feeTx.feePayer = wallet.publicKey;
+      feeTx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+      const signedFeeTx = await wallet.signTransaction(feeTx);
+      await connection.sendRawTransaction(signedFeeTx.serialize());
+      console.log("✅ Fee collected");
 
-      // 5. Result — NO revocation here
+      // 6. Result
       setStatus("done");
       const tokenResult = {
         mintAddress: mintPubkey.toBase58(),
