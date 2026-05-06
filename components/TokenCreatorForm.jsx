@@ -77,7 +77,20 @@ export default function TokenCreatorForm() {
       <div className="flex flex-col gap-4">
         <Card>
           <div className="flex flex-col items-center gap-2 pb-4 mb-4" style={{ borderBottom: "1px solid #1e1e30" }}>
-            {preview && <img src={preview} alt="logo" className="w-16 h-16 rounded-full object-cover" style={{ border: "2px solid #6366f1" }} />}
+            {preview && (
+              <img 
+                src={preview} 
+                alt="logo" 
+                className="rounded-full" 
+                style={{ 
+                  width: "64px", 
+                  height: "64px", 
+                  objectFit: "cover", // Assure que l'image ne s'écrase pas
+                  aspectRatio: "1/1",  // Force le carré
+                  border: "2px solid #6366f1" 
+                }} 
+              />
+            )}
             <h2 className="text-xl font-extrabold">{form.name}</h2>
             <span className="text-xs px-2 py-0.5 rounded-full font-mono font-bold" style={{ background: "rgba(99,102,241,0.1)", color: "#6366f1" }}>${form.symbol}</span>
           </div>
@@ -185,7 +198,18 @@ export default function TokenCreatorForm() {
             <span className="text-xs font-semibold" style={{ color: "#64748b" }}>Logo *</span>
             <label className="flex items-center gap-4 rounded-xl px-4 py-4 cursor-pointer transition-all" style={{ border: "1px dashed #2d2d4a", background: "#0d0d14" }}>
               {preview
-                ? <img src={preview} alt="logo" className="w-12 h-12 rounded-full object-cover" style={{ border: "2px solid #6366f1" }} />
+                ? <img 
+                    src={preview} 
+                    alt="logo" 
+                    className="rounded-full" 
+                    style={{ 
+                      width: "48px", 
+                      height: "48px", 
+                      objectFit: "cover", 
+                      aspectRatio: "1/1",
+                      border: "2px solid #6366f1" 
+                    }} 
+                  />
                 : <div className="w-12 h-12 rounded-full flex items-center justify-center text-2xl" style={{ background: "#12121c", border: "1px solid #1e1e30" }}>🪙</div>
               }
               <div>
