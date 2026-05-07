@@ -114,11 +114,12 @@ export function LogConsole({ logs }) {
       display: "flex",
       flexDirection: "column",
       gap: 4,
+      overflow: "hidden",
     }}>
       {logs.map((l, i) => (
-        <div key={i} style={{ display: "flex", gap: 10, color: "var(--muted)" }}>
-          <span style={{ color: "var(--dim)", userSelect: "none" }}>›</span>
-          <span>{l}</span>
+        <div key={i} style={{ display: "flex", gap: 10, color: "var(--muted)", overflow: "hidden" }}>
+          <span style={{ color: "var(--dim)", userSelect: "none", flexShrink: 0 }}>›</span>
+          <span style={{ wordBreak: "break-all", overflow: "hidden" }}>{l}</span>
         </div>
       ))}
     </div>
