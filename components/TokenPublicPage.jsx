@@ -35,10 +35,10 @@ export default function TokenPublicPage({ mint }) {
     );
   }
 
-  const solscanUrl = `https://solscan.io/token/${mint}`;
+  const solscanUrl = `https://solscan.io/token/${mint}?cluster=devnet`;
   const dexscreenerUrl = token.pairAddress
-    ? `https://dexscreener.com/solana/${token.pairAddress}`
-    : `https://dexscreener.com/solana/${mint}`;
+    ? `https://dexscreener.com/solana/${token.pairAddress}?cluster=devnet`
+    : `https://dexscreener.com/solana/${mint}?cluster=devnet`;
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>

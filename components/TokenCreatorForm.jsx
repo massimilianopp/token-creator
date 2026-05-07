@@ -115,7 +115,7 @@ export default function TokenCreatorForm() {
 
   // ── Done ──
   if (status === "done") {
-    const solscanUrl = `https://solscan.io/token/${mintAddress}`;
+    const solscanUrl = `https://solscan.io/token/${mintAddress}?cluster=devnet`;
     const publicUrl = `/token/${mintAddress}`;
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>

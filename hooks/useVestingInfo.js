@@ -25,7 +25,7 @@ export function useVestingInfo(mint) {
       try {
         const client = new SolanaStreamClient(
           connection.rpcEndpoint,
-          ICluster.Mainnet
+          ICluster.Devnet
         );
 
         // Fetch tous les contrats liés à ce mint

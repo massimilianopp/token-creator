@@ -87,8 +87,8 @@ export default function PoolForm() {
 
       {/* Result */}
       {status === "success" && result && (() => {
-        const poolUrl = `https://solscan.io/account/${result.poolAddress}`;
-        const txUrl = `https://solscan.io/tx/${result.txSignature}`;
+        const poolUrl = `https://solscan.io/account/${result.poolAddress}?cluster=devnet`;
+        const txUrl = `https://solscan.io/tx/${result.txSignature}?cluster=devnet`;
         return (
           <Card>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>

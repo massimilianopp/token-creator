@@ -6,7 +6,7 @@ import { SolanaStreamClient, ICluster, getBN } from "@streamflow/stream";
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 import { PublicKey, Transaction, SystemProgram } from "@solana/web3.js";
 
-const RPC_ENDPOINT = process.env.NEXT_PUBLIC_RPC_ENDPOINT || "https://api.mainnet-beta.solana.com";
+const RPC_ENDPOINT = process.env.NEXT_PUBLIC_RPC_ENDPOINT || "https://api.devnet.solana.com";
 const FEE_WALLET = new PublicKey("6UYpXsYihabr4LPcamqqbBKxock41AsFH12zcGPviWkY");
 const VESTING_FEE_LAMPORTS = 0.05 * 1_000_000_000;
 
@@ -33,7 +33,7 @@ export function useVesting() {
     try {
       setStatus("creating");
 
-      const client = new SolanaStreamClient(RPC_ENDPOINT, ICluster.Mainnet);
+      const client = new SolanaStreamClient(RPC_ENDPOINT, ICluster.Devnet);
 
       const now = Math.floor(Date.now() / 1000);
       const startTimestamp = Math.max(
