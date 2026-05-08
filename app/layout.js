@@ -1,6 +1,7 @@
 import "./globals.css";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import Providers from "@/components/Providers";
+import { Analytics } from "@vercel/analytics/next"
 
 export default function RootLayout({ children }) {
   return (
