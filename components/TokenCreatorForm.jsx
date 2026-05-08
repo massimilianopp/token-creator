@@ -28,6 +28,7 @@ export default function TokenCreatorForm() {
   const formRef = useRef(null);
   const stepsRef = useRef(null);
   const successRef = useRef(null);
+  const actionsRef = useRef(null);
 
   const [form, setForm] = useState({
     name: "", symbol: "", description: "", imageFile: null,
@@ -73,8 +74,25 @@ export default function TokenCreatorForm() {
         message: "Token created successfully!",
         type: "success",
       });
+      
+      // Animer l'apparition des actions post-création avec un délai
+      setTimeout(() => {
+        if (actionsRef.current) {
+          gsap.fromTo(actionsRef.current, 
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
+          );
+          
+          // Animer les boutons individuellement
+          const buttons = actionsRef.current.querySelectorAll('a');
+          gsap.fromTo(buttons,
+            { opacity: 0, y: 10 },
+            { opacity: 1, y: 0, duration: 0.4, stagger: 0.1, delay: 0.2, ease: "power2.out" }
+          );
+        }
+      }, 800);
     }
-  }, [status, showSuccessFeedback, showToastNotification]);
+  }, [status, showSuccessFeedback, showToastNotification, gsap]);
 
   // Animations des étapes de transaction
   useEffect(() => {
@@ -268,6 +286,114 @@ export default function TokenCreatorForm() {
               Authorities revoked — fully decentralized
             </div>
           )}
+        </Card>
+
+        {/* Post-creation actions */}
+        <Card ref={actionsRef} animated={false} style={{ opacity: 0 }}>
+          <div style={{ textAlign: "center", marginBottom: 16 }}>
+            <p style={{ fontSize: 14, fontWeight: 500, color: "var(--text)", marginBottom: 4 }}>
+              Que voulez-vous faire maintenant ?
+            </p>
+            <p style={{ fontSize: 12, color: "var(--muted)" }}>
+              Sécurisez votre allocation ou ajoutez de la liquidité
+            </p>
+          </div>
+          
+          <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+            <a 
+              href={`/vesting?mint=${mintAddress}`}
+              style={{ 
+                flex: 1, 
+                display: "flex", 
+                flexDirection: "column", 
+                alignItems: "center", 
+                padding: "16px 12px", 
+                textDecoration: "none", 
+                background: "var(--surface)", 
+                border: "1px solid var(--border)", 
+                borderRadius: 8,
+                transition: "all 0.2s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = "var(--hover)";
+                e.target.style.transform = "translateY(-1px)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = "var(--surface)";
+                e.target.style.transform = "translateY(0)";
+              }}
+            >
+              <div style={{
+                width: 32,
+                height: 32,
+                borderRadius: "50%",
+                background: "var(--orange-dim)",
+                border: "1px solid var(--orange-border)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: 8
+              }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" strokeWidth="2">
+                  <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
+                  <circle cx="12" cy="16" r="1"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+              </div>
+              <span style={{ fontSize: 13, fontWeight: 500, color: "var(--text)", marginBottom: 2 }}>
+                Lock my allocation
+              </span>
+              <span style={{ fontSize: 11, color: "var(--muted)", textAlign: "center" }}>
+                Vesting sécurisé
+              </span>
+            </a>
+
+            <a 
+              href={`/pool?mint=${mintAddress}`}
+              style={{ 
+                flex: 1, 
+                display: "flex", 
+                flexDirection: "column", 
+                alignItems: "center", 
+                padding: "16px 12px", 
+                textDecoration: "none", 
+                background: "var(--surface)", 
+                border: "1px solid var(--border)", 
+                borderRadius: 8,
+                transition: "all 0.2s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = "var(--hover)";
+                e.target.style.transform = "translateY(-1px)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = "var(--surface)";
+                e.target.style.transform = "translateY(0)";
+              }}
+            >
+              <div style={{
+                width: 32,
+                height: 32,
+                borderRadius: "50%",
+                background: "var(--blue-dim)",
+                border: "1px solid var(--blue-border)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: 8
+              }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="2">
+                  <path d="M12 2v20M2 12h20"/>
+                </svg>
+              </div>
+              <span style={{ fontSize: 13, fontWeight: 500, color: "var(--text)", marginBottom: 2 }}>
+                Add liquidity
+              </span>
+              <span style={{ fontSize: 11, color: "var(--muted)", textAlign: "center" }}>
+                Pool Whirlpool
+              </span>
+            </a>
+          </div>
         </Card>
 
         <Button onClick={handleReset} variant="ghost">Create another token</Button>

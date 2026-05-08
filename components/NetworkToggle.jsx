@@ -14,7 +14,7 @@ export default function NetworkToggle() {
     if (toggleRef.current && indicatorRef.current) {
       // Animation du switch
       gsap.to(indicatorRef.current, {
-        x: currentNetwork === "mainnet" ? 0 : 28,
+        x: currentNetwork === "mainnet" ? 0 : 38,
         duration: DURATIONS.fast,
         ease: EASE_CONFIGS.smooth,
       });
@@ -36,99 +36,72 @@ export default function NetworkToggle() {
   };
 
   return (
-    <>
-      {/* Indicateur Devnet fixe en haut */}
-      {isDevnet() && (
-        <div
-          style={{
-            position: "fixed",
-            top: 12,
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 100000,
-            background: "rgba(251, 146, 60, 0.15)",
-            border: "1px solid rgba(251, 146, 60, 0.3)",
-            borderRadius: 6,
-            padding: "4px 8px",
-            fontSize: 10,
-            fontFamily: "'Geist Mono', monospace",
-            fontWeight: 600,
-            color: "#fb923c",
-            letterSpacing: "0.05em",
-            backdropFilter: "blur(8px)",
-          }}
-        >
-          ⚡ DEVNET
-        </div>
-      )}
-
-      {/* Toggle compact pour la nav */}
+    <div
+      ref={toggleRef}
+      style={{
+        position: "relative",
+        display: "flex",
+        background: "var(--surface)",
+        border: "1px solid var(--border)",
+        borderRadius: 8,
+        padding: 2,
+        width: 80,
+        height: 28,
+        cursor: "pointer",
+      }}
+      onClick={() => handleNetworkSwitch(currentNetwork === "mainnet" ? "devnet" : "mainnet")}
+    >
+      {/* Indicateur mobile */}
       <div
-        ref={toggleRef}
+        ref={indicatorRef}
         style={{
-          position: "relative",
-          display: "flex",
-          background: "var(--surface)",
-          border: "1px solid var(--border)",
+          position: "absolute",
+          top: 2,
+          left: 2,
+          width: 36,
+          height: 22,
+          background: currentNetwork === "devnet" ? "#fb923c" : "#3b82f6",
           borderRadius: 6,
-          padding: 2,
-          width: 58,
-          height: 26,
-          cursor: "pointer",
+          transition: "background-color 0.2s",
+          boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
         }}
-        onClick={() => handleNetworkSwitch(currentNetwork === "mainnet" ? "devnet" : "mainnet")}
+      />
+      
+      {/* Labels */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: 36,
+          height: 22,
+          fontSize: 10,
+          fontFamily: "'Geist Mono', monospace",
+          fontWeight: 600,
+          color: currentNetwork === "mainnet" ? "white" : "var(--muted)",
+          zIndex: 1,
+          letterSpacing: "-0.02em",
+        }}
       >
-        {/* Indicateur mobile */}
-        <div
-          ref={indicatorRef}
-          style={{
-            position: "absolute",
-            top: 2,
-            left: 2,
-            width: 26,
-            height: 20,
-            background: currentNetwork === "devnet" ? "#fb923c" : "#3b82f6",
-            borderRadius: 4,
-            transition: "background-color 0.2s",
-          }}
-        />
-        
-        {/* Labels */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 26,
-            height: 20,
-            fontSize: 9,
-            fontFamily: "'Geist Mono', monospace",
-            fontWeight: 600,
-            color: currentNetwork === "mainnet" ? "white" : "var(--muted)",
-            zIndex: 1,
-            letterSpacing: "-0.02em",
-          }}
-        >
-          M
-        </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 26,
-            height: 20,
-            fontSize: 9,
-            fontFamily: "'Geist Mono', monospace",
-            fontWeight: 600,
-            color: currentNetwork === "devnet" ? "white" : "var(--muted)",
-            zIndex: 1,
-            letterSpacing: "-0.02em",
-          }}
-        >
-          D
-        </div>
+        MAIN
       </div>
-    </>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: 36,
+          height: 22,
+          fontSize: 10,
+          fontFamily: "'Geist Mono', monospace",
+          fontWeight: 600,
+          color: currentNetwork === "devnet" ? "white" : "var(--muted)",
+          zIndex: 1,
+          letterSpacing: "-0.02em",
+        }}
+      >
+        DEV
+      </div>
+    </div>
   );
 }
