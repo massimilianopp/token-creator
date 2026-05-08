@@ -387,7 +387,7 @@ export default function TokenCreatorForm() {
 
   // ── Form ──
   return (
-    <div ref={formRef} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+    <div ref={formRef} style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: "40vh" }}>
 
       {/* Logo — prominent, like Pump.fun */}
       <Card className="form-section" interactive animated={false}>
@@ -417,13 +417,13 @@ export default function TokenCreatorForm() {
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <div style={{ display: "flex", gap: 8 }}>
             <div style={{ flex: 1 }}>
-              <Input label="Name" placeholder="My Token" value={form.name} onChange={set("name")} />
+              <Input label="Name" placeholder="My Token" value={form.name} onChange={set("name")} onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)} />
             </div>
             <div style={{ width: 96 }}>
-              <Input label="Symbol" placeholder="MTK" maxLength={8} value={form.symbol} onChange={e => setForm(f => ({ ...f, symbol: e.target.value.toUpperCase() }))} />
+              <Input label="Symbol" placeholder="MTK" maxLength={8} value={form.symbol} onChange={e => setForm(f => ({ ...f, symbol: e.target.value.toUpperCase() }))} onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)} />
             </div>
           </div>
-          <Input label="Description" placeholder="What is this token for?" value={form.description} onChange={set("description")} />
+          <Input label="Description" placeholder="What is this token for?" value={form.description} onChange={set("description")} onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)} />
         </div>
       </Card>
 
@@ -444,7 +444,7 @@ export default function TokenCreatorForm() {
 
             {/* Supply + decimals */}
             <div style={{ display: "flex", gap: 8 }}>
-              <Input label="Total supply" type="number" value={form.totalSupply} onChange={e => setVal("totalSupply")(Number(e.target.value))} />
+              <Input label="Total supply" type="number" value={form.totalSupply} onChange={e => setVal("totalSupply")(Number(e.target.value))} onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)} />
               <div style={{ width: 140, display: "flex", flexDirection: "column", gap: 6 }}>
                 <span style={{ fontSize: 13, fontWeight: 500, color: "var(--muted)" }}>Decimals</span>
                 <select value={form.decimals} onChange={e => setVal("decimals")(Number(e.target.value))} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px", fontSize: 14, color: "var(--text)", outline: "none", fontFamily: "'Geist', sans-serif" }}>

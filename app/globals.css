@@ -41,6 +41,8 @@ html, body {
   line-height: 1.5;
   scroll-behavior: smooth;
   overflow-x: hidden;
+  height: 100%;
+  overflow-y: auto;
 }
 
 /* Grid background similar to landing */

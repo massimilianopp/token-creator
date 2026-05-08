@@ -102,16 +102,16 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
 
   // ── Form ──
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: "40vh" }}>
 
       {/* Token */}
       <Card>
         <SectionTitle>Token</SectionTitle>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <Input label="Mint address" placeholder="Token address from step 1" value={form.mintAddress} onChange={set("mintAddress")} />
+          <Input label="Mint address" placeholder="Token address from step 1" value={form.mintAddress} onChange={set("mintAddress")} onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)} />
           <div style={{ display: "flex", gap: 8 }}>
             <div style={{ flex: 1 }}>
-              <Input label="Amount to lock" type="number" value={form.amount} onChange={e => setVal("amount")(Number(e.target.value))} />
+              <Input label="Amount to lock" type="number" value={form.amount} onChange={e => setVal("amount")(Number(e.target.value))} onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)} />
             </div>
             <div style={{ width: 110, display: "flex", flexDirection: "column", gap: 6 }}>
               <span style={{ fontSize: 13, fontWeight: 500, color: "var(--muted)" }}>Decimals</span>
@@ -121,7 +121,7 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
               </select>
             </div>
           </div>
-          <Input label="Stream name" placeholder={`Dev Allocation - ${form.symbol || "MyToken"}`} value={form.name} onChange={set("name")} />
+          <Input label="Stream name" placeholder={`Dev Allocation - ${form.symbol || "MyToken"}`} value={form.name} onChange={set("name")} onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)} />
         </div>
       </Card>
 
@@ -129,7 +129,7 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
       <Card>
         <SectionTitle>Schedule</SectionTitle>
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          <Input label="Start date" type="date" min={today} value={form.startDate} onChange={set("startDate")} />
+          <Input label="Start date" type="date" min={today} value={form.startDate} onChange={set("startDate")} onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)} />
 
           {/* Cliff */}
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -204,7 +204,7 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
             {publicKey.toBase58()}
           </div>
         ) : (
-          <Input label="Recipient address" placeholder="Destination wallet address" value={form.recipient} onChange={set("recipient")} />
+          <Input label="Recipient address" placeholder="Destination wallet address" value={form.recipient} onChange={set("recipient")} onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)} />
         )}
       </Card>
 
