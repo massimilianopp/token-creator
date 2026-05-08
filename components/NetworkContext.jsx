@@ -9,12 +9,12 @@ export const NETWORKS = {
   mainnet: {
     name: "Mainnet",
     value: "mainnet-beta",
-    rpcUrl: process.env.NEXT_PUBLIC_RPC_ENDPOINT || clusterApiUrl("mainnet-beta"),
+    rpcUrl: process.env.NEXT_PUBLIC_RPC_MAINNET_ENDPOINT || clusterApiUrl("mainnet-beta"),
   },
   devnet: {
     name: "Devnet", 
     value: "devnet",
-    rpcUrl: process.env.NEXT_PUBLIC_RPC_ENDPOINT || clusterApiUrl("devnet"),
+    rpcUrl: process.env.NEXT_PUBLIC_RPC_DEVNET_ENDPOINT || clusterApiUrl("devnet"),
   },
 };
 
