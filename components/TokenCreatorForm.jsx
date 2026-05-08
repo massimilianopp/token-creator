@@ -24,7 +24,7 @@ export default function TokenCreatorForm() {
   const { showSuccessFeedback, showErrorFeedback, showToastNotification } = useFeedbackAnimations();
   const { animateTransactionStep } = useTransactionFeedback();
 
-  // Refs pour les animations
+  // Refs for animations
   const formRef = useRef(null);
   const stepsRef = useRef(null);
   const successRef = useRef(null);
@@ -47,7 +47,7 @@ export default function TokenCreatorForm() {
   const isCreating = status && status !== "done" && status !== "error";
   const canSubmit = form.name && form.symbol && form.imageFile && publicKey && !isCreating;
 
-  // Animations d'apparition au scroll pour le formulaire
+  // Scroll-triggered animations for the form
   useEffect(() => {
     if (formRef.current && !isCreating) {
       const inputs = formRef.current.querySelectorAll('input, button, .form-section');
@@ -55,7 +55,7 @@ export default function TokenCreatorForm() {
     }
   }, [staggerUp, isCreating]);
 
-  // Animation des étapes de création
+  // Creation steps animation
   useEffect(() => {
     if (stepsRef.current && isCreating) {
       const steps = stepsRef.current.children;
@@ -63,7 +63,7 @@ export default function TokenCreatorForm() {
     }
   }, [staggerUp, isCreating]);
 
-  // Animation de succès
+  // Success animation
   useEffect(() => {
     if (status === "done" && successRef.current) {
       showSuccessFeedback(successRef.current, {
@@ -75,7 +75,7 @@ export default function TokenCreatorForm() {
         type: "success",
       });
       
-      // Animer l'apparition des actions post-création avec un délai
+      // Animate the appearance of post-creation actions with a delay
       setTimeout(() => {
         if (actionsRef.current) {
           gsap.fromTo(actionsRef.current, 
@@ -83,7 +83,7 @@ export default function TokenCreatorForm() {
             { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
           );
           
-          // Animer les boutons individuellement
+          // Animate buttons individually
           const buttons = actionsRef.current.querySelectorAll('a');
           gsap.fromTo(buttons,
             { opacity: 0, y: 10 },
@@ -94,7 +94,7 @@ export default function TokenCreatorForm() {
     }
   }, [status, showSuccessFeedback, showToastNotification, gsap]);
 
-  // Animations des étapes de transaction
+  // Transaction steps animations
   useEffect(() => {
     if (stepsRef.current && status) {
       const steps = stepsRef.current.children;
@@ -108,7 +108,7 @@ export default function TokenCreatorForm() {
           stepStatus = "processing";
         }
         
-        // Ajouter les classes pour le sélecteur CSS
+        // Add classes for CSS selector
         const indicator = step.querySelector('div');
         const text = step.querySelector('span');
         if (indicator) indicator.className = 'step-indicator';
@@ -131,10 +131,10 @@ export default function TokenCreatorForm() {
     setError(null);
     try { 
       await createToken(form); 
-      // Animation de succès sera gérée par l'effet useEffect qui détecte status === "done"
+      // Success animation will be handled by the useEffect hook that detects status === "done"
     } catch (err) { 
       setError(err.message);
-      // Animation d'erreur sur le formulaire
+      // Error animation on the form
       if (formRef.current) {
         showErrorFeedback(formRef.current);
       }
@@ -292,10 +292,10 @@ export default function TokenCreatorForm() {
         <Card ref={actionsRef} animated={false} style={{ opacity: 0 }}>
           <div style={{ textAlign: "center", marginBottom: 16 }}>
             <p style={{ fontSize: 14, fontWeight: 500, color: "var(--text)", marginBottom: 4 }}>
-              Que voulez-vous faire maintenant ?
+              What would you like to do now?
             </p>
             <p style={{ fontSize: 12, color: "var(--muted)" }}>
-              Sécurisez votre allocation ou ajoutez de la liquidité
+              Secure your allocation or add liquidity
             </p>
           </div>
           
@@ -305,47 +305,39 @@ export default function TokenCreatorForm() {
               style={{ 
                 flex: 1, 
                 display: "flex", 
-                flexDirection: "column", 
                 alignItems: "center", 
-                padding: "16px 12px", 
+                gap: 12,
+                padding: "12px 16px", 
                 textDecoration: "none", 
-                background: "var(--surface)", 
+                background: "transparent", 
                 border: "1px solid var(--border)", 
                 borderRadius: 8,
-                transition: "all 0.2s ease"
+                fontWeight: 500,
+                fontSize: 14,
+                color: "var(--muted)",
+                fontFamily: "'Geist', sans-serif",
+                transition: "all 0.2s ease",
+                cursor: "pointer"
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = "var(--hover)";
-                e.target.style.transform = "translateY(-1px)";
+                e.currentTarget.style.borderColor = "var(--dim)";
+                e.currentTarget.style.color = "var(--text)";
+                e.currentTarget.style.backgroundColor = "var(--surface)";
+                e.currentTarget.style.transform = "translateY(-1px)";
               }}
               onMouseLeave={(e) => {
-                e.target.style.background = "var(--surface)";
-                e.target.style.transform = "translateY(0)";
+                e.currentTarget.style.borderColor = "var(--border)";
+                e.currentTarget.style.color = "var(--muted)";
+                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.transform = "translateY(0)";
               }}
             >
-              <div style={{
-                width: 32,
-                height: 32,
-                borderRadius: "50%",
-                background: "var(--orange-dim)",
-                border: "1px solid var(--orange-border)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: 8
-              }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" strokeWidth="2">
-                  <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
-                  <circle cx="12" cy="16" r="1"/>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                </svg>
-              </div>
-              <span style={{ fontSize: 13, fontWeight: 500, color: "var(--text)", marginBottom: 2 }}>
-                Lock my allocation
-              </span>
-              <span style={{ fontSize: 11, color: "var(--muted)", textAlign: "center" }}>
-                Vesting sécurisé
-              </span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
+                <circle cx="12" cy="16" r="1"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              Lock allocation
             </a>
 
             <a 
@@ -353,45 +345,37 @@ export default function TokenCreatorForm() {
               style={{ 
                 flex: 1, 
                 display: "flex", 
-                flexDirection: "column", 
                 alignItems: "center", 
-                padding: "16px 12px", 
+                gap: 12,
+                padding: "12px 16px", 
                 textDecoration: "none", 
-                background: "var(--surface)", 
+                background: "transparent", 
                 border: "1px solid var(--border)", 
                 borderRadius: 8,
-                transition: "all 0.2s ease"
+                fontWeight: 500,
+                fontSize: 14,
+                color: "var(--muted)",
+                fontFamily: "'Geist', sans-serif",
+                transition: "all 0.2s ease",
+                cursor: "pointer"
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = "var(--hover)";
-                e.target.style.transform = "translateY(-1px)";
+                e.currentTarget.style.borderColor = "var(--dim)";
+                e.currentTarget.style.color = "var(--text)";
+                e.currentTarget.style.backgroundColor = "var(--surface)";
+                e.currentTarget.style.transform = "translateY(-1px)";
               }}
               onMouseLeave={(e) => {
-                e.target.style.background = "var(--surface)";
-                e.target.style.transform = "translateY(0)";
+                e.currentTarget.style.borderColor = "var(--border)";
+                e.currentTarget.style.color = "var(--muted)";
+                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.transform = "translateY(0)";
               }}
             >
-              <div style={{
-                width: 32,
-                height: 32,
-                borderRadius: "50%",
-                background: "var(--blue-dim)",
-                border: "1px solid var(--blue-border)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: 8
-              }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="2">
-                  <path d="M12 2v20M2 12h20"/>
-                </svg>
-              </div>
-              <span style={{ fontSize: 13, fontWeight: 500, color: "var(--text)", marginBottom: 2 }}>
-                Add liquidity
-              </span>
-              <span style={{ fontSize: 11, color: "var(--muted)", textAlign: "center" }}>
-                Pool Whirlpool
-              </span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 2v20M2 12h20"/>
+              </svg>
+              Add liquidity
             </a>
           </div>
         </Card>
