@@ -18,11 +18,12 @@ import {
   getFullRangeTicks,
   orderMints,
   TICK_SPACING,
-  WSOL_MINT,
-  USDC_MINT,
+  getWSolMint,
+  getUSDCMint,
   WHIRLPOOLS_CONFIG_MAINNET,
   ORCA_WHIRLPOOL_PROGRAM_ID,
 } from "@/lib/whirlpool";
+import { useNetwork } from "@/components/NetworkContext";
 
 const FEE_WALLET = new PublicKey("6UYpXsYihabr4LPcamqqbBKxock41AsFH12zcGPviWkY");
 const POOL_FEE_PCT = 0.001; // 0.1%
@@ -30,6 +31,7 @@ const POOL_FEE_PCT = 0.001; // 0.1%
 export function useWhirlpool() {
   const { connection } = useConnection();
   const wallet = useWallet();
+  const { isDevnet } = useNetwork();
 
   const [status, setStatus] = useState("idle");
   const [logs, setLogs] = useState([]);
@@ -62,7 +64,7 @@ export function useWhirlpool() {
 
         // 2. Resolve mints
         const userMint = new PublicKey(tokenMint);
-        const pairedMint = pairedWith === "SOL" ? WSOL_MINT : USDC_MINT;
+        const pairedMint = pairedWith === "SOL" ? getWSolMint(isDevnet()) : getUSDCMint(isDevnet());
         const pairedDecimals = pairedWith === "SOL" ? 9 : 6;
 
         // 3. Mandatory order mintA < mintB
@@ -315,7 +317,7 @@ export function useWhirlpool() {
         setStatus("error");
       }
     },
-    [connection, wallet]
+    [connection, wallet, isDevnet]
   );
 
   return { createPool, status, logs, result, error };

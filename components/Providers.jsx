@@ -9,13 +9,17 @@ import BottomNav from "@/components/BottomNav";
 import { NetworkProvider, useNetwork } from "@/components/NetworkContext";
 
 function WalletConnectionProvider({ children }) {
-  const { getCurrentEndpoint } = useNetwork();
+  const { getCurrentEndpoint, currentNetwork } = useNetwork();
   const endpoint = getCurrentEndpoint();
   
   const wallets = useMemo(() => [
-    new PhantomWalletAdapter(),
-    new SolflareWalletAdapter(),
-  ], []);
+    new PhantomWalletAdapter({
+      network: currentNetwork === "devnet" ? "devnet" : "mainnet-beta"
+    }),
+    new SolflareWalletAdapter({
+      network: currentNetwork === "devnet" ? "devnet" : "mainnet-beta"
+    }),
+  ], [currentNetwork]);
 
   return (
     <ConnectionProvider endpoint={endpoint}>
