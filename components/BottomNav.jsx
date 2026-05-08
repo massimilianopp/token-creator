@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
+import { useGSAP, DURATIONS, EASE_CONFIGS } from "@/hooks/useGSAP";
 
 const WalletMultiButton = dynamic(
   () => import("@solana/wallet-adapter-react-ui").then((mod) => mod.WalletMultiButton),
@@ -17,18 +19,44 @@ const NAV_ITEMS = [
 
 export default function BottomNav() {
   const pathname = usePathname();
+  const navRef = useRef(null);
+  const { gsap } = useGSAP();
+
+  useEffect(() => {
+    if (navRef.current) {
+      // Animation d'entrée de la navigation
+      gsap.fromTo(
+        navRef.current,
+        {
+          y: 80,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: DURATIONS.normal,
+          ease: EASE_CONFIGS.smooth,
+          delay: 0.2,
+        }
+      );
+    }
+  }, [gsap]);
+
   if (pathname.startsWith("/token/")) return null;
 
   return (
-    <nav style={{
-      position: "fixed",
-      bottom: 0, left: 0, right: 0,
-      zIndex: 99999,
-      background: "rgba(10,10,10,0.95)",
-      backdropFilter: "blur(20px)",
-      borderTop: "1px solid var(--border)",
-      height: 60,
-    }} className="animate-slideUp">
+    <nav
+      ref={navRef}
+      style={{
+        position: "fixed",
+        bottom: 0, left: 0, right: 0,
+        zIndex: 99999,
+        background: "rgba(10,10,10,0.95)",
+        backdropFilter: "blur(20px)",
+        borderTop: "1px solid var(--border)",
+        height: 60,
+      }}
+    >
       <div style={{
         maxWidth: 480,
         margin: "0 auto",

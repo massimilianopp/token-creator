@@ -1,24 +1,59 @@
-export function Card({ children, className = "", interactive = false }) {
+"use client";
+
+import { useRef, useEffect } from "react";
+import { useGSAP, DURATIONS, EASE_CONFIGS } from "@/hooks/useGSAP";
+
+export function Card({ children, className = "", interactive = false, animated = true }) {
+  const cardRef = useRef(null);
+  const { scaleIn, gsap } = useGSAP();
+
+  useEffect(() => {
+    if (cardRef.current && animated) {
+      scaleIn(cardRef.current, {
+        delay: Math.random() * 0.2, // Stagger aléatoire léger
+      });
+    }
+  }, [scaleIn, animated]);
+
+  const handleMouseEnter = (e) => {
+    if (!interactive) return;
+    
+    gsap.to(e.currentTarget, {
+      y: -2,
+      borderColor: "rgba(255,255,255,0.15)",
+      boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+      duration: DURATIONS.quick,
+      ease: EASE_CONFIGS.smooth,
+    });
+  };
+
+  const handleMouseLeave = (e) => {
+    if (!interactive) return;
+    
+    gsap.to(e.currentTarget, {
+      y: 0,
+      borderColor: "var(--border)",
+      boxShadow: "none",
+      duration: DURATIONS.quick,
+      ease: EASE_CONFIGS.smooth,
+    });
+  };
+
   return (
-    <div className={`${className} animate-fadeInUp`} style={{
-      background: "var(--card)",
-      border: "1px solid var(--border)",
-      borderRadius: 12,
-      padding: 24,
-      transition: "all 0.2s ease",
-      transform: "translateY(0)",
-      cursor: interactive ? "pointer" : "default",
-    }}
-    onMouseEnter={interactive ? (e) => {
-      e.currentTarget.style.transform = "translateY(-2px)";
-      e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
-      e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,0,0,0.3)";
-    } : undefined}
-    onMouseLeave={interactive ? (e) => {
-      e.currentTarget.style.transform = "translateY(0)";
-      e.currentTarget.style.borderColor = "var(--border)";
-      e.currentTarget.style.boxShadow = "none";
-    } : undefined}>
+    <div 
+      ref={cardRef}
+      className={className} 
+      style={{
+        background: "var(--card)",
+        border: "1px solid var(--border)",
+        borderRadius: 12,
+        padding: 24,
+        cursor: interactive ? "pointer" : "default",
+        opacity: animated ? 0 : 1,
+      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {children}
     </div>
   );
@@ -40,6 +75,33 @@ export function SectionTitle({ children }) {
 }
 
 export function Input({ label, hint, error, ...props }) {
+  const inputRef = useRef(null);
+  const { gsap } = useGSAP();
+
+  const handleFocus = (e) => {
+    if (error) return;
+    
+    gsap.to(e.target, {
+      borderColor: "var(--border-focus)",
+      scale: 1.01,
+      backgroundColor: "var(--card)",
+      duration: DURATIONS.quick,
+      ease: EASE_CONFIGS.smooth,
+    });
+  };
+
+  const handleBlur = (e) => {
+    if (error) return;
+    
+    gsap.to(e.target, {
+      borderColor: "var(--border)",
+      scale: 1,
+      backgroundColor: "var(--surface)",
+      duration: DURATIONS.quick,
+      ease: EASE_CONFIGS.smooth,
+    });
+  };
+
   return (
     <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       {label && (
@@ -48,6 +110,7 @@ export function Input({ label, hint, error, ...props }) {
         </span>
       )}
       <input
+        ref={inputRef}
         {...props}
         style={{
           width: "100%",
@@ -59,22 +122,9 @@ export function Input({ label, hint, error, ...props }) {
           color: "var(--text)",
           outline: "none",
           fontFamily: "'Geist', sans-serif",
-          transition: "all 0.2s ease",
         }}
-        onFocus={e => { 
-          if (!error) {
-            e.target.style.borderColor = "var(--border-focus)";
-            e.target.style.transform = "scale(1.01)";
-            e.target.style.background = "var(--card)";
-          }
-        }}
-        onBlur={e => { 
-          if (!error) {
-            e.target.style.borderColor = "var(--border)";
-            e.target.style.transform = "scale(1)";
-            e.target.style.background = "var(--surface)";
-          }
-        }}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
       />
       {hint && <span style={{ fontSize: 12, color: "var(--dim)" }}>{hint}</span>}
       {error && <span style={{ fontSize: 12, color: "var(--red)" }}>{error}</span>}
@@ -83,6 +133,9 @@ export function Input({ label, hint, error, ...props }) {
 }
 
 export function Button({ children, loading, disabled, onClick, variant = "primary", size = "md" }) {
+  const buttonRef = useRef(null);
+  const { buttonPress, gsap, spin } = useGSAP();
+  
   const isPrimary = variant === "primary";
   const isGhost = variant === "ghost";
   const isDanger = variant === "danger";
@@ -90,11 +143,74 @@ export function Button({ children, loading, disabled, onClick, variant = "primar
   const padding = size === "sm" ? "8px 16px" : "12px 20px";
   const fontSize = size === "sm" ? 13 : 14;
 
+  useEffect(() => {
+    if (loading && buttonRef.current) {
+      const spinner = buttonRef.current.querySelector('.loading-spinner');
+      if (spinner) {
+        spin(spinner);
+      }
+    }
+  }, [loading, spin]);
+
+  const handleMouseEnter = (e) => {
+    if (loading || disabled) return;
+    
+    const animations = {
+      y: -1,
+      duration: DURATIONS.quick,
+      ease: EASE_CONFIGS.smooth,
+    };
+
+    if (isPrimary) {
+      animations.backgroundColor = "#e5e5e5";
+      animations.boxShadow = "0 4px 20px rgba(255,255,255,0.15)";
+    } else if (isDanger) {
+      animations.borderColor = "var(--red)";
+      animations.backgroundColor = "rgba(239,68,68,0.1)";
+    } else {
+      animations.borderColor = "var(--dim)";
+      animations.color = "var(--text)";
+      animations.backgroundColor = "var(--surface)";
+    }
+
+    gsap.to(e.currentTarget, animations);
+  };
+
+  const handleMouseLeave = (e) => {
+    if (loading || disabled) return;
+    
+    const animations = {
+      y: 0,
+      boxShadow: "none",
+      duration: DURATIONS.quick,
+      ease: EASE_CONFIGS.smooth,
+    };
+
+    if (isPrimary) {
+      animations.backgroundColor = "var(--accent)";
+    } else if (isDanger) {
+      animations.borderColor = "var(--red-border)";
+      animations.backgroundColor = "var(--red-dim)";
+    } else {
+      animations.borderColor = "var(--border)";
+      animations.color = "var(--muted)";
+      animations.backgroundColor = "transparent";
+    }
+
+    gsap.to(e.currentTarget, animations);
+  };
+
+  const handleClick = (e) => {
+    if (loading || disabled || !onClick) return;
+    buttonPress(e.currentTarget);
+    onClick(e);
+  };
+
   return (
     <button
-      onClick={onClick}
+      ref={buttonRef}
+      onClick={handleClick}
       disabled={loading || disabled}
-      className={loading ? "animate-pulse" : ""}
       style={{
         width: "100%",
         padding,
@@ -105,50 +221,25 @@ export function Button({ children, loading, disabled, onClick, variant = "primar
         letterSpacing: "0.01em",
         cursor: loading || disabled ? "not-allowed" : "pointer",
         opacity: disabled ? 0.4 : 1,
-        transition: "all 0.2s ease",
-        transform: "translateY(0)",
         border: isPrimary ? "none" : isDanger ? "1px solid var(--red-border)" : "1px solid var(--border)",
         background: isPrimary ? "var(--accent)" : isDanger ? "var(--red-dim)" : "transparent",
         color: isPrimary ? "#000000" : isDanger ? "var(--red)" : "var(--muted)",
       }}
-      onMouseEnter={e => {
-        if (loading || disabled) return;
-        e.currentTarget.style.transform = "translateY(-1px)";
-        if (isPrimary) {
-          e.currentTarget.style.background = "#e5e5e5";
-          e.currentTarget.style.boxShadow = "0 4px 20px rgba(255,255,255,0.15)";
-        } else if (isDanger) {
-          e.currentTarget.style.borderColor = "var(--red)";
-          e.currentTarget.style.background = "rgba(239,68,68,0.1)";
-        } else {
-          e.currentTarget.style.borderColor = "var(--dim)";
-          e.currentTarget.style.color = "var(--text)";
-          e.currentTarget.style.background = "var(--surface)";
-        }
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.transform = "translateY(0)";
-        e.currentTarget.style.boxShadow = "none";
-        if (isPrimary) e.currentTarget.style.background = "var(--accent)";
-        else if (isDanger) {
-          e.currentTarget.style.borderColor = "var(--red-border)";
-          e.currentTarget.style.background = "var(--red-dim)";
-        } else {
-          e.currentTarget.style.borderColor = "var(--border)";
-          e.currentTarget.style.color = "var(--muted)";
-          e.currentTarget.style.background = "transparent";
-        }
-      }}
-      onMouseDown={e => {
-        if (loading || disabled) return;
-        e.currentTarget.style.transform = "translateY(0) scale(0.98)";
-      }}
-      onMouseUp={e => {
-        if (loading || disabled) return;
-        e.currentTarget.style.transform = "translateY(-1px) scale(1)";
-      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
-      {loading ? "Processing..." : children}
+      {loading ? (
+        <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+          <span className="loading-spinner" style={{ 
+            width: 12, 
+            height: 12, 
+            border: "2px solid currentColor", 
+            borderTop: "2px solid transparent", 
+            borderRadius: "50%",
+          }} />
+          Processing...
+        </span>
+      ) : children}
     </button>
   );
 }

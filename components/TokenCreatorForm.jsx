@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useTokenCreator } from "../hooks/useTokenCreator";
+import { useScrollAnimation, useProgressAnimation } from "../hooks/useScrollAnimation";
+import { useGSAP, DURATIONS, EASE_CONFIGS } from "../hooks/useGSAP";
+import { useFeedbackAnimations, useTransactionFeedback } from "../hooks/useFeedbackAnimations";
 import { Card, SectionTitle, Input, Button, ErrorBox, Badge, Divider } from "@/components/ui/Card";
 
 const STEPS = [
@@ -15,6 +18,16 @@ const STEPS = [
 export default function TokenCreatorForm() {
   const { publicKey } = useWallet();
   const { createToken, revokeAuthorities, status, mintAddress, reset } = useTokenCreator();
+  const { animateOnScroll } = useScrollAnimation();
+  const { pulseElement } = useProgressAnimation();
+  const { gsap, staggerUp } = useGSAP();
+  const { showSuccessFeedback, showErrorFeedback, showToastNotification } = useFeedbackAnimations();
+  const { animateTransactionStep } = useTransactionFeedback();
+
+  // Refs pour les animations
+  const formRef = useRef(null);
+  const stepsRef = useRef(null);
+  const successRef = useRef(null);
 
   const [form, setForm] = useState({
     name: "", symbol: "", description: "", imageFile: null,
@@ -33,6 +46,61 @@ export default function TokenCreatorForm() {
   const isCreating = status && status !== "done" && status !== "error";
   const canSubmit = form.name && form.symbol && form.imageFile && publicKey && !isCreating;
 
+  // Animations d'apparition au scroll pour le formulaire
+  useEffect(() => {
+    if (formRef.current && !isCreating) {
+      const inputs = formRef.current.querySelectorAll('input, button, .form-section');
+      staggerUp(inputs, { stagger: 0.05 });
+    }
+  }, [staggerUp, isCreating]);
+
+  // Animation des étapes de création
+  useEffect(() => {
+    if (stepsRef.current && isCreating) {
+      const steps = stepsRef.current.children;
+      staggerUp(steps, { stagger: 0.1, delay: 0.2 });
+    }
+  }, [staggerUp, isCreating]);
+
+  // Animation de succès
+  useEffect(() => {
+    if (status === "done" && successRef.current) {
+      showSuccessFeedback(successRef.current, {
+        message: "Token created successfully!",
+        showConfetti: true,
+      });
+      showToastNotification(null, {
+        message: "Token created successfully!",
+        type: "success",
+      });
+    }
+  }, [status, showSuccessFeedback, showToastNotification]);
+
+  // Animations des étapes de transaction
+  useEffect(() => {
+    if (stepsRef.current && status) {
+      const steps = stepsRef.current.children;
+      Array.from(steps).forEach((step, index) => {
+        const stepData = STEPS[index];
+        let stepStatus = "pending";
+        
+        if (index < currentStepIndex) {
+          stepStatus = "success";
+        } else if (index === currentStepIndex) {
+          stepStatus = "processing";
+        }
+        
+        // Ajouter les classes pour le sélecteur CSS
+        const indicator = step.querySelector('div');
+        const text = step.querySelector('span');
+        if (indicator) indicator.className = 'step-indicator';
+        if (text) text.className = 'step-text';
+        
+        animateTransactionStep(step, stepStatus);
+      });
+    }
+  }, [status, currentStepIndex, animateTransactionStep]);
+
   const set = (field) => (e) => setForm(f => ({ ...f, [field]: e.target.value }));
   const setVal = (field) => (val) => setForm(f => ({ ...f, [field]: val }));
 
@@ -43,7 +111,20 @@ export default function TokenCreatorForm() {
 
   const handleSubmit = async () => {
     setError(null);
-    try { await createToken(form); } catch (err) { setError(err.message); }
+    try { 
+      await createToken(form); 
+      // Animation de succès sera gérée par l'effet useEffect qui détecte status === "done"
+    } catch (err) { 
+      setError(err.message);
+      // Animation d'erreur sur le formulaire
+      if (formRef.current) {
+        showErrorFeedback(formRef.current);
+      }
+      showToastNotification(null, {
+        message: "Failed to create token",
+        type: "error",
+      });
+    }
   };
 
   const handleRevoke = async () => {
@@ -73,7 +154,7 @@ export default function TokenCreatorForm() {
   if (isCreating) {
     return (
       <Card>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div ref={stepsRef} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {STEPS.map((step, i) => {
             const isDone = i < currentStepIndex;
             const isCurrent = i === currentStepIndex;
@@ -118,8 +199,8 @@ export default function TokenCreatorForm() {
     const solscanUrl = `https://solscan.io/token/${mintAddress}`;
     const publicUrl = `/token/${mintAddress}`;
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        <Card>
+      <div ref={successRef} style={{ display: "flex", flexDirection: "column", gap: 12, opacity: 0 }}>
+        <Card animated={false}>
           {/* Token header */}
           <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24 }}>
             {preview && (
@@ -196,10 +277,10 @@ export default function TokenCreatorForm() {
 
   // ── Form ──
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+    <div ref={formRef} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
 
       {/* Logo — prominent, like Pump.fun */}
-      <Card className="stagger-1" interactive>
+      <Card className="form-section" interactive animated={false}>
         <label style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, cursor: "pointer", padding: "8px 0" }}>
           {preview ? (
             <img src={preview} alt="logo" style={{ width: 80, height: 80, borderRadius: "50%", objectFit: "cover", border: "1px solid var(--border)" }} />
@@ -221,7 +302,7 @@ export default function TokenCreatorForm() {
       </Card>
 
       {/* Identity */}
-      <Card className="stagger-2">
+      <Card className="form-section" animated={false}>
         <SectionTitle>Identity</SectionTitle>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <div style={{ display: "flex", gap: 8 }}>
@@ -237,7 +318,7 @@ export default function TokenCreatorForm() {
       </Card>
 
       {/* Advanced — collapsed by default */}
-      <div style={{ border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }} className="animate-fadeInUp stagger-3">
+      <div style={{ border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }} className="form-section">
         <button onClick={() => setShowAdvanced(v => !v)} style={{
           width: "100%", padding: "14px 20px", background: "var(--card)", border: "none",
           display: "flex", alignItems: "center", justifyContent: "space-between",
