@@ -14,7 +14,8 @@ export default function VestingPage() {
   }, [transitionIn]);
 
   return (
-    <main ref={pageRef} style={{ padding: "32px 24px 0" }}>
+    <div className="mobile-form">
+    <main ref={pageRef} style={{ padding: "32px 24px 30px" }}>
       <div style={{ marginBottom: 32 }} className="page-header">
         <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 8 }}>
           Step 02 · Optional
@@ -30,5 +31,6 @@ export default function VestingPage() {
         <VestingForm />
       </div>
     </main>
+    </div>
   );
 }

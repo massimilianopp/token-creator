@@ -24,16 +24,32 @@ export default function PoolForm() {
   });
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: "40vh" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: "30px" }}>
 
       {/* Mint */}
       <Card>
         <SectionTitle>Token</SectionTitle>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <Input label="Mint address" placeholder="Your token address..." value={form.tokenMint} onChange={set("tokenMint")} disabled={isLoading} onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)} />
+          <Input label="Mint address" placeholder="Your token address..." value={form.tokenMint} onChange={set("tokenMint")} disabled={isLoading} onFocus={(e) => {
+     setTimeout(() => {
+       e.target.scrollIntoView({ 
+         behavior: 'smooth', 
+         block: 'center',
+         inline: 'nearest'
+       });
+     }, 400);
+   }} />
           <div style={{ display: "flex", gap: 8 }}>
             <div style={{ width: 100 }}>
-              <Input label="Decimals" type="number" min="0" max="9" value={form.tokenDecimals} onChange={set("tokenDecimals")} disabled={isLoading} onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)} />
+              <Input label="Decimals" type="number" min="0" max="9" value={form.tokenDecimals} onChange={set("tokenDecimals")} disabled={isLoading} onFocus={(e) => {
+     setTimeout(() => {
+       e.target.scrollIntoView({ 
+         behavior: 'smooth', 
+         block: 'center',
+         inline: 'nearest'
+       });
+     }, 400);
+   }} />
             </div>
 
             {/* Pair selector — big buttons */}
@@ -62,13 +78,37 @@ export default function PoolForm() {
       <Card>
         <SectionTitle>Liquidity</SectionTitle>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <Input label="Initial price" hint="Ignored if pool already exists" type="number" step="any" placeholder="Ex: 0.001" value={form.initialPrice} onChange={set("initialPrice")} disabled={isLoading} onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)} />
+          <Input label="Initial price" hint="Ignored if pool already exists" type="number" step="any" placeholder="Ex: 0.001" value={form.initialPrice} onChange={set("initialPrice")} disabled={isLoading} onFocus={(e) => {
+     setTimeout(() => {
+       e.target.scrollIntoView({ 
+         behavior: 'smooth', 
+         block: 'center',
+         inline: 'nearest'
+       });
+     }, 400);
+   }} />
           <div style={{ display: "flex", gap: 8 }}>
             <div style={{ flex: 1 }}>
-              <Input label="Token amount" type="number" step="any" placeholder="Ex: 1000" value={form.amountToken} onChange={set("amountToken")} disabled={isLoading} onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)} />
+              <Input label="Token amount" type="number" step="any" placeholder="Ex: 1000" value={form.amountToken} onChange={set("amountToken")} disabled={isLoading} onFocus={(e) => {
+     setTimeout(() => {
+       e.target.scrollIntoView({ 
+         behavior: 'smooth', 
+         block: 'center',
+         inline: 'nearest'
+       });
+     }, 400);
+   }} />
             </div>
             <div style={{ flex: 1 }}>
-              <Input label={`${form.pairedWith} amount`} type="number" step="any" placeholder={form.pairedWith === "SOL" ? "Ex: 0.5" : "Ex: 10"} value={form.amountPaired} onChange={set("amountPaired")} disabled={isLoading} onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)} />
+              <Input label={`${form.pairedWith} amount`} type="number" step="any" placeholder={form.pairedWith === "SOL" ? "Ex: 0.5" : "Ex: 10"} value={form.amountPaired} onChange={set("amountPaired")} disabled={isLoading} onFocus={(e) => {
+     setTimeout(() => {
+       e.target.scrollIntoView({ 
+         behavior: 'smooth', 
+         block: 'center',
+         inline: 'nearest'
+       });
+     }, 400);
+   }} />
             </div>
           </div>
         </div>

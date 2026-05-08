@@ -46,6 +46,13 @@ html, body {
   padding-bottom: 60px;
 }
 
+/* Mobile form container with dynamic viewport height */
+.mobile-form {
+  height: 100dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Grid background similar to landing */
 body::before {
   content: '';
