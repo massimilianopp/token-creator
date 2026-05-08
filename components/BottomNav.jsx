@@ -91,7 +91,7 @@ export default function BottomNav() {
                 fontSize: 9,
                 fontFamily: "'Geist Mono', monospace",
                 fontWeight: 500,
-                color: isActive ? "var(--muted)" : "var(--dim)",
+                color: isActive ? "var(--text)" : "var(--muted)",
                 letterSpacing: "0.06em",
               }}>
                 {item.number}
