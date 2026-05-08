@@ -1,6 +1,6 @@
 "use client";
 import TokenCreatorForm from "@/components/TokenCreatorForm";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
 
 export default function Home() {
   return (
