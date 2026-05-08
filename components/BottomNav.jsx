@@ -25,21 +25,25 @@ export default function BottomNav() {
 
   useEffect(() => {
     if (navRef.current) {
-      // Animation d'entrée de la navigation
-      gsap.fromTo(
-        navRef.current,
-        {
-          y: 80,
-          opacity: 0,
-        },
-        {
-          y: 0,
-          opacity: 1,
-          duration: DURATIONS.normal,
-          ease: EASE_CONFIGS.smooth,
-          delay: 0.2,
-        }
-      );
+      try {
+        // Animation d'entrée de la navigation
+        gsap.fromTo(
+          navRef.current,
+          {
+            y: 80,
+            opacity: 0,
+          },
+          {
+            y: 0,
+            opacity: 1,
+            duration: DURATIONS.normal,
+            ease: EASE_CONFIGS.smooth,
+            delay: 0.2,
+          }
+        );
+      } catch (e) {
+        // Si GSAP échoue, la nav reste visible
+      }
     }
   }, [gsap]);
 
@@ -56,6 +60,7 @@ export default function BottomNav() {
         backdropFilter: "blur(20px)",
         borderTop: "1px solid var(--border)",
         height: 60,
+        opacity: 1,
       }}
     >
       <div style={{
