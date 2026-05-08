@@ -1,11 +1,24 @@
-export function Card({ children, className = "" }) {
+export function Card({ children, className = "", interactive = false }) {
   return (
-    <div className={className} style={{
+    <div className={`${className} animate-fadeInUp`} style={{
       background: "var(--card)",
       border: "1px solid var(--border)",
       borderRadius: 12,
       padding: 24,
-    }}>
+      transition: "all 0.2s ease",
+      transform: "translateY(0)",
+      cursor: interactive ? "pointer" : "default",
+    }}
+    onMouseEnter={interactive ? (e) => {
+      e.currentTarget.style.transform = "translateY(-2px)";
+      e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
+      e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,0,0,0.3)";
+    } : undefined}
+    onMouseLeave={interactive ? (e) => {
+      e.currentTarget.style.transform = "translateY(0)";
+      e.currentTarget.style.borderColor = "var(--border)";
+      e.currentTarget.style.boxShadow = "none";
+    } : undefined}>
       {children}
     </div>
   );
@@ -46,10 +59,22 @@ export function Input({ label, hint, error, ...props }) {
           color: "var(--text)",
           outline: "none",
           fontFamily: "'Geist', sans-serif",
-          transition: "border-color 0.15s",
+          transition: "all 0.2s ease",
         }}
-        onFocus={e => { if (!error) e.target.style.borderColor = "var(--border-focus)"; }}
-        onBlur={e => { if (!error) e.target.style.borderColor = "var(--border)"; }}
+        onFocus={e => { 
+          if (!error) {
+            e.target.style.borderColor = "var(--border-focus)";
+            e.target.style.transform = "scale(1.01)";
+            e.target.style.background = "var(--card)";
+          }
+        }}
+        onBlur={e => { 
+          if (!error) {
+            e.target.style.borderColor = "var(--border)";
+            e.target.style.transform = "scale(1)";
+            e.target.style.background = "var(--surface)";
+          }
+        }}
       />
       {hint && <span style={{ fontSize: 12, color: "var(--dim)" }}>{hint}</span>}
       {error && <span style={{ fontSize: 12, color: "var(--red)" }}>{error}</span>}
@@ -69,6 +94,7 @@ export function Button({ children, loading, disabled, onClick, variant = "primar
     <button
       onClick={onClick}
       disabled={loading || disabled}
+      className={loading ? "animate-pulse" : ""}
       style={{
         width: "100%",
         padding,
@@ -79,21 +105,47 @@ export function Button({ children, loading, disabled, onClick, variant = "primar
         letterSpacing: "0.01em",
         cursor: loading || disabled ? "not-allowed" : "pointer",
         opacity: disabled ? 0.4 : 1,
-        transition: "all 0.15s",
+        transition: "all 0.2s ease",
+        transform: "translateY(0)",
         border: isPrimary ? "none" : isDanger ? "1px solid var(--red-border)" : "1px solid var(--border)",
         background: isPrimary ? "var(--accent)" : isDanger ? "var(--red-dim)" : "transparent",
         color: isPrimary ? "#000000" : isDanger ? "var(--red)" : "var(--muted)",
       }}
       onMouseEnter={e => {
         if (loading || disabled) return;
-        if (isPrimary) e.currentTarget.style.background = "#e5e5e5";
-        else if (isDanger) e.currentTarget.style.borderColor = "var(--red)";
-        else { e.currentTarget.style.borderColor = "var(--dim)"; e.currentTarget.style.color = "var(--text)"; }
+        e.currentTarget.style.transform = "translateY(-1px)";
+        if (isPrimary) {
+          e.currentTarget.style.background = "#e5e5e5";
+          e.currentTarget.style.boxShadow = "0 4px 20px rgba(255,255,255,0.15)";
+        } else if (isDanger) {
+          e.currentTarget.style.borderColor = "var(--red)";
+          e.currentTarget.style.background = "rgba(239,68,68,0.1)";
+        } else {
+          e.currentTarget.style.borderColor = "var(--dim)";
+          e.currentTarget.style.color = "var(--text)";
+          e.currentTarget.style.background = "var(--surface)";
+        }
       }}
       onMouseLeave={e => {
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.boxShadow = "none";
         if (isPrimary) e.currentTarget.style.background = "var(--accent)";
-        else if (isDanger) e.currentTarget.style.borderColor = "var(--red-border)";
-        else { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--muted)"; }
+        else if (isDanger) {
+          e.currentTarget.style.borderColor = "var(--red-border)";
+          e.currentTarget.style.background = "var(--red-dim)";
+        } else {
+          e.currentTarget.style.borderColor = "var(--border)";
+          e.currentTarget.style.color = "var(--muted)";
+          e.currentTarget.style.background = "transparent";
+        }
+      }}
+      onMouseDown={e => {
+        if (loading || disabled) return;
+        e.currentTarget.style.transform = "translateY(0) scale(0.98)";
+      }}
+      onMouseUp={e => {
+        if (loading || disabled) return;
+        e.currentTarget.style.transform = "translateY(-1px) scale(1)";
       }}
     >
       {loading ? "Processing..." : children}
@@ -161,9 +213,24 @@ export function ErrorBox({ message }) {
 
 export function Badge({ children, variant = "default" }) {
   const styles = {
-    default: { background: "var(--surface)", color: "var(--muted)", border: "1px solid var(--border)" },
-    success: { background: "var(--green-dim)", color: "var(--green)", border: "1px solid var(--green-border)" },
-    warning: { background: "rgba(245,158,11,0.06)", color: "var(--amber)", border: "1px solid rgba(245,158,11,0.2)" },
+    default: { 
+      background: "rgba(22,22,22,0.8)", 
+      color: "var(--muted)", 
+      border: "1px solid var(--border)",
+      backdropFilter: "blur(8px)" 
+    },
+    success: { 
+      background: "rgba(34,197,94,0.15)", 
+      color: "var(--green)", 
+      border: "1px solid var(--green-border)",
+      backdropFilter: "blur(8px)"
+    },
+    warning: { 
+      background: "rgba(245,158,11,0.1)", 
+      color: "var(--amber)", 
+      border: "1px solid rgba(245,158,11,0.2)",
+      backdropFilter: "blur(8px)"
+    },
   };
   return (
     <span style={{

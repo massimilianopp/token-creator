@@ -14,6 +14,8 @@ export default function RootLayout({ children }) {
           background: "var(--bg)",
           borderLeft: "1px solid var(--border)",
           borderRight: "1px solid var(--border)",
+          position: "relative",
+          zIndex: 1,
         }}>
           <Providers>
             {children}

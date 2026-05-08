@@ -24,10 +24,11 @@ export default function BottomNav() {
       position: "fixed",
       bottom: 0, left: 0, right: 0,
       zIndex: 99999,
-      background: "var(--bg)",
+      background: "rgba(10,10,10,0.95)",
+      backdropFilter: "blur(20px)",
       borderTop: "1px solid var(--border)",
       height: 60,
-    }}>
+    }} className="animate-slideUp">
       <div style={{
         maxWidth: 480,
         margin: "0 auto",
@@ -36,7 +37,7 @@ export default function BottomNav() {
         alignItems: "center",
         padding: "0 16px",
         gap: 4,
-        background: "var(--bg)",
+        background: "rgba(10,10,10,0.95)",
         borderLeft: "1px solid var(--border)",
         borderRight: "1px solid var(--border)",
       }}>

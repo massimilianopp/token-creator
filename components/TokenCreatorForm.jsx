@@ -199,7 +199,7 @@ export default function TokenCreatorForm() {
     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
 
       {/* Logo — prominent, like Pump.fun */}
-      <Card>
+      <Card className="stagger-1" interactive>
         <label style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, cursor: "pointer", padding: "8px 0" }}>
           {preview ? (
             <img src={preview} alt="logo" style={{ width: 80, height: 80, borderRadius: "50%", objectFit: "cover", border: "1px solid var(--border)" }} />
@@ -221,7 +221,7 @@ export default function TokenCreatorForm() {
       </Card>
 
       {/* Identity */}
-      <Card>
+      <Card className="stagger-2">
         <SectionTitle>Identity</SectionTitle>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <div style={{ display: "flex", gap: 8 }}>
@@ -237,7 +237,7 @@ export default function TokenCreatorForm() {
       </Card>
 
       {/* Advanced — collapsed by default */}
-      <div style={{ border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
+      <div style={{ border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }} className="animate-fadeInUp stagger-3">
         <button onClick={() => setShowAdvanced(v => !v)} style={{
           width: "100%", padding: "14px 20px", background: "var(--card)", border: "none",
           display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -312,11 +312,13 @@ export default function TokenCreatorForm() {
         )}
       </div>
 
-      <ErrorBox message={error} />
+      {error && <div className="animate-scaleIn"><ErrorBox message={error} /></div>}
 
-      <Button onClick={handleSubmit} disabled={!canSubmit} loading={isCreating}>
-        Create token
-      </Button>
+      <div className="animate-fadeInUp stagger-4">
+        <Button onClick={handleSubmit} disabled={!canSubmit} loading={isCreating}>
+          Create token
+        </Button>
+      </div>
 
     </div>
   );
