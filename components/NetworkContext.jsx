@@ -19,7 +19,7 @@ export const NETWORKS = {
 };
 
 export function NetworkProvider({ children }) {
-  const [currentNetwork, setCurrentNetwork] = useState("devnet");
+  const [currentNetwork, setCurrentNetwork] = useState("mainnet");
 
   useEffect(() => {
     const saved = localStorage.getItem("solana-network");
