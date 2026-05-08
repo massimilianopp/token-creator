@@ -17,6 +17,7 @@ export default function Home() {
         </p>
       </div>
       <TokenCreatorForm />
+      <Analytics />
     </main>
   );
 }
