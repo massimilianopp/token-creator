@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useGSAP, DURATIONS, EASE_CONFIGS } from "@/hooks/useGSAP";
+import NetworkToggle from "@/components/NetworkToggle";
 
 const WalletMultiButton = dynamic(
   () => import("@solana/wallet-adapter-react-ui").then((mod) => mod.WalletMultiButton),
@@ -107,7 +108,14 @@ export default function BottomNav() {
           );
         })}
 
-        <div style={{ flexShrink: 0, marginLeft: 4 }}>
+        <div style={{ 
+          display: "flex", 
+          alignItems: "center", 
+          gap: 8, 
+          flexShrink: 0, 
+          marginLeft: 4 
+        }}>
+          <NetworkToggle />
           <WalletMultiButton />
         </div>
       </div>

@@ -24,6 +24,12 @@
   --amber: #f59e0b;
 }
 
+:root[data-network="devnet"] {
+  --border: #422f1a;
+  --surface: #141310;
+  --card: #1a1713;
+}
+
 * { box-sizing: border-box; }
 
 html, body {

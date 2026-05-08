@@ -5,11 +5,13 @@ import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
-import { clusterApiUrl } from "@solana/web3.js";
 import BottomNav from "@/components/BottomNav";
+import { NetworkProvider, useNetwork } from "@/components/NetworkContext";
 
-export default function Providers({ children }) {
-  const endpoint = process.env.NEXT_PUBLIC_RPC_ENDPOINT || clusterApiUrl("devnet");
+function WalletConnectionProvider({ children }) {
+  const { getCurrentEndpoint } = useNetwork();
+  const endpoint = getCurrentEndpoint();
+  
   const wallets = useMemo(() => [
     new PhantomWalletAdapter(),
     new SolflareWalletAdapter(),
@@ -24,5 +26,15 @@ export default function Providers({ children }) {
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
+  );
+}
+
+export default function Providers({ children }) {
+  return (
+    <NetworkProvider>
+      <WalletConnectionProvider>
+        {children}
+      </WalletConnectionProvider>
+    </NetworkProvider>
   );
 }
