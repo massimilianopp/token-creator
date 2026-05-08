@@ -20,7 +20,7 @@ import {
   TICK_SPACING,
   getWSolMint,
   getUSDCMint,
-  WHIRLPOOLS_CONFIG_MAINNET,
+  getWhirlpoolsConfig,
   ORCA_WHIRLPOOL_PROGRAM_ID,
 } from "@/lib/whirlpool";
 import { useNetwork } from "@/components/NetworkContext";
@@ -77,7 +77,7 @@ export function useWhirlpool() {
         // 4. Pool PDA Address
         const poolPDA = PDAUtil.getWhirlpool(
           ORCA_WHIRLPOOL_PROGRAM_ID,
-          WHIRLPOOLS_CONFIG_MAINNET,
+          getWhirlpoolsConfig(isDevnet()),
           mintA,
           mintB,
           TICK_SPACING
@@ -100,7 +100,7 @@ export function useWhirlpool() {
             : new Decimal(initialPrice);
 
           const { poolKey, tx: initTx } = await client.createPool(
-            WHIRLPOOLS_CONFIG_MAINNET,
+            getWhirlpoolsConfig(isDevnet()),
             mintA,
             mintB,
             TICK_SPACING,
