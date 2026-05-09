@@ -16,6 +16,7 @@ const NAV_ITEMS = [
   { href: "/", label: "Token", number: "01" },
   { href: "/vesting", label: "Vesting", number: "02" },
   { href: "/pool", label: "Pool", number: "03" },
+  { href: "/explore", label: "Explore", number: "04" },
 ];
 
 export default function BottomNav() {
