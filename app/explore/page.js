@@ -16,10 +16,70 @@ export default function ExplorePage() {
   const [sortBy, setSortBy] = useState("marketCap");
   const [searchQuery, setSearchQuery] = useState("");
   const [lastUpdate, setLastUpdate] = useState(null);
+  const [searchedToken, setSearchedToken] = useState(null);
+  const [searchLoading, setSearchLoading] = useState(false);
   
   const containerRef = useRef(null);
   const listRef = useRef(null);
   const { gsap } = useGSAP();
+
+  // Check if query is a valid Solana mint address (43-44 characters, alphanumeric + certain special chars)
+  const isValidMintAddress = (query) => {
+    const mintPattern = /^[1-9A-HJ-NP-Za-km-z]{43,44}$/;
+    return mintPattern.test(query.trim());
+  };
+
+  // Search for specific token by mint address using Solscan
+  const searchTokenByMint = async (mintAddress) => {
+    try {
+      setSearchLoading(true);
+      setSearchedToken(null);
+
+      // Fetch metadata and market data in parallel
+      const [metaRes, marketRes] = await Promise.all([
+        fetch(`https://public-api.solscan.io/token/meta?tokenAddress=${mintAddress}`),
+        fetch(`https://public-api.solscan.io/market/token/${mintAddress}`)
+      ]);
+
+      let tokenData = null;
+
+      if (metaRes.ok) {
+        const metaData = await metaRes.json();
+        tokenData = {
+          address: mintAddress,
+          name: metaData.name || "Unknown Token",
+          symbol: metaData.symbol || "???",
+          decimals: metaData.decimals || 9,
+          logo: metaData.icon || null,
+          supply: metaData.supply || 0,
+          holders: metaData.holder || 0,
+          price: 0,
+          marketCap: 0,
+          volume24h: 0,
+          priceChange24h: 0,
+          source: "solscan"
+        };
+
+        // Try to get market data
+        if (marketRes.ok) {
+          const marketData = await marketRes.json();
+          tokenData.price = parseFloat(marketData.priceUsdt || 0);
+          tokenData.volume24h = parseFloat(marketData.volumeUsdt || 0);
+          tokenData.marketCap = parseFloat(marketData.marketCapFD || 0);
+        }
+
+        setSearchedToken(tokenData);
+      } else {
+        // Token not found on Solscan
+        setSearchedToken("not_found");
+      }
+    } catch (err) {
+      console.error("Error searching token:", err);
+      setSearchedToken("error");
+    } finally {
+      setSearchLoading(false);
+    }
+  };
 
   const fetchTokens = async () => {
     try {
@@ -93,6 +153,18 @@ export default function ExplorePage() {
     return () => clearInterval(interval);
   }, []);
 
+  // Handle search query changes
+  useEffect(() => {
+    if (searchQuery.trim() && isValidMintAddress(searchQuery)) {
+      const timeoutId = setTimeout(() => {
+        searchTokenByMint(searchQuery.trim());
+      }, 500); // Debounce search
+      return () => clearTimeout(timeoutId);
+    } else {
+      setSearchedToken(null);
+    }
+  }, [searchQuery]);
+
   // GSAP animations
   useEffect(() => {
     if (!loading && tokens.length > 0 && listRef.current) {
@@ -119,12 +191,17 @@ export default function ExplorePage() {
     }
   }, [loading, tokens, gsap]);
 
-  // Filter and sort tokens
+  // Filter and sort tokens (exclude searched token if it's a mint address search)
   const filteredAndSortedTokens = tokens
-    .filter(token => 
-      token.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      token.symbol.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+    .filter(token => {
+      // If we're searching by mint address, don't filter regular tokens
+      if (isValidMintAddress(searchQuery)) return true;
+      
+      return (
+        token.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        token.symbol.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    })
     .sort((a, b) => {
       switch (sortBy) {
         case "volume":
@@ -196,7 +273,7 @@ export default function ExplorePage() {
         }}>
           <input
             type="text"
-            placeholder="Search by name or symbol..."
+            placeholder="Search by name, symbol or mint address..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
@@ -314,6 +391,204 @@ export default function ExplorePage() {
             >
               Retry
             </button>
+          </div>
+        )}
+
+        {/* Searched token result */}
+        {searchLoading && (
+          <div style={{
+            background: "var(--surface)",
+            borderRadius: 12,
+            padding: 16,
+            marginBottom: 16,
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            animation: "pulse 1.5s ease-in-out infinite"
+          }}>
+            <div style={{
+              width: 40,
+              height: 40,
+              background: "var(--card)",
+              borderRadius: "50%"
+            }} />
+            <div style={{ flex: 1 }}>
+              <div style={{
+                height: 16,
+                background: "var(--card)",
+                borderRadius: 4,
+                marginBottom: 8,
+                width: "60%"
+              }} />
+              <div style={{
+                height: 12,
+                background: "var(--card)",
+                borderRadius: 4,
+                width: "40%"
+              }} />
+            </div>
+          </div>
+        )}
+
+        {searchedToken === "not_found" && (
+          <div style={{
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            borderRadius: 12,
+            padding: 16,
+            marginBottom: 16,
+            textAlign: "center"
+          }}>
+            <p style={{ color: "var(--muted)", margin: 0 }}>
+              Token not found — make sure the address is correct
+            </p>
+          </div>
+        )}
+
+        {searchedToken && typeof searchedToken === "object" && (
+          <div style={{
+            background: "var(--surface)",
+            border: "2px solid var(--green-border)",
+            borderRadius: 12,
+            padding: 16,
+            marginBottom: 16,
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            position: "relative"
+          }}>
+            {/* Solscan badge */}
+            <div style={{
+              position: "absolute",
+              top: 8,
+              right: 8,
+              background: "var(--green)",
+              color: "white",
+              padding: "2px 6px",
+              borderRadius: 4,
+              fontSize: 10,
+              fontWeight: 600
+            }}>
+              Found on Solscan
+            </div>
+
+            {/* Token logo */}
+            <div style={{
+              width: 40,
+              height: 40,
+              borderRadius: "50%",
+              background: "var(--card)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
+              flexShrink: 0
+            }}>
+              {searchedToken.logo ? (
+                <img 
+                  src={searchedToken.logo} 
+                  alt={searchedToken.symbol}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover"
+                  }}
+                />
+              ) : (
+                <span style={{
+                  fontSize: 14,
+                  fontWeight: 600,
+                  color: "var(--muted)"
+                }}>
+                  {searchedToken.symbol.slice(0, 2)}
+                </span>
+              )}
+            </div>
+
+            {/* Token info */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                marginBottom: 4
+              }}>
+                <span style={{
+                  fontSize: 14,
+                  fontWeight: 600,
+                  color: "var(--text)",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis"
+                }}>
+                  {searchedToken.name}
+                </span>
+                <span style={{
+                  fontSize: 12,
+                  color: "var(--muted)",
+                  fontFamily: "'Geist Mono', monospace"
+                }}>
+                  {searchedToken.symbol}
+                </span>
+              </div>
+              
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                fontSize: 11,
+                color: "var(--muted)"
+              }}>
+                <span>MC: {formatNumber(searchedToken.marketCap)}</span>
+                <span>Vol: {formatNumber(searchedToken.volume24h)}</span>
+                {searchedToken.holders > 0 && (
+                  <span>Holders: {searchedToken.holders.toLocaleString()}</span>
+                )}
+              </div>
+            </div>
+
+            {/* Price */}
+            <div style={{
+              textAlign: "right",
+              flexShrink: 0,
+              marginRight: 12
+            }}>
+              <div style={{
+                fontSize: 14,
+                fontWeight: 600,
+                color: "var(--text)",
+                marginBottom: 4
+              }}>
+                {formatPrice(searchedToken.price)}
+              </div>
+            </div>
+
+            {/* Trade button */}
+            <a
+              href={`https://jup.ag/swap/SOL-${searchedToken.address}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                background: "var(--text)",
+                color: "var(--bg)",
+                border: "none",
+                borderRadius: 8,
+                padding: "6px 12px",
+                fontSize: 12,
+                fontWeight: 600,
+                textDecoration: "none",
+                transition: "all 0.15s",
+                flexShrink: 0
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = "var(--dim)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = "var(--text)";
+              }}
+            >
+              Trade
+            </a>
           </div>
         )}
 
@@ -474,7 +749,7 @@ export default function ExplorePage() {
         )}
 
         {/* No results */}
-        {!loading && !error && filteredAndSortedTokens.length === 0 && (
+        {!loading && !error && filteredAndSortedTokens.length === 0 && !isValidMintAddress(searchQuery) && searchQuery.trim() && (
           <div style={{
             textAlign: "center",
             padding: 40,
