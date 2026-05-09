@@ -2,6 +2,12 @@ import "./globals.css";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import Providers from "@/components/Providers";
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 export const metadata = {};
 
 
