@@ -7,6 +7,7 @@ import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
 import BottomNav from "@/components/BottomNav";
 import { NetworkProvider, useNetwork } from "@/components/NetworkContext";
+import { useKeyboardScroll } from "@/hooks/useKeyboardScroll";
 
 function WalletConnectionProvider({ children }) {
   const { getCurrentEndpoint, currentNetwork } = useNetwork();
@@ -34,6 +35,8 @@ function WalletConnectionProvider({ children }) {
 }
 
 export default function Providers({ children }) {
+  useKeyboardScroll();
+  
   return (
     <NetworkProvider>
       <WalletConnectionProvider>
