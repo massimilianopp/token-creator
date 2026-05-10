@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </head>
-      <body style={{ paddingTop: 48, paddingBottom: 80 }}>
+      <body style={{ paddingTop: 48, paddingBottom: 100 }}>
         <Providers>
           <Header />
           <div style={{

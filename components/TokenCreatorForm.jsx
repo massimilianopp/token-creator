@@ -387,7 +387,7 @@ export default function TokenCreatorForm() {
 
   // ── Form ──
   return (
-    <div ref={formRef} style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: "30px" }}>
+    <div ref={formRef} style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: "100px" }}>
 
       {/* Logo — prominent, like Pump.fun */}
       <Card className="form-section" interactive animated={false}>

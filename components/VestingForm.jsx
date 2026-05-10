@@ -102,7 +102,7 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
 
   // ── Form ──
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: "30px" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: "100px" }}>
 
       {/* Token */}
       <Card>
