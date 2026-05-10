@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useGSAP, DURATIONS, EASE_CONFIGS } from "@/hooks/useGSAP";
+import { useNetwork } from "@/components/NetworkContext";
 
 const SORT_OPTIONS = [
   { key: "marketCap", label: "Market Cap" },
@@ -22,57 +23,76 @@ export default function ExplorePage() {
   const containerRef = useRef(null);
   const listRef = useRef(null);
   const { gsap } = useGSAP();
+  const { isDevnet } = useNetwork();
 
-  // Check if query is a valid Solana mint address (43-44 characters, alphanumeric + certain special chars)
+  // Check if query is a valid Solana mint address (32-44 characters, alphanumeric + certain special chars)
   const isValidMintAddress = (query) => {
-    const mintPattern = /^[1-9A-HJ-NP-Za-km-z]{43,44}$/;
+    const mintPattern = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
     return mintPattern.test(query.trim());
   };
 
-  // Search for specific token by mint address using Solscan
+  // Search for specific token by mint address using Helius DAS API
   const searchTokenByMint = async (mintAddress) => {
     try {
       setSearchLoading(true);
       setSearchedToken(null);
 
-      // Fetch metadata and market data in parallel
-      const [metaRes, marketRes] = await Promise.all([
-        fetch(`https://public-api.solscan.io/token/meta?tokenAddress=${mintAddress}`),
-        fetch(`https://public-api.solscan.io/market/token/${mintAddress}`)
-      ]);
+      // Determine the correct Helius endpoint based on network
+      const heliosApiKey = process.env.NEXT_PUBLIC_HELIUS_API_KEY;
+      const baseUrl = isDevnet() 
+        ? `https://devnet.helius-rpc.com/?api-key=${heliosApiKey}`
+        : `https://mainnet.helius-rpc.com/?api-key=${heliosApiKey}`;
 
-      let tokenData = null;
+      // Call Helius DAS API
+      const response = await fetch(baseUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: 1,
+          method: "getAsset",
+          params: { id: mintAddress }
+        })
+      });
 
-      if (metaRes.ok) {
-        const metaData = await metaRes.json();
-        tokenData = {
-          address: mintAddress,
-          name: metaData.name || "Unknown Token",
-          symbol: metaData.symbol || "???",
-          decimals: metaData.decimals || 9,
-          logo: metaData.icon || null,
-          supply: metaData.supply || 0,
-          holders: metaData.holder || 0,
-          price: 0,
-          marketCap: 0,
-          volume24h: 0,
-          priceChange24h: 0,
-          source: "solscan"
-        };
-
-        // Try to get market data
-        if (marketRes.ok) {
-          const marketData = await marketRes.json();
-          tokenData.price = parseFloat(marketData.priceUsdt || 0);
-          tokenData.volume24h = parseFloat(marketData.volumeUsdt || 0);
-          tokenData.marketCap = parseFloat(marketData.marketCapFD || 0);
-        }
-
-        setSearchedToken(tokenData);
-      } else {
-        // Token not found on Solscan
-        setSearchedToken("not_found");
+      if (!response.ok) {
+        throw new Error('Helius API request failed');
       }
+
+      const data = await response.json();
+
+      if (data.error) {
+        setSearchedToken("not_found");
+        return;
+      }
+
+      const asset = data.result;
+      
+      // Extract token information from Helius DAS response
+      const tokenData = {
+        address: mintAddress,
+        name: asset.content?.metadata?.name || "Unknown Token",
+        symbol: asset.content?.metadata?.symbol || "???",
+        decimals: asset.token_info?.decimals || 9,
+        logo: asset.content?.links?.image || null,
+        supply: asset.token_info?.supply || 0,
+        holders: 0, // Helius DAS doesn't provide holder count
+        price: asset.token_info?.price_info?.price_per_token || 0,
+        marketCap: 0, // Calculate if needed
+        volume24h: 0, // Not available in DAS API
+        priceChange24h: 0, // Not available in DAS API
+        source: "helius"
+      };
+
+      // Calculate market cap if price and supply are available
+      if (tokenData.price && tokenData.supply) {
+        const totalSupply = tokenData.supply / Math.pow(10, tokenData.decimals);
+        tokenData.marketCap = tokenData.price * totalSupply;
+      }
+
+      setSearchedToken(tokenData);
     } catch (err) {
       console.error("Error searching token:", err);
       setSearchedToken("error");
@@ -457,7 +477,7 @@ export default function ExplorePage() {
             gap: 12,
             position: "relative"
           }}>
-            {/* Solscan badge */}
+            {/* Found badge */}
             <div style={{
               position: "absolute",
               top: 8,
@@ -469,7 +489,7 @@ export default function ExplorePage() {
               fontSize: 10,
               fontWeight: 600
             }}>
-              Found on Solscan
+              Found on Solana
             </div>
 
             {/* Token logo */}
