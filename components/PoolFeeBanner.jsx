@@ -88,7 +88,7 @@ export default function PoolFeeBanner({ tokenAmount }) {
             <div style={{ marginBottom: 4 }}>• Tick arrays (3x) : ~0.09 SOL</div>
             <div style={{ marginBottom: 4 }}>• Position NFT : ~0.003 SOL</div>
             <div style={{ margin: "8px 0", color: "var(--border)" }}>──────────────────</div>
-            <div style={{ marginBottom: 4, fontWeight: 500 }}>• Total estimé : ~{MINIMUM_SOL_REQUIRED} SOL minimum</div>
+            <div style={{ marginBottom: 4, fontWeight: 500 }}>• Total estimated : ~{MINIMUM_SOL_REQUIRED} SOL minimum</div>
             <div style={{ marginBottom: 12, fontWeight: 500 }}>• Service fee : 0.1% of deposited tokens</div>
           </div>
           <p style={{
