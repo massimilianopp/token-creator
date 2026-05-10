@@ -49,10 +49,10 @@ export default function Header() {
         position: "fixed",
         top: 0, left: 0, right: 0,
         zIndex: 99999,
-        background: "rgba(10,10,10,0.95)",
+        background: "rgba(8,8,8,0.8)",
         backdropFilter: "blur(20px)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
-        height: 48,
+        borderBottom: "1px solid var(--border)",
+        height: 52,
         opacity: 1,
       }}
     >
@@ -70,14 +70,11 @@ export default function Header() {
       }}>
         {/* Logo/Title */}
         <h1 style={{
-          fontSize: 16,
+          fontSize: 14,
           fontWeight: 600,
-          color: "var(--text)",
-          fontFamily: "'Syne', sans-serif",
+          color: "white",
+          fontFamily: "'Inter', sans-serif",
           margin: 0,
-          background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
         }}>
           Token Creator
         </h1>

@@ -14,7 +14,7 @@ export default function NetworkToggle() {
     if (toggleRef.current && indicatorRef.current) {
       // Animation du switch
       gsap.to(indicatorRef.current, {
-        x: currentNetwork === "mainnet" ? 0 : 38,
+        x: currentNetwork === "mainnet" ? 0 : 36,
         duration: DURATIONS.fast,
         ease: EASE_CONFIGS.smooth,
       });
@@ -41,12 +41,12 @@ export default function NetworkToggle() {
       style={{
         position: "relative",
         display: "flex",
-        background: "var(--surface)",
-        border: "1px solid var(--border)",
-        borderRadius: 8,
+        background: "transparent",
+        border: "1px solid rgba(255,255,255,0.1)",
+        borderRadius: 6,
         padding: 2,
-        width: 80,
-        height: 28,
+        width: 76,
+        height: 26,
         cursor: "pointer",
       }}
       onClick={() => handleNetworkSwitch(currentNetwork === "mainnet" ? "devnet" : "mainnet")}
@@ -58,12 +58,12 @@ export default function NetworkToggle() {
           position: "absolute",
           top: 2,
           left: 2,
-          width: 36,
-          height: 22,
-          background: currentNetwork === "devnet" ? "#fb923c" : "#3b82f6",
-          borderRadius: 6,
-          transition: "background-color 0.2s",
-          boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+          width: 34,
+          height: 20,
+          background: currentNetwork === "mainnet" ? "white" : "rgba(255,255,255,0.2)",
+          borderRadius: 4,
+          transition: "all 0.2s ease",
+          boxShadow: currentNetwork === "mainnet" ? "0 1px 2px rgba(0,0,0,0.1)" : "none",
         }}
       />
       
@@ -73,14 +73,14 @@ export default function NetworkToggle() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          width: 36,
-          height: 22,
-          fontSize: 10,
-          fontFamily: "'Geist Mono', monospace",
-          fontWeight: 600,
-          color: currentNetwork === "mainnet" ? "white" : "var(--muted)",
+          width: 34,
+          height: 20,
+          fontSize: 9,
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: 500,
+          color: currentNetwork === "mainnet" ? "black" : "rgba(255,255,255,0.7)",
           zIndex: 1,
-          letterSpacing: "-0.02em",
+          letterSpacing: "0.02em",
         }}
       >
         MAIN
@@ -90,14 +90,14 @@ export default function NetworkToggle() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          width: 36,
-          height: 22,
-          fontSize: 10,
-          fontFamily: "'Geist Mono', monospace",
-          fontWeight: 600,
-          color: currentNetwork === "devnet" ? "white" : "var(--muted)",
+          width: 34,
+          height: 20,
+          fontSize: 9,
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: 500,
+          color: currentNetwork === "devnet" ? "white" : "rgba(255,255,255,0.7)",
           zIndex: 1,
-          letterSpacing: "-0.02em",
+          letterSpacing: "0.02em",
         }}
       >
         DEV
