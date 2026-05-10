@@ -51,7 +51,7 @@ export default function Header() {
         zIndex: 99999,
         background: "rgba(10,10,10,0.95)",
         backdropFilter: "blur(20px)",
-        borderBottom: "1px solid var(--border)",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
         height: 48,
         opacity: 1,
       }}
