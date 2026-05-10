@@ -385,31 +385,104 @@ export default function TokenCreatorForm() {
     );
   }
 
+  // Progress calculation
+  const progress = (() => {
+    let filled = 0;
+    let total = 3; // name, symbol, imageFile
+    
+    if (form.name.trim()) filled++;
+    if (form.symbol.trim()) filled++;
+    if (form.imageFile) filled++;
+    
+    return (filled / total) * 100;
+  })();
+
   // ── Form ──
   return (
-    <div ref={formRef} style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: "100px" }}>
-
-      {/* Logo — prominent, like Pump.fun */}
-      <Card className="form-section" interactive animated={false}>
-        <label style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, cursor: "pointer", padding: "8px 0" }}>
+    <div ref={formRef} style={{ display: "flex", flexDirection: "column", gap: 20, paddingBottom: "100px" }}>
+      
+      {/* Header */}
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{
+          fontSize: 32,
+          fontWeight: 700,
+          color: "white",
+          fontFamily: "'Inter', sans-serif",
+          marginBottom: 8,
+        }}>
+          Create Token
+        </h1>
+        <p style={{
+          fontSize: 16,
+          color: "var(--text-2)",
+          fontFamily: "'Inter', sans-serif",
+          marginBottom: 16,
+        }}>
+          Deploy your SPL token on Solana
+        </p>
+        
+        {/* Progress bar */}
+        <div style={{
+          width: "100%",
+          height: 2,
+          background: "rgba(255,255,255,0.1)",
+          borderRadius: 1,
+          overflow: "hidden",
+        }}>
+          <div style={{
+            width: `${progress}%`,
+            height: "100%",
+            background: "white",
+            borderRadius: 1,
+            transition: "width 0.3s ease",
+          }} />
+        </div>
+      </div>
+      {/* Image Upload */}
+      <div 
+        className="form-section" 
+        style={{
+          border: `1px dashed var(--border)`,
+          borderRadius: "var(--radius-lg)",
+          padding: "24px",
+          height: 160,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 12,
+          cursor: "pointer",
+          transition: "all 0.2s ease",
+          background: "transparent",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.borderColor = "var(--border-strong)";
+          e.currentTarget.style.boxShadow = "0 0 20px rgba(255,255,255,0.05)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.borderColor = "var(--border)";
+          e.currentTarget.style.boxShadow = "none";
+        }}
+      >
+        <label style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, cursor: "pointer", width: "100%" }}>
           {preview ? (
-            <img src={preview} alt="logo" style={{ width: 80, height: 80, borderRadius: "50%", objectFit: "cover", border: "1px solid var(--border)" }} />
+            <img src={preview} alt="logo" style={{ width: 64, height: 64, borderRadius: "50%", objectFit: "cover", border: "1px solid var(--border)" }} />
           ) : (
-            <div style={{ width: 80, height: 80, borderRadius: "50%", background: "var(--surface)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: "var(--dim)" }}>
-                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
-              </svg>
-            </div>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" style={{ color: "var(--text-3)" }}>
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+            </svg>
           )}
           <div style={{ textAlign: "center" }}>
-            <p style={{ fontSize: 13, color: preview ? "var(--text)" : "var(--muted)", fontWeight: 500 }}>
-              {preview ? "Logo uploaded" : "Upload logo"}
+            <p style={{ fontSize: 14, color: preview ? "white" : "var(--text-2)", fontWeight: 500, marginBottom: 4 }}>
+              {preview ? "Logo uploaded" : "Drop your logo here"}
             </p>
-            <p style={{ fontSize: 11, color: "var(--dim)", marginTop: 2 }}>PNG, JPG — max 5MB</p>
+            <p style={{ fontSize: 13, color: "var(--text-3)" }}>
+              {preview ? "Click to change" : "or click to browse"}
+            </p>
           </div>
           <input type="file" accept="image/*" style={{ display: "none" }} onChange={handleImage} />
         </label>
-      </Card>
+      </div>
 
       {/* Identity */}
       <Card className="form-section" animated={false}>
@@ -539,7 +612,7 @@ export default function TokenCreatorForm() {
 
       <div className="animate-fadeInUp stagger-4">
         <Button onClick={handleSubmit} disabled={!canSubmit} loading={isCreating}>
-          Create token
+          Create Token — 0.05 SOL
         </Button>
       </div>
 

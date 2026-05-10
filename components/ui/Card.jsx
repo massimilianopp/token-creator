@@ -64,17 +64,30 @@ export function Card({ children, className = "", interactive = false, animated =
 
 export function SectionTitle({ children }) {
   return (
-    <p style={{
-      fontSize: "var(--text-xs)",
-      fontWeight: 500,
-      letterSpacing: "0.06em",
-      textTransform: "uppercase",
-      color: "var(--text-2)",
-      marginBottom: "var(--space-6)",
-      fontFamily: "'Inter', sans-serif",
+    <div style={{ 
+      display: "flex", 
+      alignItems: "center", 
+      gap: 16, 
+      marginBottom: 20 
     }}>
-      {children}
-    </p>
+      <p style={{
+        fontSize: 11,
+        fontWeight: 500,
+        letterSpacing: "0.08em",
+        textTransform: "uppercase",
+        color: "var(--text-3)",
+        margin: 0,
+        fontFamily: "'Inter', sans-serif",
+        flexShrink: 0,
+      }}>
+        {children}
+      </p>
+      <div style={{ 
+        height: 1, 
+        background: "var(--border)", 
+        flex: 1 
+      }} />
+    </div>
   );
 }
 
@@ -87,7 +100,7 @@ export function Input({ label, hint, error, ...props }) {
     
     gsap.to(e.target, {
       borderColor: "var(--border-strong)",
-      boxShadow: "0 0 0 3px rgba(255,255,255,0.04)",
+      boxShadow: "0 0 0 3px rgba(255,255,255,0.06)",
       duration: 0.1,
       ease: "power2.out",
     });
@@ -112,9 +125,11 @@ export function Input({ label, hint, error, ...props }) {
     }}>
       {label && (
         <span style={{ 
-          fontSize: "var(--text-sm)", 
+          fontSize: 11, 
           fontWeight: 500, 
-          color: "var(--text-2)",
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          color: "var(--text-3)",
           fontFamily: "'Inter', sans-serif",
         }}>
           {label}
@@ -125,17 +140,20 @@ export function Input({ label, hint, error, ...props }) {
         {...props}
         style={{
           width: "100%",
-          minHeight: "44px",
+          height: 44,
           background: "var(--surface)",
           border: `1px solid ${error ? "var(--red)" : "var(--border)"}`,
           borderRadius: "var(--radius-md)",
-          padding: "var(--space-3) var(--space-4)",
-          fontSize: "var(--text-sm)",
+          padding: "0 16px",
+          fontSize: 14,
           color: "var(--text)",
           outline: "none",
           fontFamily: "'Inter', sans-serif",
           transition: "border-color 0.15s ease",
           willChange: "box-shadow",
+          "::placeholder": {
+            color: "var(--text-3)",
+          },
         }}
         onFocus={handleFocus}
         onBlur={handleBlur}
@@ -249,11 +267,11 @@ export function Button({ children, loading, disabled, onClick, variant = "primar
       disabled={loading || disabled}
       style={{
         width: "100%",
-        height,
+        height: 52,
         padding,
         borderRadius: "var(--radius-md)",
-        fontSize,
-        fontWeight: 500,
+        fontSize: 15,
+        fontWeight: 600,
         fontFamily: "'Inter', sans-serif",
         letterSpacing: "0.01em",
         cursor: loading || disabled ? "not-allowed" : "pointer",
@@ -277,7 +295,7 @@ export function Button({ children, loading, disabled, onClick, variant = "primar
           <span className="loading-spinner" style={{ 
             width: 12, 
             height: 12, 
-            border: "2px solid currentColor", 
+            border: "2px solid white", 
             borderTop: "2px solid transparent", 
             borderRadius: "50%",
           }} />
