@@ -412,14 +412,6 @@ export default function TokenCreatorForm() {
         }}>
           Create Token
         </h1>
-        <p style={{
-          fontSize: 16,
-          color: "var(--text-2)",
-          fontFamily: "'Inter', sans-serif",
-          marginBottom: 16,
-        }}>
-          Deploy your SPL token on Solana
-        </p>
         
         {/* Progress bar */}
         <div style={{
