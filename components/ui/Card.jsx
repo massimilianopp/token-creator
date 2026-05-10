@@ -10,7 +10,8 @@ export function Card({ children, className = "", interactive = false, animated =
   useEffect(() => {
     if (cardRef.current && animated) {
       scaleIn(cardRef.current, {
-        delay: Math.random() * 0.2, // Stagger aléatoire léger
+        delay: Math.random() * 0.1,
+        duration: 0.4,
       });
     }
   }, [scaleIn, animated]);
@@ -19,11 +20,11 @@ export function Card({ children, className = "", interactive = false, animated =
     if (!interactive) return;
     
     gsap.to(e.currentTarget, {
-      y: -2,
-      borderColor: "rgba(255,255,255,0.15)",
-      boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
-      duration: DURATIONS.quick,
-      ease: EASE_CONFIGS.smooth,
+      y: -1,
+      borderColor: "var(--border-strong)",
+      boxShadow: "var(--shadow-md)",
+      duration: 0.15,
+      ease: "power2.out",
     });
   };
 
@@ -34,8 +35,8 @@ export function Card({ children, className = "", interactive = false, animated =
       y: 0,
       borderColor: "var(--border)",
       boxShadow: "none",
-      duration: DURATIONS.quick,
-      ease: EASE_CONFIGS.smooth,
+      duration: 0.15,
+      ease: "power2.out",
     });
   };
 
@@ -46,10 +47,12 @@ export function Card({ children, className = "", interactive = false, animated =
       style={{
         background: "var(--card)",
         border: "1px solid var(--border)",
-        borderRadius: 12,
-        padding: 24,
+        borderRadius: "var(--radius-lg)",
+        padding: "20px",
         cursor: interactive ? "pointer" : "default",
         opacity: animated ? 0 : 1,
+        transition: "all 0.15s ease",
+        willChange: interactive ? "transform, box-shadow" : "auto",
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -62,12 +65,13 @@ export function Card({ children, className = "", interactive = false, animated =
 export function SectionTitle({ children }) {
   return (
     <p style={{
-      fontSize: 11,
+      fontSize: "var(--text-xs)",
       fontWeight: 500,
       letterSpacing: "0.06em",
       textTransform: "uppercase",
-      color: "var(--muted)",
-      marginBottom: 20,
+      color: "var(--text-2)",
+      marginBottom: "var(--space-6)",
+      fontFamily: "'Inter', sans-serif",
     }}>
       {children}
     </p>
@@ -82,11 +86,10 @@ export function Input({ label, hint, error, ...props }) {
     if (error) return;
     
     gsap.to(e.target, {
-      borderColor: "var(--border-focus)",
-      scale: 1.01,
-      backgroundColor: "var(--card)",
-      duration: DURATIONS.quick,
-      ease: EASE_CONFIGS.smooth,
+      borderColor: "var(--border-strong)",
+      boxShadow: "0 0 0 3px rgba(255,255,255,0.04)",
+      duration: 0.1,
+      ease: "power2.out",
     });
   };
 
@@ -95,17 +98,25 @@ export function Input({ label, hint, error, ...props }) {
     
     gsap.to(e.target, {
       borderColor: "var(--border)",
-      scale: 1,
-      backgroundColor: "var(--surface)",
-      duration: DURATIONS.quick,
-      ease: EASE_CONFIGS.smooth,
+      boxShadow: "none",
+      duration: 0.15,
+      ease: "power2.out",
     });
   };
 
   return (
-    <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+    <label style={{ 
+      display: "flex", 
+      flexDirection: "column", 
+      gap: "var(--space-2)",
+    }}>
       {label && (
-        <span style={{ fontSize: 13, fontWeight: 500, color: "var(--muted)" }}>
+        <span style={{ 
+          fontSize: "var(--text-sm)", 
+          fontWeight: 500, 
+          color: "var(--text-2)",
+          fontFamily: "'Inter', sans-serif",
+        }}>
           {label}
         </span>
       )}
@@ -114,20 +125,39 @@ export function Input({ label, hint, error, ...props }) {
         {...props}
         style={{
           width: "100%",
+          minHeight: "44px",
           background: "var(--surface)",
           border: `1px solid ${error ? "var(--red)" : "var(--border)"}`,
-          borderRadius: 8,
-          padding: "10px 14px",
-          fontSize: 14,
+          borderRadius: "var(--radius-md)",
+          padding: "var(--space-3) var(--space-4)",
+          fontSize: "var(--text-sm)",
           color: "var(--text)",
           outline: "none",
-          fontFamily: "'Geist', sans-serif",
+          fontFamily: "'Inter', sans-serif",
+          transition: "border-color 0.15s ease",
+          willChange: "box-shadow",
         }}
         onFocus={handleFocus}
         onBlur={handleBlur}
       />
-      {hint && <span style={{ fontSize: 12, color: "var(--dim)" }}>{hint}</span>}
-      {error && <span style={{ fontSize: 12, color: "var(--red)" }}>{error}</span>}
+      {hint && (
+        <span style={{ 
+          fontSize: "var(--text-xs)", 
+          color: "var(--text-3)",
+          fontFamily: "'Inter', sans-serif",
+        }}>
+          {hint}
+        </span>
+      )}
+      {error && (
+        <span style={{ 
+          fontSize: "var(--text-xs)", 
+          color: "var(--red)",
+          fontFamily: "'Inter', sans-serif",
+        }}>
+          {error}
+        </span>
+      )}
     </label>
   );
 }
@@ -140,8 +170,9 @@ export function Button({ children, loading, disabled, onClick, variant = "primar
   const isGhost = variant === "ghost";
   const isDanger = variant === "danger";
 
-  const padding = size === "sm" ? "8px 16px" : "12px 20px";
-  const fontSize = size === "sm" ? 13 : 14;
+  const padding = size === "sm" ? "var(--space-2) var(--space-4)" : "var(--space-3) var(--space-6)";
+  const fontSize = size === "sm" ? "var(--text-sm)" : "var(--text-base)";
+  const height = "44px";
 
   useEffect(() => {
     if (loading && buttonRef.current) {
@@ -156,21 +187,19 @@ export function Button({ children, loading, disabled, onClick, variant = "primar
     if (loading || disabled) return;
     
     const animations = {
-      y: -1,
-      duration: DURATIONS.quick,
-      ease: EASE_CONFIGS.smooth,
+      duration: 0.1,
+      ease: "power2.out",
     };
 
     if (isPrimary) {
-      animations.backgroundColor = "#e5e5e5";
-      animations.boxShadow = "0 4px 20px rgba(255,255,255,0.15)";
+      animations.opacity = 0.9;
+      animations.scale = 0.99;
     } else if (isDanger) {
-      animations.borderColor = "var(--red)";
-      animations.backgroundColor = "rgba(239,68,68,0.1)";
+      animations.opacity = 0.9;
+      animations.scale = 0.99;
     } else {
-      animations.borderColor = "var(--dim)";
+      animations.backgroundColor = "var(--surface-2)";
       animations.color = "var(--text)";
-      animations.backgroundColor = "var(--surface)";
     }
 
     gsap.to(e.currentTarget, animations);
@@ -180,21 +209,19 @@ export function Button({ children, loading, disabled, onClick, variant = "primar
     if (loading || disabled) return;
     
     const animations = {
-      y: 0,
-      boxShadow: "none",
-      duration: DURATIONS.quick,
-      ease: EASE_CONFIGS.smooth,
+      duration: 0.15,
+      ease: "power2.out",
     };
 
     if (isPrimary) {
-      animations.backgroundColor = "var(--accent)";
+      animations.opacity = 1;
+      animations.scale = 1;
     } else if (isDanger) {
-      animations.borderColor = "var(--red-border)";
-      animations.backgroundColor = "var(--red-dim)";
+      animations.opacity = 1;
+      animations.scale = 1;
     } else {
-      animations.borderColor = "var(--border)";
-      animations.color = "var(--muted)";
       animations.backgroundColor = "transparent";
+      animations.color = "var(--text-2)";
     }
 
     gsap.to(e.currentTarget, animations);
@@ -202,7 +229,16 @@ export function Button({ children, loading, disabled, onClick, variant = "primar
 
   const handleClick = (e) => {
     if (loading || disabled || !onClick) return;
-    buttonPress(e.currentTarget);
+    
+    // Micro-interaction tactile
+    gsap.to(e.currentTarget, {
+      scale: 0.97,
+      duration: 0.06,
+      ease: "power2.out",
+      yoyo: true,
+      repeat: 1,
+    });
+    
     onClick(e);
   };
 
@@ -213,23 +249,31 @@ export function Button({ children, loading, disabled, onClick, variant = "primar
       disabled={loading || disabled}
       style={{
         width: "100%",
+        height,
         padding,
-        borderRadius: 8,
+        borderRadius: "var(--radius-md)",
         fontSize,
         fontWeight: 500,
-        fontFamily: "'Geist', sans-serif",
+        fontFamily: "'Inter', sans-serif",
         letterSpacing: "0.01em",
         cursor: loading || disabled ? "not-allowed" : "pointer",
         opacity: disabled ? 0.4 : 1,
-        border: isPrimary ? "none" : isDanger ? "1px solid var(--red-border)" : "1px solid var(--border)",
-        background: isPrimary ? "var(--accent)" : isDanger ? "var(--red-dim)" : "transparent",
-        color: isPrimary ? "#000000" : isDanger ? "var(--red)" : "var(--muted)",
+        border: isPrimary ? "none" : isDanger ? "1px solid var(--red)" : "1px solid var(--border)",
+        background: isPrimary ? "white" : isDanger ? "var(--red)" : "transparent",
+        color: isPrimary ? "black" : isDanger ? "white" : "var(--text-2)",
+        transition: "all 0.1s ease",
+        willChange: "transform, opacity",
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       {loading ? (
-        <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+        <span style={{ 
+          display: "flex", 
+          alignItems: "center", 
+          justifyContent: "center", 
+          gap: "var(--space-2)",
+        }}>
           <span className="loading-spinner" style={{ 
             width: 12, 
             height: 12, 
@@ -250,19 +294,31 @@ export function LogConsole({ logs }) {
     <div style={{
       background: "var(--surface)",
       border: "1px solid var(--border)",
-      borderRadius: 8,
-      padding: 16,
+      borderRadius: "var(--radius-md)",
+      padding: "var(--space-4)",
       fontFamily: "'Geist Mono', monospace",
-      fontSize: 12,
+      fontSize: "var(--text-xs)",
       display: "flex",
       flexDirection: "column",
-      gap: 4,
+      gap: "var(--space-1)",
       overflow: "hidden",
     }}>
       {logs.map((l, i) => (
-        <div key={i} style={{ display: "flex", gap: 10, color: "var(--muted)", overflow: "hidden" }}>
-          <span style={{ color: "var(--dim)", userSelect: "none", flexShrink: 0 }}>›</span>
-          <span style={{ wordBreak: "break-all", overflow: "hidden" }}>{l}</span>
+        <div key={i} style={{ 
+          display: "flex", 
+          gap: "var(--space-3)", 
+          color: "var(--text-2)", 
+          overflow: "hidden",
+        }}>
+          <span style={{ 
+            color: "var(--text-3)", 
+            userSelect: "none", 
+            flexShrink: 0,
+          }}>›</span>
+          <span style={{ 
+            wordBreak: "break-all", 
+            overflow: "hidden",
+          }}>{l}</span>
         </div>
       ))}
     </div>
@@ -272,13 +328,13 @@ export function LogConsole({ logs }) {
 export function ResultBox({ children }) {
   return (
     <div style={{
-      background: "var(--green-dim)",
-      border: "1px solid var(--green-border)",
-      borderRadius: 8,
-      padding: 16,
+      background: "rgba(22,163,74,0.08)",
+      border: "1px solid rgba(22,163,74,0.2)",
+      borderRadius: "var(--radius-md)",
+      padding: "var(--space-4)",
       display: "flex",
       flexDirection: "column",
-      gap: 12,
+      gap: "var(--space-3)",
     }}>
       {children}
     </div>
@@ -289,11 +345,11 @@ export function ErrorBox({ message }) {
   if (!message) return null;
   return (
     <div style={{
-      background: "var(--red-dim)",
-      border: "1px solid var(--red-border)",
-      borderRadius: 8,
-      padding: 12,
-      fontSize: 13,
+      background: "rgba(220,38,38,0.08)",
+      border: "1px solid rgba(220,38,38,0.2)",
+      borderRadius: "var(--radius-md)",
+      padding: "var(--space-3)",
+      fontSize: "var(--text-sm)",
       color: "var(--red)",
       fontFamily: "'Geist Mono', monospace",
     }}>
@@ -305,33 +361,32 @@ export function ErrorBox({ message }) {
 export function Badge({ children, variant = "default" }) {
   const styles = {
     default: { 
-      background: "rgba(22,22,22,0.8)", 
-      color: "var(--muted)", 
+      background: "var(--surface-2)", 
+      color: "var(--text-2)", 
       border: "1px solid var(--border)",
-      backdropFilter: "blur(8px)" 
     },
     success: { 
-      background: "rgba(34,197,94,0.15)", 
+      background: "rgba(22,163,74,0.1)", 
       color: "var(--green)", 
-      border: "1px solid var(--green-border)",
-      backdropFilter: "blur(8px)"
+      border: "1px solid rgba(22,163,74,0.2)",
     },
     warning: { 
       background: "rgba(245,158,11,0.1)", 
-      color: "var(--amber)", 
+      color: "#f59e0b", 
       border: "1px solid rgba(245,158,11,0.2)",
-      backdropFilter: "blur(8px)"
     },
   };
+  
   return (
     <span style={{
       display: "inline-flex",
       alignItems: "center",
-      padding: "3px 8px",
-      borderRadius: 4,
-      fontSize: 11,
+      padding: "var(--space-1) var(--space-2)",
+      borderRadius: "var(--radius-sm)",
+      fontSize: "var(--text-xs)",
       fontWeight: 500,
       letterSpacing: "0.04em",
+      fontFamily: "'Inter', sans-serif",
       ...styles[variant],
     }}>
       {children}
@@ -340,5 +395,11 @@ export function Badge({ children, variant = "default" }) {
 }
 
 export function Divider() {
-  return <div style={{ height: 1, background: "var(--border)", margin: "4px 0" }} />;
+  return (
+    <div style={{ 
+      height: 1, 
+      background: "var(--border)", 
+      margin: "var(--space-1) 0",
+    }} />
+  );
 }
