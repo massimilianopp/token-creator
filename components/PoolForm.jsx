@@ -1,11 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useWallet, useConnection } from "@solana/wallet-adapter-react";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { useWhirlpool } from "@/hooks/useWhirlpool";
 import { Card, SectionTitle, Input, Button, LogConsole, ErrorBox, Badge, Divider } from "@/components/ui/Card";
+import PoolFeeBanner from "@/components/PoolFeeBanner";
 
 export default function PoolForm() {
   const { createPool, status, logs, result, error } = useWhirlpool();
+  const { publicKey } = useWallet();
+  const { connection } = useConnection();
+  const [balance, setBalance] = useState(null);
   const [form, setForm] = useState({
     tokenMint: "", tokenDecimals: "9", pairedWith: "SOL",
     initialPrice: "", amountToken: "", amountPaired: "",
@@ -13,6 +19,33 @@ export default function PoolForm() {
 
   const set = (field) => (e) => setForm((p) => ({ ...p, [field]: e.target.value }));
   const isLoading = status === "loading";
+  const MINIMUM_SOL_REQUIRED = 0.25;
+
+  useEffect(() => {
+    const fetchBalance = async () => {
+      if (!publicKey || !connection) {
+        setBalance(null);
+        return;
+      }
+
+      try {
+        const balanceResponse = await connection.getBalance(publicKey);
+        setBalance(balanceResponse / LAMPORTS_PER_SOL);
+      } catch (error) {
+        console.error("Error fetching balance:", error);
+        setBalance(null);
+      }
+    };
+
+    fetchBalance();
+    const interval = publicKey ? setInterval(fetchBalance, 10000) : null;
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [publicKey, connection]);
+
+  const isBalanceSufficient = balance !== null && balance >= MINIMUM_SOL_REQUIRED;
+  const isFormValid = form.tokenMint && form.initialPrice && (!publicKey || isBalanceSufficient);
 
   const handleCreate = () => createPool({
     tokenMint: form.tokenMint,
@@ -25,6 +58,9 @@ export default function PoolForm() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: "100px" }}>
+
+      {/* Fee Banner */}
+      <PoolFeeBanner tokenAmount={form.amountToken} />
 
       {/* Mint */}
       <Card>
@@ -160,8 +196,13 @@ export default function PoolForm() {
         );
       })()}
 
-      <Button onClick={handleCreate} loading={isLoading} disabled={!form.tokenMint || !form.initialPrice}>
-        Create pool
+      <Button 
+        onClick={handleCreate} 
+        loading={isLoading} 
+        disabled={!isFormValid}
+        title={publicKey && !isBalanceSufficient ? `Insufficient SOL balance. You need at least ${MINIMUM_SOL_REQUIRED} SOL to create a pool.` : undefined}
+      >
+        {publicKey && !isBalanceSufficient ? "Insufficient SOL balance" : "Create pool"}
       </Button>
 
     </div>
