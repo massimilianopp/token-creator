@@ -142,6 +142,35 @@ export default function ExplorePage() {
     }
   };
 
+  // Helper function to get market data from DexScreener
+  const getMarketData = async (tokenAddress) => {
+    try {
+      const response = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${tokenAddress}`);
+      if (!response.ok) {
+        return null;
+      }
+
+      const data = await response.json();
+      const pairs = data?.pairs?.filter(p => p.chainId === "solana") || [];
+      
+      // Get pair with highest liquidity
+      const bestPair = pairs.sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0))[0];
+      
+      if (!bestPair) {
+        return null;
+      }
+
+      return {
+        price: parseFloat(bestPair.priceUsd) || 0,
+        marketCap: bestPair.marketCap || bestPair.fdv || 0,
+        volume24h: bestPair.volume?.h24 || 0,
+        priceChange24h: bestPair.priceChange?.h24 || 0
+      };
+    } catch (err) {
+      return null;
+    }
+  };
+
   const fetchTokens = async () => {
     try {
       setError(null);
@@ -163,38 +192,33 @@ export default function ExplorePage() {
       // Take first 20 Solana tokens
       const limitedTokens = solanaTokens.slice(0, 20);
 
-      // Enhance tokens with metadata from Helius (in batches to avoid rate limits)
-      const enhancedTokens = [];
-      for (let i = 0; i < limitedTokens.length; i += 5) {
-        const batch = limitedTokens.slice(i, i + 5);
-        const batchPromises = batch.map(async (token) => {
-          const metadata = await getAssetMetadata(token.tokenAddress);
-          
-          return {
-            address: token.tokenAddress,
-            name: metadata?.name || token.description?.split(' ')[0] || "Unknown",
-            symbol: metadata?.symbol || "???",
-            price: 0, // DexScreener trending API doesn't provide price
-            marketCap: 0, // DexScreener trending API doesn't provide market cap
-            volume24h: 0, // DexScreener trending API doesn't provide volume
-            priceChange24h: 0, // DexScreener trending API doesn't provide price change
-            logo: metadata?.logo || null, // Use Helius logo, ignore DexScreener icon
-            totalAmount: token.totalAmount || 0, // Boost amount from DexScreener
-            url: token.url || null // DexScreener URL
-          };
-        });
+      // Enhance tokens with metadata and market data in parallel
+      const enhanceTokenPromises = limitedTokens.map(async (token) => {
+        // Fetch metadata and market data in parallel
+        const [metadata, marketData] = await Promise.all([
+          getAssetMetadata(token.tokenAddress),
+          getMarketData(token.tokenAddress)
+        ]);
         
-        const batchResults = await Promise.allSettled(batchPromises);
-        enhancedTokens.push(...batchResults
-          .filter(result => result.status === 'fulfilled')
-          .map(result => result.value)
-        );
-        
-        // Add small delay between batches to avoid rate limiting
-        if (i + 5 < limitedTokens.length) {
-          await new Promise(resolve => setTimeout(resolve, 200));
-        }
-      }
+        return {
+          address: token.tokenAddress,
+          name: metadata?.name || token.description?.split(' ')[0] || "Unknown",
+          symbol: metadata?.symbol || "???",
+          price: marketData?.price || 0,
+          marketCap: marketData?.marketCap || 0,
+          volume24h: marketData?.volume24h || 0,
+          priceChange24h: marketData?.priceChange24h || 0,
+          logo: metadata?.logo || null,
+          totalAmount: token.totalAmount || 0,
+          url: token.url || null
+        };
+      });
+
+      // Wait for all tokens to be enhanced
+      const enhancedResults = await Promise.allSettled(enhanceTokenPromises);
+      const enhancedTokens = enhancedResults
+        .filter(result => result.status === 'fulfilled')
+        .map(result => result.value);
 
       setTokens(enhancedTokens);
       setLastUpdate(new Date());

@@ -3,14 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import dynamic from "next/dynamic";
 import { useGSAP, DURATIONS, EASE_CONFIGS } from "@/hooks/useGSAP";
-import NetworkToggle from "@/components/NetworkToggle";
-
-const WalletMultiButton = dynamic(
-  () => import("@solana/wallet-adapter-react-ui").then((mod) => mod.WalletMultiButton),
-  { ssr: false }
-);
 
 const NAV_ITEMS = [
   { href: "/", label: "Token", number: "01" },
@@ -71,7 +64,7 @@ export default function BottomNav() {
         display: "flex",
         alignItems: "center",
         padding: "0 16px",
-        gap: 4,
+        gap: 8,
         background: "rgba(10,10,10,0.95)",
         borderLeft: "1px solid var(--border)",
         borderRight: "1px solid var(--border)",
@@ -86,7 +79,7 @@ export default function BottomNav() {
               alignItems: "center",
               justifyContent: "center",
               gap: 2,
-              padding: "6px 4px",
+              padding: "6px 8px",
               borderRadius: 8,
               textDecoration: "none",
               background: isActive ? "var(--surface)" : "transparent",
@@ -113,17 +106,6 @@ export default function BottomNav() {
             </Link>
           );
         })}
-
-        <div style={{ 
-          display: "flex", 
-          alignItems: "center", 
-          gap: 8, 
-          flexShrink: 0, 
-          marginLeft: 4 
-        }}>
-          <NetworkToggle />
-          <WalletMultiButton />
-        </div>
       </div>
     </nav>
   );
