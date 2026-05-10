@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useConnection } from "@solana/wallet-adapter-react";
+import { useState, useEffect, useMemo } from "react";
 import { PublicKey } from "@solana/web3.js";
 import { Metadata } from "@metaplex-foundation/mpl-token-metadata";
 
@@ -41,7 +40,10 @@ async function fetchDexscreener(mint) {
 
 async function fetchOffchainMetadata(uri) {
   try {
-    const res = await fetch(uri);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    const res = await fetch(uri, { signal: controller.signal });
+    clearTimeout(timeout);
     return await res.json();
   } catch {
     return null;
@@ -51,7 +53,13 @@ async function fetchOffchainMetadata(uri) {
 // ── Hook ───────────────────────────────────────────────────────────────────────
 
 export function useTokenInfo(mint) {
-  const { connection } = useConnection();
+  const connection = useMemo(() => {
+    const { Connection } = require("@solana/web3.js");
+    return new Connection(
+      `https://mainnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_HELIUS_API_KEY}`,
+      "confirmed"
+    );
+  }, []);
 
   const [state, setState] = useState({
     loading: true,
@@ -175,7 +183,7 @@ export function useTokenInfo(mint) {
     }
 
     load();
-  }, [mint, connection]);
+  }, [mint]);
 
   return state;
 }
