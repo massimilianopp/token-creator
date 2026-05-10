@@ -82,7 +82,7 @@ export default function TokenMeta({ name, symbol, image, description, links, sup
             {topHolders.map((h, i) => (
               <div key={h.address} style={{ display: "flex", alignItems: "center", gap: 12, padding: "8px 12px", borderRadius: 8, background: "var(--surface)", border: "1px solid var(--border)" }}>
                 <span style={{ fontSize: 11, color: "var(--dim)", fontFamily: "'Geist Mono', monospace", width: 16 }}>{i + 1}</span>
-                <span style={{ fontSize: 11, fontFamily: "'Geist Mono', monospace", color: "var(--muted)", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{h.address}</span>
+                <span style={{ fontSize: 11, fontFamily: "'Geist Mono', monospace", color: "var(--muted)", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{h.address.slice(0, 4)}...{h.address.slice(-4)}</span>
                 <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text)", flexShrink: 0 }}>{h.pct}%</span>
               </div>
             ))}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTokenInfo } from "@/hooks/useTokenInfo";
 import { useVestingInfo } from "@/hooks/useVestingInfo";
 import TokenChart from "@/components/TokenChart";
@@ -12,6 +13,47 @@ function Section({ title, children }) {
       <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)" }}>{title}</p>
       {children}
     </div>
+  );
+}
+
+function ShareButton() {
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = window.location.href;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleShare}
+      style={{
+        fontSize: 12,
+        padding: "5px 12px",
+        borderRadius: 6,
+        background: copied ? "var(--green)" : "var(--surface)",
+        border: `1px solid ${copied ? "var(--green)" : "var(--border)"}`,
+        color: copied ? "white" : "var(--muted)",
+        textDecoration: "none",
+        cursor: "pointer",
+        transition: "all 0.15s"
+      }}
+    >
+      {copied ? "Copied!" : "Share"}
+    </button>
   );
 }
 
@@ -53,10 +95,45 @@ export default function TokenPublicPage({ mint }) {
             <a href={dexscreenerUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, padding: "5px 12px", borderRadius: 6, background: "var(--surface)", border: "1px solid var(--border)", color: "var(--muted)", textDecoration: "none" }}>
               DEXscreener ↗
             </a>
+            <ShareButton />
           </div>
           <span style={{ fontSize: 11, fontFamily: "'Geist Mono', monospace", color: "var(--dim)", maxWidth: 140, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {mint}
           </span>
+        </div>
+
+        {/* Jupiter Trade Button */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
+          <a
+            href={`https://jup.ag/swap/SOL-${mint}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "12px 24px",
+              background: "linear-gradient(135deg, #00D4AA 0%, #00A3FF 100%)",
+              border: "none",
+              borderRadius: 12,
+              color: "white",
+              fontSize: 14,
+              fontWeight: 600,
+              textDecoration: "none",
+              transition: "all 0.15s",
+              boxShadow: "0 2px 8px rgba(0, 212, 170, 0.3)"
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-1px)";
+              e.target.style.boxShadow = "0 4px 12px rgba(0, 212, 170, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "0 2px 8px rgba(0, 212, 170, 0.3)";
+            }}
+          >
+            Trade on Jupiter →
+          </a>
         </div>
 
         {/* Meta */}
