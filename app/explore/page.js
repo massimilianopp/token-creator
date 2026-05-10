@@ -101,63 +101,102 @@ export default function ExplorePage() {
     }
   };
 
+  // Helper function to get asset metadata from Helius
+  const getAssetMetadata = async (tokenAddress) => {
+    try {
+      const heliosApiKey = process.env.NEXT_PUBLIC_HELIUS_API_KEY;
+      const baseUrl = isDevnet() 
+        ? `https://devnet.helius-rpc.com/?api-key=${heliosApiKey}`
+        : `https://mainnet.helius-rpc.com/?api-key=${heliosApiKey}`;
+
+      const response = await fetch(baseUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: 1,
+          method: "getAsset",
+          params: { id: tokenAddress }
+        })
+      });
+
+      if (!response.ok || response.error) {
+        return null;
+      }
+
+      const data = await response.json();
+      if (data.error || !data.result) {
+        return null;
+      }
+
+      const asset = data.result;
+      return {
+        name: asset.content?.metadata?.name || null,
+        symbol: asset.content?.metadata?.symbol || null,
+        logo: asset.content?.links?.image || null
+      };
+    } catch (err) {
+      return null;
+    }
+  };
+
   const fetchTokens = async () => {
     try {
       setError(null);
       
-      // Fetch both endpoints
-      const [topTokensRes, latestTokensRes] = await Promise.all([
-        fetch("https://api.dexscreener.com/token-boosts/top/v1"),
-        fetch("https://api.dexscreener.com/latest/dex/tokens/solana")
-      ]);
+      // Fetch trending tokens from DexScreener
+      const topTokensRes = await fetch("https://api.dexscreener.com/token-boosts/top/v1");
 
-      if (!topTokensRes.ok || !latestTokensRes.ok) {
+      if (!topTokensRes.ok) {
         throw new Error("Failed to fetch token data");
       }
 
-      const [topTokensData, latestTokensData] = await Promise.all([
-        topTokensRes.json(),
-        latestTokensRes.json()
-      ]);
+      const topTokensData = await topTokensRes.json();
 
-      // Combine and deduplicate tokens
-      const allTokens = [];
-      
-      // Add top tokens
-      if (topTokensData?.data) {
-        allTokens.push(...topTokensData.data.map(token => ({
-          address: token.tokenAddress,
-          name: token.name || "Unknown",
-          symbol: token.symbol || "???",
-          price: parseFloat(token.priceUsd || 0),
-          marketCap: parseFloat(token.marketCap || 0),
-          volume24h: parseFloat(token.volume24h || 0),
-          priceChange24h: parseFloat(token.priceChange24h || 0),
-          logo: token.imageUrl || null
-        })));
+      // Parse response as array directly and filter for Solana tokens only
+      const solanaTokens = Array.isArray(topTokensData) 
+        ? topTokensData.filter(token => token.chainId === "solana")
+        : [];
+
+      // Take first 20 Solana tokens
+      const limitedTokens = solanaTokens.slice(0, 20);
+
+      // Enhance tokens with metadata from Helius (in batches to avoid rate limits)
+      const enhancedTokens = [];
+      for (let i = 0; i < limitedTokens.length; i += 5) {
+        const batch = limitedTokens.slice(i, i + 5);
+        const batchPromises = batch.map(async (token) => {
+          const metadata = await getAssetMetadata(token.tokenAddress);
+          
+          return {
+            address: token.tokenAddress,
+            name: metadata?.name || token.description?.split(' ')[0] || "Unknown",
+            symbol: metadata?.symbol || "???",
+            price: 0, // DexScreener trending API doesn't provide price
+            marketCap: 0, // DexScreener trending API doesn't provide market cap
+            volume24h: 0, // DexScreener trending API doesn't provide volume
+            priceChange24h: 0, // DexScreener trending API doesn't provide price change
+            logo: metadata?.logo || null, // Use Helius logo, ignore DexScreener icon
+            totalAmount: token.totalAmount || 0, // Boost amount from DexScreener
+            url: token.url || null // DexScreener URL
+          };
+        });
+        
+        const batchResults = await Promise.allSettled(batchPromises);
+        enhancedTokens.push(...batchResults
+          .filter(result => result.status === 'fulfilled')
+          .map(result => result.value)
+        );
+        
+        // Add small delay between batches to avoid rate limiting
+        if (i + 5 < limitedTokens.length) {
+          await new Promise(resolve => setTimeout(resolve, 200));
+        }
       }
 
-      // Add latest tokens (avoid duplicates)
-      if (latestTokensData?.pairs) {
-        const existingAddresses = new Set(allTokens.map(t => t.address));
-        latestTokensData.pairs
-          .filter(pair => pair.chainId === "solana" && !existingAddresses.has(pair.baseToken.address))
-          .slice(0, 20)
-          .forEach(pair => {
-            allTokens.push({
-              address: pair.baseToken.address,
-              name: pair.baseToken.name || "Unknown",
-              symbol: pair.baseToken.symbol || "???",
-              price: parseFloat(pair.priceUsd || 0),
-              marketCap: parseFloat(pair.marketCap || 0),
-              volume24h: parseFloat(pair.volume?.h24 || 0),
-              priceChange24h: parseFloat(pair.priceChange?.h24 || 0),
-              logo: pair.info?.imageUrl || null
-            });
-          });
-      }
-
-      setTokens(allTokens.slice(0, 50)); // Limit to 50 tokens
+      setTokens(enhancedTokens);
       setLastUpdate(new Date());
       setLoading(false);
     } catch (err) {
