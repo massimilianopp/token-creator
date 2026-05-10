@@ -401,7 +401,17 @@ export default function TokenCreatorForm() {
   return (
     <div ref={formRef} style={{ display: "flex", flexDirection: "column", gap: 20, paddingBottom: "100px" }}>
       
-
+      {/* Header */}
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{
+          fontSize: 32,
+          fontWeight: 700,
+          color: "white",
+          fontFamily: "'Inter', sans-serif",
+          marginBottom: 8,
+        }}>
+          Create Token
+        </h1>
         
         {/* Progress bar */}
         <div style={{
