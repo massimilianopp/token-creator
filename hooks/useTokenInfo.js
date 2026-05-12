@@ -151,26 +151,26 @@ export function useTokenInfo(mint) {
 
     async function load() {
       setState((s) => ({ ...s, loading: true, error: null }));
-      console.log("[useTokenInfo] Starting load for mint:", mint);
+      console.log("[useTokenInfo] 1. Starting load for mint:", mint);
 
       try {
         const mintPubkey = new PublicKey(mint);
 
         // ── 1. Détecter le réseau ──────────────────────
         const assetResult = await fetchAsset(mint);
-        console.log("[useTokenInfo] fetchAsset result:", assetResult);
+        console.log("[useTokenInfo] 2. fetchAsset result:", assetResult);
         let network = "mainnet"; // par défaut
 
         if (assetResult) {
           network = assetResult.network;
         }
-        console.log("[useTokenInfo] network:", network);
 
         // ── 2. Métadonnées Metaplex ──────────────────────────────────────────
         let name = null, symbol = null, image = null, description = null, links = {};
 
         try {
           const metadataPDA = getMetadataPDA(mint);
+          console.log("[useTokenInfo] 3. metadata PDA:", metadataPDA?.toBase58());
           const metadataAccount = await connection.getAccountInfo(metadataPDA);
 
           if (metadataAccount) {
@@ -197,7 +197,6 @@ export function useTokenInfo(mint) {
         } catch (e) {
           console.warn("[useTokenInfo] metadata error:", e.message);
         }
-        console.log("[useTokenInfo] metadata:", name, symbol);
 
         // ── 3. Supply + décimales ────────────────────────────────────────────
         let supply = null, decimals = null;
@@ -209,7 +208,7 @@ export function useTokenInfo(mint) {
         } catch (e) {
           console.warn("[useTokenInfo] supply error:", e.message);
         }
-        console.log("[useTokenInfo] supply:", supply);
+        console.log("[useTokenInfo] 4. supply:", supply);
 
         // ── 4. Top holders ───────────────────────────────────────────────────
         let topHolders = [];
@@ -224,14 +223,13 @@ export function useTokenInfo(mint) {
         } catch (e) {
           console.warn("[useTokenInfo] holders error:", e.message);
         }
-        console.log("[useTokenInfo] holders:", topHolders);
+        console.log("[useTokenInfo] 5. holders count:", topHolders.length);
 
         // ── 5. DEXscreener ───────────────────────────────────────────────────
         let price = null, priceChange24h = null, marketCap = null;
         let volume24h = null, liquidity = null, pairAddress = null;
 
         const pair = await fetchDexscreener(mint);
-        console.log("[useTokenInfo] dexscreener:", pair);
         if (pair) {
           price = parseFloat(pair.priceUsd) || null;
           priceChange24h = pair.priceChange?.h24 || null;
@@ -240,8 +238,9 @@ export function useTokenInfo(mint) {
           liquidity = pair.liquidity?.usd || null;
           pairAddress = pair.pairAddress || null;
         }
+        console.log("[useTokenInfo] 6. dexscreener pair:", pair?.pairAddress);
 
-        console.log("[useTokenInfo] Done loading");
+        console.log("[useTokenInfo] 7. Done — setting state");
         setState({
           loading: false,
           error: null,
