@@ -1,13 +1,10 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { PublicKey, Connection } from "@solana/web3.js";
+import { PublicKey, Connection, clusterApiUrl } from "@solana/web3.js";
 import { Metadata } from "@metaplex-foundation/mpl-token-metadata";
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
-
-const HELIUS_MAINNET = `https://mainnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_HELIUS_API_KEY}`;
-const HELIUS_DEVNET = `https://devnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_HELIUS_API_KEY}`;
 
 function getMetadataPDA(mint) {
   const METADATA_PROGRAM_ID = new PublicKey(
@@ -25,6 +22,18 @@ function getMetadataPDA(mint) {
 }
 
 async function fetchAsset(mint) {
+  const apiKey = process.env.NEXT_PUBLIC_HELIUS_API_KEY;
+  console.log("[fetchAsset] apiKey:", apiKey ? "present" : "MISSING");
+  console.log("[fetchAsset] trying mainnet for mint:", mint);
+  
+  if (!apiKey) {
+    console.log("[fetchAsset] No API key, skipping Helius");
+    return null;
+  }
+
+  const HELIUS_MAINNET = `https://mainnet.helius-rpc.com/?api-key=${apiKey}`;
+  const HELIUS_DEVNET = `https://devnet.helius-rpc.com/?api-key=${apiKey}`;
+  
   // Essayer mainnet d'abord
   try {
     const res = await fetch(HELIUS_MAINNET, {
@@ -37,13 +46,17 @@ async function fetchAsset(mint) {
       })
     });
     const data = await res.json();
+    console.log("[fetchAsset] mainnet response:", data);
     if (data.result && !data.error) {
       return { data: data.result, network: "mainnet" };
     }
-  } catch {}
+  } catch (e) {
+    console.log("[fetchAsset] mainnet error:", e.message);
+  }
   
   // Fallback devnet
   try {
+    console.log("[fetchAsset] trying devnet");
     const res = await fetch(HELIUS_DEVNET, {
       method: "POST", 
       headers: { "Content-Type": "application/json" },
@@ -54,11 +67,15 @@ async function fetchAsset(mint) {
       })
     });
     const data = await res.json();
+    console.log("[fetchAsset] devnet response:", data);
     if (data.result && !data.error) {
       return { data: data.result, network: "devnet" };
     }
-  } catch {}
+  } catch (e) {
+    console.log("[fetchAsset] devnet error:", e.message);
+  }
   
+  console.log("[fetchAsset] No result from Helius");
   return null;
 }
 
@@ -119,12 +136,15 @@ export function useTokenInfo(mint) {
     network: null,
   });
 
-  const connection = useMemo(() => 
-    new Connection(
-      `https://mainnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_HELIUS_API_KEY}`,
-      "confirmed"
-    ), 
-  []);
+  const connection = useMemo(() => {
+    const apiKey = process.env.NEXT_PUBLIC_HELIUS_API_KEY;
+    const rpcUrl = apiKey 
+      ? `https://mainnet.helius-rpc.com/?api-key=${apiKey}`
+      : clusterApiUrl("mainnet-beta");
+    
+    console.log("[useTokenInfo] connection using:", apiKey ? "Helius" : "public RPC");
+    return new Connection(rpcUrl, "confirmed");
+  }, []);
 
   useEffect(() => {
     if (!mint) return;
