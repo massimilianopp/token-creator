@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { PublicKey } from "@solana/web3.js";
+import { PublicKey, Connection } from "@solana/web3.js";
 import { Metadata } from "@metaplex-foundation/mpl-token-metadata";
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -119,6 +119,13 @@ export function useTokenInfo(mint) {
     network: null,
   });
 
+  const connection = useMemo(() => 
+    new Connection(
+      `https://mainnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_HELIUS_API_KEY}`,
+      "confirmed"
+    ), 
+  []);
+
   useEffect(() => {
     if (!mint) return;
 
@@ -129,20 +136,15 @@ export function useTokenInfo(mint) {
       try {
         const mintPubkey = new PublicKey(mint);
 
-        // ── 1. Détecter le réseau et créer la connexion ──────────────────────
+        // ── 1. Détecter le réseau ──────────────────────
         const assetResult = await fetchAsset(mint);
         console.log("[useTokenInfo] fetchAsset result:", assetResult);
         let network = "mainnet"; // par défaut
-        let connection;
 
         if (assetResult) {
           network = assetResult.network;
         }
         console.log("[useTokenInfo] network:", network);
-
-        const { Connection } = require("@solana/web3.js");
-        const rpc = network === "mainnet" ? HELIUS_MAINNET : HELIUS_DEVNET;
-        connection = new Connection(rpc, "confirmed");
 
         // ── 2. Métadonnées Metaplex ──────────────────────────────────────────
         let name = null, symbol = null, image = null, description = null, links = {};
