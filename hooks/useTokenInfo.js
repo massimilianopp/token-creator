@@ -124,18 +124,21 @@ export function useTokenInfo(mint) {
 
     async function load() {
       setState((s) => ({ ...s, loading: true, error: null }));
+      console.log("[useTokenInfo] Starting load for mint:", mint);
 
       try {
         const mintPubkey = new PublicKey(mint);
 
         // ── 1. Détecter le réseau et créer la connexion ──────────────────────
         const assetResult = await fetchAsset(mint);
+        console.log("[useTokenInfo] fetchAsset result:", assetResult);
         let network = "mainnet"; // par défaut
         let connection;
 
         if (assetResult) {
           network = assetResult.network;
         }
+        console.log("[useTokenInfo] network:", network);
 
         const { Connection } = require("@solana/web3.js");
         const rpc = network === "mainnet" ? HELIUS_MAINNET : HELIUS_DEVNET;
@@ -172,6 +175,7 @@ export function useTokenInfo(mint) {
         } catch (e) {
           console.warn("[useTokenInfo] metadata error:", e.message);
         }
+        console.log("[useTokenInfo] metadata:", name, symbol);
 
         // ── 3. Supply + décimales ────────────────────────────────────────────
         let supply = null, decimals = null;
@@ -183,6 +187,7 @@ export function useTokenInfo(mint) {
         } catch (e) {
           console.warn("[useTokenInfo] supply error:", e.message);
         }
+        console.log("[useTokenInfo] supply:", supply);
 
         // ── 4. Top holders ───────────────────────────────────────────────────
         let topHolders = [];
@@ -197,12 +202,14 @@ export function useTokenInfo(mint) {
         } catch (e) {
           console.warn("[useTokenInfo] holders error:", e.message);
         }
+        console.log("[useTokenInfo] holders:", topHolders);
 
         // ── 5. DEXscreener ───────────────────────────────────────────────────
         let price = null, priceChange24h = null, marketCap = null;
         let volume24h = null, liquidity = null, pairAddress = null;
 
         const pair = await fetchDexscreener(mint);
+        console.log("[useTokenInfo] dexscreener:", pair);
         if (pair) {
           price = parseFloat(pair.priceUsd) || null;
           priceChange24h = pair.priceChange?.h24 || null;
@@ -212,6 +219,7 @@ export function useTokenInfo(mint) {
           pairAddress = pair.pairAddress || null;
         }
 
+        console.log("[useTokenInfo] Done loading");
         setState({
           loading: false,
           error: null,
