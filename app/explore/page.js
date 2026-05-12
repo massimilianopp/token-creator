@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useGSAP, DURATIONS, EASE_CONFIGS } from "@/hooks/useGSAP";
 import { useNetwork } from "@/components/NetworkContext";
 
@@ -26,7 +26,6 @@ export default function ExplorePage() {
   const containerRef = useRef(null);
   const listRef = useRef(null);
   const progressRef = useRef(null);
-  const router = useRouter();
   const { gsap } = useGSAP();
   const { isDevnet } = useNetwork();
 
@@ -333,10 +332,6 @@ export default function ExplorePage() {
       }
     });
 
-  // Handle token click
-  const handleTokenClick = (address) => {
-    router.push(`/token/${address}`);
-  };
 
   const formatNumber = (num) => {
     if (num >= 1e9) return `$${(num / 1e9).toFixed(2)}B`;
@@ -633,17 +628,27 @@ export default function ExplorePage() {
         )}
 
         {searchedToken && typeof searchedToken === "object" && (
-          <div style={{
-            background: "var(--surface)",
-            border: "2px solid var(--green-border)",
-            borderRadius: 12,
-            padding: 16,
-            marginBottom: 16,
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            position: "relative"
-          }}>
+          <Link 
+            href={`/token/${searchedToken.address}`}
+            style={{
+              display: "block",
+              textDecoration: "none",
+              color: "inherit"
+            }}
+          >
+            <div style={{
+              background: "var(--surface)",
+              border: "2px solid var(--green-border)",
+              borderRadius: 12,
+              padding: 16,
+              marginBottom: 16,
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              position: "relative",
+              cursor: "pointer",
+              transition: "all 0.15s"
+            }}>
             {/* Custom badge */}
             <div style={{
               position: "absolute",
@@ -750,33 +755,23 @@ export default function ExplorePage() {
               </div>
             </div>
 
-            {/* Trade button */}
-            <a
-              href={`https://jup.ag/swap/SOL-${searchedToken.address}`}
-              target="_blank"
-              rel="noopener noreferrer"
+            {/* Arrow */}
+            <svg 
               style={{
-                background: "var(--text)",
-                color: "var(--bg)",
-                border: "none",
-                borderRadius: 8,
-                padding: "6px 12px",
-                fontSize: 12,
-                fontWeight: 600,
-                textDecoration: "none",
-                transition: "all 0.15s",
-                flexShrink: 0
+                width: 16,
+                height: 16,
+                color: "var(--text-3)",
+                flexShrink: 0,
+                transition: "transform 0.1s"
               }}
-              onMouseEnter={(e) => {
-                e.target.style.background = "var(--dim)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = "var(--text)";
-              }}
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
             >
-              Trade
-            </a>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
           </div>
+          </Link>
         )}
 
         {/* Token list */}
@@ -787,26 +782,33 @@ export default function ExplorePage() {
             gap: 12
           }}>
             {filteredAndSortedTokens.map((token, index) => (
-              <div
+              <Link
                 key={token.address}
-                onClick={() => handleTokenClick(token.address)}
+                href={`/token/${token.address}`}
                 style={{
-                  height: 56,
-                  borderBottom: index < filteredAndSortedTokens.length - 1 ? "1px solid var(--border)" : "none",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  padding: "0 4px",
-                  transition: "background 0.1s",
-                  cursor: "pointer"
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.background = "var(--surface)";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.background = "transparent";
+                  display: "block",
+                  textDecoration: "none",
+                  color: "inherit"
                 }}
               >
+                <div
+                  style={{
+                    height: 56,
+                    borderBottom: index < filteredAndSortedTokens.length - 1 ? "1px solid var(--border)" : "none",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    padding: "0 4px",
+                    transition: "background 0.1s",
+                    cursor: "pointer"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = "var(--surface)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = "transparent";
+                  }}
+                >
                 {/* Rank */}
                 <div style={{
                   fontSize: 11,
@@ -927,6 +929,7 @@ export default function ExplorePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </div>
+              </Link>
             ))}
           </div>
         )}
