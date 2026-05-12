@@ -1,27 +1,32 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useGSAP, DURATIONS, EASE_CONFIGS } from "@/hooks/useGSAP";
 import { useNetwork } from "@/components/NetworkContext";
 
-const SORT_OPTIONS = [
-  { key: "marketCap", label: "Market Cap" },
-  { key: "volume", label: "Volume" },
-  { key: "priceChange", label: "24h Change" }
+const TABS = [
+  { key: "trending", label: "Trending" },
+  { key: "top", label: "Top" },
+  { key: "gainers", label: "Gainers" },
+  { key: "losers", label: "Losers" }
 ];
 
 export default function ExplorePage() {
   const [tokens, setTokens] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [sortBy, setSortBy] = useState("marketCap");
+  const [activeTab, setActiveTab] = useState("trending");
   const [searchQuery, setSearchQuery] = useState("");
   const [lastUpdate, setLastUpdate] = useState(null);
   const [searchedToken, setSearchedToken] = useState(null);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [refreshProgress, setRefreshProgress] = useState(0);
   
   const containerRef = useRef(null);
   const listRef = useRef(null);
+  const progressRef = useRef(null);
+  const router = useRouter();
   const { gsap } = useGSAP();
   const { isDevnet } = useNetwork();
 
@@ -229,11 +234,27 @@ export default function ExplorePage() {
     }
   };
 
-  // Initial fetch and auto-refresh every 30s
+  // Initial fetch and auto-refresh every 30s with progress bar
   useEffect(() => {
     fetchTokens();
-    const interval = setInterval(fetchTokens, 30000);
-    return () => clearInterval(interval);
+    
+    const refreshInterval = setInterval(fetchTokens, 30000);
+    
+    // Progress bar animation
+    const progressInterval = setInterval(() => {
+      setRefreshProgress(prev => {
+        const newProgress = prev + (100 / 300); // 30s = 300 intervals of 100ms
+        if (newProgress >= 100) {
+          return 0; // Reset when complete
+        }
+        return newProgress;
+      });
+    }, 100);
+    
+    return () => {
+      clearInterval(refreshInterval);
+      clearInterval(progressInterval);
+    };
   }, []);
 
   // Handle search query changes
@@ -247,6 +268,18 @@ export default function ExplorePage() {
       setSearchedToken(null);
     }
   }, [searchQuery]);
+
+  // Handle search submit (clear search field)
+  const handleSearch = () => {
+    if (searchQuery.trim() && !isValidMintAddress(searchQuery)) {
+      // Filter by name/symbol - don't clear
+      return;
+    }
+    // Clear search after mint address search
+    if (isValidMintAddress(searchQuery)) {
+      setTimeout(() => setSearchQuery(""), 100);
+    }
+  };
 
   // GSAP animations
   useEffect(() => {
@@ -274,7 +307,7 @@ export default function ExplorePage() {
     }
   }, [loading, tokens, gsap]);
 
-  // Filter and sort tokens (exclude searched token if it's a mint address search)
+  // Filter and sort tokens based on active tab
   const filteredAndSortedTokens = tokens
     .filter(token => {
       // If we're searching by mint address, don't filter regular tokens
@@ -286,15 +319,24 @@ export default function ExplorePage() {
       );
     })
     .sort((a, b) => {
-      switch (sortBy) {
-        case "volume":
-          return b.volume24h - a.volume24h;
-        case "priceChange":
-          return b.priceChange24h - a.priceChange24h;
-        default:
+      switch (activeTab) {
+        case "top":
           return b.marketCap - a.marketCap;
+        case "gainers":
+          return b.priceChange24h - a.priceChange24h;
+        case "losers":
+          return a.priceChange24h - b.priceChange24h;
+        case "trending":
+        default:
+          // Default DexScreener order (by totalAmount from boost data)
+          return (b.totalAmount || 0) - (a.totalAmount || 0);
       }
     });
+
+  // Handle token click
+  const handleTokenClick = (address) => {
+    router.push(`/token/${address}`);
+  };
 
   const formatNumber = (num) => {
     if (num >= 1e9) return `$${(num / 1e9).toFixed(2)}B`;
@@ -323,86 +365,148 @@ export default function ExplorePage() {
         {/* Header */}
         <div style={{
           marginBottom: 24,
-          textAlign: "center"
+          position: "relative"
         }}>
-          <h1 style={{
-            fontSize: 24,
-            fontWeight: 700,
-            fontFamily: "'Syne', sans-serif",
-            marginBottom: 8,
-            background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent"
+          {/* Progress bar */}
+          <div style={{
+            position: "absolute",
+            top: "-20px",
+            left: 0,
+            right: 0,
+            height: 1,
+            background: "var(--border)",
+            borderRadius: 1
           }}>
-            Explore Tokens
-          </h1>
-          <p style={{
-            fontSize: 13,
-            color: "var(--muted)",
-            marginBottom: 0
+            <div 
+              ref={progressRef}
+              style={{
+                height: "100%",
+                background: "var(--green)",
+                borderRadius: 1,
+                width: `${refreshProgress}%`,
+                transition: "width 0.1s linear"
+              }}
+            />
+          </div>
+          
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            marginBottom: 16
           }}>
-            Discover trending Solana tokens
-            {lastUpdate && (
-              <span style={{ display: "block", fontSize: 11 }}>
-                Last updated: {lastUpdate.toLocaleTimeString()}
-              </span>
-            )}
-          </p>
+            <h1 style={{
+              fontSize: 24,
+              fontWeight: 700,
+              fontFamily: "'Inter', sans-serif",
+              margin: 0,
+              color: "var(--text)"
+            }}>
+              Explore
+            </h1>
+            {/* Live indicator */}
+            <div style={{
+              width: 6,
+              height: 6,
+              background: "var(--green)",
+              borderRadius: "50%",
+              animation: "pulse 2s infinite"
+            }} />
+          </div>
         </div>
 
         {/* Search */}
         <div style={{
-          marginBottom: 16
+          marginBottom: 16,
+          position: "relative"
         }}>
+          {/* Search icon */}
+          <svg 
+            style={{
+              position: "absolute",
+              left: 12,
+              top: "50%",
+              transform: "translateY(-50%)",
+              width: 16,
+              height: 16,
+              color: "var(--text-3)",
+              pointerEvents: "none"
+            }}
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+          
           <input
             type="text"
-            placeholder="Search by name, symbol or mint address..."
+            placeholder="Search by name, symbol or paste mint address..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             style={{
               width: "100%",
-              padding: "12px 16px",
+              height: 44,
+              padding: "0 16px 0 40px",
               background: "var(--surface)",
               border: "1px solid var(--border)",
-              borderRadius: 12,
+              borderRadius: 8,
               color: "var(--text)",
               fontSize: 14,
               outline: "none",
               transition: "border-color 0.15s"
             }}
-            onFocus={(e) => e.target.style.borderColor = "var(--dim)"}
+            onFocus={(e) => e.target.style.borderColor = "var(--border-strong)"}
             onBlur={(e) => e.target.style.borderColor = "var(--border)"}
           />
         </div>
 
-        {/* Sort options */}
+        {/* Tabs */}
         <div style={{
-          display: "flex",
-          gap: 8,
-          marginBottom: 20,
-          overflowX: "auto",
-          paddingBottom: 4
+          position: "relative",
+          marginBottom: 20
         }}>
-          {SORT_OPTIONS.map(option => (
-            <button
-              key={option.key}
-              onClick={() => setSortBy(option.key)}
-              style={{
-                padding: "6px 12px",
-                background: sortBy === option.key ? "var(--surface)" : "transparent",
-                border: `1px solid ${sortBy === option.key ? "var(--border)" : "transparent"}`,
-                borderRadius: 8,
-                color: sortBy === option.key ? "var(--text)" : "var(--muted)",
-                fontSize: 12,
-                fontWeight: 500,
-                cursor: "pointer",
-                transition: "all 0.15s",
-                whiteSpace: "nowrap"
-              }}
-            >
-              {option.label}
-            </button>
-          ))}
+          <div style={{
+            display: "flex",
+            gap: 0,
+            borderBottom: "1px solid var(--border)"
+          }}>
+            {TABS.map(tab => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                style={{
+                  padding: "12px 16px",
+                  background: "transparent",
+                  border: "none",
+                  color: activeTab === tab.key ? "var(--text)" : "var(--text-3)",
+                  fontSize: 14,
+                  fontWeight: activeTab === tab.key ? 600 : 400,
+                  cursor: "pointer",
+                  transition: "all 0.15s",
+                  position: "relative",
+                  flex: 1,
+                  textAlign: "center"
+                }}
+              >
+                {tab.label}
+                {/* Active indicator */}
+                {activeTab === tab.key && (
+                  <div style={{
+                    position: "absolute",
+                    bottom: -1,
+                    left: 0,
+                    right: 0,
+                    height: 2,
+                    background: "var(--text)",
+                    borderRadius: "1px 1px 0 0"
+                  }} />
+                )}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Loading state */}
@@ -540,19 +644,19 @@ export default function ExplorePage() {
             gap: 12,
             position: "relative"
           }}>
-            {/* Found badge */}
+            {/* Custom badge */}
             <div style={{
               position: "absolute",
               top: 8,
               right: 8,
-              background: "var(--green)",
-              color: "white",
+              background: "var(--border)",
+              color: "var(--text-3)",
               padding: "2px 6px",
               borderRadius: 4,
               fontSize: 10,
-              fontWeight: 600
+              fontWeight: 500
             }}>
-              Found on Solana
+              custom
             </div>
 
             {/* Token logo */}
@@ -685,30 +789,39 @@ export default function ExplorePage() {
             {filteredAndSortedTokens.map((token, index) => (
               <div
                 key={token.address}
+                onClick={() => handleTokenClick(token.address)}
                 style={{
-                  background: "var(--surface)",
-                  border: "1px solid var(--border)",
-                  borderRadius: 12,
-                  padding: 16,
+                  height: 56,
+                  borderBottom: index < filteredAndSortedTokens.length - 1 ? "1px solid var(--border)" : "none",
                   display: "flex",
                   alignItems: "center",
                   gap: 12,
-                  transition: "all 0.15s",
+                  padding: "0 4px",
+                  transition: "background 0.1s",
                   cursor: "pointer"
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.borderColor = "var(--dim)";
-                  e.target.style.background = "var(--card)";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.borderColor = "var(--border)";
                   e.target.style.background = "var(--surface)";
                 }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "transparent";
+                }}
               >
+                {/* Rank */}
+                <div style={{
+                  fontSize: 11,
+                  fontFamily: "'Geist Mono', monospace",
+                  color: "var(--text-3)",
+                  width: 24,
+                  textAlign: "right",
+                  flexShrink: 0
+                }}>
+                  {String(index + 1).padStart(2, '0')}
+                </div>
                 {/* Token logo */}
                 <div style={{
-                  width: 40,
-                  height: 40,
+                  width: 32,
+                  height: 32,
                   borderRadius: "50%",
                   background: "var(--card)",
                   display: "flex",
@@ -729,103 +842,90 @@ export default function ExplorePage() {
                     />
                   ) : (
                     <span style={{
-                      fontSize: 14,
+                      fontSize: 12,
                       fontWeight: 600,
-                      color: "var(--muted)"
+                      color: "var(--text-3)"
                     }}>
                       {token.symbol.slice(0, 2)}
                     </span>
                   )}
                 </div>
 
-                {/* Token info */}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    marginBottom: 4
-                  }}>
-                    <span style={{
-                      fontSize: 14,
-                      fontWeight: 600,
-                      color: "var(--text)",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis"
-                    }}>
-                      {token.name}
-                    </span>
-                    <span style={{
-                      fontSize: 12,
-                      color: "var(--muted)",
-                      fontFamily: "'Geist Mono', monospace"
-                    }}>
-                      {token.symbol}
-                    </span>
-                  </div>
-                  
-                  <div style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 12,
-                    fontSize: 11,
-                    color: "var(--muted)"
-                  }}>
-                    <span>MC: {formatNumber(token.marketCap)}</span>
-                    <span>Vol: {formatNumber(token.volume24h)}</span>
-                  </div>
-                </div>
-
-                {/* Price and change */}
+                {/* Token name and symbol */}
                 <div style={{
-                  textAlign: "right",
-                  flexShrink: 0
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2,
+                  minWidth: 0,
+                  marginRight: "auto"
                 }}>
-                  <div style={{
-                    fontSize: 14,
-                    fontWeight: 600,
+                  <span style={{
+                    fontSize: 13,
+                    fontWeight: 700,
                     color: "var(--text)",
-                    marginBottom: 4
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: 140
                   }}>
-                    {formatPrice(token.price)}
-                  </div>
-                  
-                  <div style={{
-                    fontSize: 12,
-                    fontWeight: 500,
-                    color: token.priceChange24h >= 0 ? "var(--green)" : "var(--red)"
+                    {token.name}
+                  </span>
+                  <span style={{
+                    fontSize: 11,
+                    color: "var(--text-3)",
+                    fontFamily: "'Geist Mono', monospace",
+                    textTransform: "uppercase"
                   }}>
-                    {token.priceChange24h >= 0 ? "+" : ""}{token.priceChange24h.toFixed(2)}%
-                  </div>
+                    {token.symbol}
+                  </span>
                 </div>
 
-                {/* Trade button */}
-                <a
-                  href={`https://jup.ag/swap/SOL-${token.address}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    background: "var(--text)",
-                    color: "var(--bg)",
-                    border: "none",
-                    borderRadius: 8,
-                    padding: "6px 12px",
-                    fontSize: 12,
+                {/* Price */}
+                <div style={{
+                  fontSize: 13,
+                  fontFamily: "'Geist Mono', monospace",
+                  fontWeight: 500,
+                  color: "var(--text)",
+                  flexShrink: 0,
+                  textAlign: "right",
+                  minWidth: 80
+                }}>
+                  {formatPrice(token.price)}
+                </div>
+
+                {/* Change pill */}
+                {token.priceChange24h !== 0 && (
+                  <div style={{
+                    background: token.priceChange24h >= 0 ? "var(--green)" : "var(--red)",
+                    color: "white",
+                    padding: "2px 6px",
+                    borderRadius: 12,
+                    fontSize: 11,
                     fontWeight: 600,
-                    textDecoration: "none",
-                    transition: "all 0.15s",
-                    flexShrink: 0
+                    flexShrink: 0,
+                    minWidth: 50,
+                    textAlign: "center"
+                  }}>
+                    {token.priceChange24h >= 0 ? "+" : ""}{token.priceChange24h.toFixed(1)}%
+                  </div>
+                )}
+
+                {/* Arrow */}
+                <svg 
+                  style={{
+                    width: 16,
+                    height: 16,
+                    color: "var(--text-3)",
+                    flexShrink: 0,
+                    marginLeft: 8,
+                    transition: "transform 0.1s"
                   }}
-                  onMouseEnter={(e) => {
-                    e.target.style.background = "var(--dim)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.background = "var(--text)";
-                  }}
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
                 >
-                  Trade
-                </a>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </div>
             ))}
           </div>
@@ -845,8 +945,8 @@ export default function ExplorePage() {
 
       <style jsx>{`
         @keyframes pulse {
-          0%, 100% { opacity: 0.4; }
-          50% { opacity: 0.6; }
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.7; transform: scale(1.1); }
         }
       `}</style>
     </div>
