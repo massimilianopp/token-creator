@@ -172,6 +172,10 @@ body::before {
   75% { transform: translateX(5px); }
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   .gsap-element {

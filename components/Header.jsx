@@ -6,8 +6,8 @@ import dynamic from "next/dynamic";
 import { useGSAP, DURATIONS, EASE_CONFIGS } from "@/hooks/useGSAP";
 import NetworkToggle from "@/components/NetworkToggle";
 
-const WalletMultiButton = dynamic(
-  () => import("@solana/wallet-adapter-react-ui").then((mod) => mod.WalletMultiButton),
+const WalletButton = dynamic(
+  () => import("@/components/WalletButton"),
   { ssr: false }
 );
 
@@ -87,7 +87,7 @@ export default function Header() {
           flexShrink: 0,
         }}>
           <NetworkToggle />
-          <WalletMultiButton />
+          <WalletButton />
         </div>
       </div>
     </header>
