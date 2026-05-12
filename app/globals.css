@@ -193,3 +193,21 @@ body::before {
 input:focus, textarea:focus, select:focus {
   scroll-margin-bottom: 120px;
 }
+
+/* Fix wallet adapter modal positioning */
+.wallet-adapter-modal-wrapper {
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+
+.wallet-adapter-modal {
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.wallet-adapter-modal-container {
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+}
