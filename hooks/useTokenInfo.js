@@ -147,13 +147,17 @@ export function useTokenInfo(mint) {
   }, []);
 
   useEffect(() => {
-    if (!mint) return;
-
+    if (!mint) {
+      console.log("[useTokenInfo] No mint provided");
+      return;
+    }
+    
     async function load() {
-      setState((s) => ({ ...s, loading: true, error: null }));
-      console.log("[useTokenInfo] 1. Starting load for mint:", mint);
-
+      console.log("[useTokenInfo] load() called for:", mint);
       try {
+        setState((s) => ({ ...s, loading: true, error: null }));
+        console.log("[useTokenInfo] 1. Starting load for mint:", mint);
+
         const mintPubkey = new PublicKey(mint);
 
         // ── 1. Détecter le réseau ──────────────────────
@@ -251,16 +255,17 @@ export function useTokenInfo(mint) {
           network,
         });
       } catch (err) {
-        console.error("[useTokenInfo]", err);
-        setState((s) => ({
-          ...s,
-          loading: false,
-          error: err.message || "Erreur inconnue",
-        }));
+        console.error("[useTokenInfo] FATAL ERROR:", err);
+        console.error("[useTokenInfo] Error stack:", err.stack);
+        setState(s => ({ ...s, loading: false, error: err.message }));
       }
     }
-
-    load();
+    
+    load().catch(err => {
+      console.error("[useTokenInfo] Unhandled promise rejection:", err);
+      setState(s => ({ ...s, loading: false, error: err.message }));
+    });
+    
   }, [mint]);
 
   return state;
