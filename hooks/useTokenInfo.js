@@ -6,6 +6,9 @@ import { Metadata } from "@metaplex-foundation/mpl-token-metadata";
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
+const HELIUS_MAINNET = `https://mainnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_HELIUS_API_KEY}`;
+const HELIUS_DEVNET = `https://devnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_HELIUS_API_KEY}`;
+
 function getMetadataPDA(mint) {
   const METADATA_PROGRAM_ID = new PublicKey(
     "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
@@ -19,6 +22,44 @@ function getMetadataPDA(mint) {
     METADATA_PROGRAM_ID
   );
   return pda;
+}
+
+async function fetchAsset(mint) {
+  // Essayer mainnet d'abord
+  try {
+    const res = await fetch(HELIUS_MAINNET, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0", id: 1,
+        method: "getAsset",
+        params: { id: mint }
+      })
+    });
+    const data = await res.json();
+    if (data.result && !data.error) {
+      return { data: data.result, network: "mainnet" };
+    }
+  } catch {}
+  
+  // Fallback devnet
+  try {
+    const res = await fetch(HELIUS_DEVNET, {
+      method: "POST", 
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0", id: 1,
+        method: "getAsset",
+        params: { id: mint }
+      })
+    });
+    const data = await res.json();
+    if (data.result && !data.error) {
+      return { data: data.result, network: "devnet" };
+    }
+  } catch {}
+  
+  return null;
 }
 
 async function fetchDexscreener(mint) {
@@ -53,14 +94,6 @@ async function fetchOffchainMetadata(uri) {
 // ── Hook ───────────────────────────────────────────────────────────────────────
 
 export function useTokenInfo(mint) {
-  const connection = useMemo(() => {
-    const { Connection } = require("@solana/web3.js");
-    return new Connection(
-      `https://mainnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_HELIUS_API_KEY}`,
-      "confirmed"
-    );
-  }, []);
-
   const [state, setState] = useState({
     loading: true,
     error: null,
@@ -82,6 +115,8 @@ export function useTokenInfo(mint) {
     pairAddress: null,
     // Holders
     topHolders: [],
+    // Réseau détecté
+    network: null,
   });
 
   useEffect(() => {
@@ -93,7 +128,20 @@ export function useTokenInfo(mint) {
       try {
         const mintPubkey = new PublicKey(mint);
 
-        // ── 1. Métadonnées Metaplex ──────────────────────────────────────────
+        // ── 1. Détecter le réseau et créer la connexion ──────────────────────
+        const assetResult = await fetchAsset(mint);
+        let network = "mainnet"; // par défaut
+        let connection;
+
+        if (assetResult) {
+          network = assetResult.network;
+        }
+
+        const { Connection } = require("@solana/web3.js");
+        const rpc = network === "mainnet" ? HELIUS_MAINNET : HELIUS_DEVNET;
+        connection = new Connection(rpc, "confirmed");
+
+        // ── 2. Métadonnées Metaplex ──────────────────────────────────────────
         let name = null, symbol = null, image = null, description = null, links = {};
 
         try {
@@ -125,7 +173,7 @@ export function useTokenInfo(mint) {
           console.warn("[useTokenInfo] metadata error:", e.message);
         }
 
-        // ── 2. Supply + décimales ────────────────────────────────────────────
+        // ── 3. Supply + décimales ────────────────────────────────────────────
         let supply = null, decimals = null;
 
         try {
@@ -136,7 +184,7 @@ export function useTokenInfo(mint) {
           console.warn("[useTokenInfo] supply error:", e.message);
         }
 
-        // ── 3. Top holders ───────────────────────────────────────────────────
+        // ── 4. Top holders ───────────────────────────────────────────────────
         let topHolders = [];
 
         try {
@@ -150,7 +198,7 @@ export function useTokenInfo(mint) {
           console.warn("[useTokenInfo] holders error:", e.message);
         }
 
-        // ── 4. DEXscreener ───────────────────────────────────────────────────
+        // ── 5. DEXscreener ───────────────────────────────────────────────────
         let price = null, priceChange24h = null, marketCap = null;
         let volume24h = null, liquidity = null, pairAddress = null;
 
@@ -171,6 +219,7 @@ export function useTokenInfo(mint) {
           supply, decimals,
           price, priceChange24h, marketCap, volume24h, liquidity, pairAddress,
           topHolders,
+          network,
         });
       } catch (err) {
         console.error("[useTokenInfo]", err);
