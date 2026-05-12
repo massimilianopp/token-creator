@@ -1,7 +1,7 @@
 import TokenPublicPage from "@/components/TokenPublicPage";
 
 export async function generateMetadata({ params }) {
-  const { mint } = params;
+  const { mint } = await params;
   
   try {
     // Fetch token info via Helius
@@ -62,6 +62,6 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function TokenPage({ params }) {
-  const { mint } = params;
+  const { mint } = await params;
   return <TokenPublicPage mint={mint} />;
 }
