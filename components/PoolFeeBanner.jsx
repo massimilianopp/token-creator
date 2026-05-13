@@ -47,111 +47,47 @@ export default function PoolFeeBanner({ tokenAmount }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      {/* Fee Banner */}
+      {/* Inline Fee Warning */}
       <div style={{
-        padding: "16px",
-        borderRadius: 12,
-        background: "rgba(245,158,11,0.04)",
-        border: "1px solid var(--amber)",
-        display: "flex",
-        gap: 12
+        borderLeft: "2px solid var(--amber)",
+        paddingLeft: 12,
+        background: "transparent"
       }}>
-        <div style={{
-          width: 20,
-          height: 20,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "var(--amber)",
-          fontSize: 16,
-          flexShrink: 0
-        }}>
-          ⚠️
-        </div>
-        <div style={{ flex: 1 }}>
-          <h3 style={{
-            fontSize: 15,
-            fontWeight: 600,
-            color: "var(--text)",
-            marginBottom: 12,
-            fontFamily: "'Syne', sans-serif"
-          }}>
-            Pool creation costs
-          </h3>
-          <div style={{
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+          <span style={{ color: "var(--amber)", fontSize: 14 }}>⚠</span>
+          <span style={{
             fontSize: 13,
             color: "var(--text-2)",
-            lineHeight: 1.6,
-            fontFamily: "'Geist Mono', monospace"
+            fontFamily: "'Geist', sans-serif"
           }}>
-            <div style={{ marginBottom: 4 }}>• Orca Whirlpool initialization : ~0.15 SOL</div>
-            <div style={{ marginBottom: 4 }}>• Tick arrays (3x) : ~0.09 SOL</div>
-            <div style={{ marginBottom: 4 }}>• Position NFT : ~0.003 SOL</div>
-            <div style={{ margin: "8px 0", color: "var(--border)" }}>──────────────────</div>
-            <div style={{ marginBottom: 4, fontWeight: 500 }}>• Total estimated : ~{MINIMUM_SOL_REQUIRED} SOL minimum</div>
-            <div style={{ marginBottom: 12, fontWeight: 500 }}>• Service fee : 0.1% of deposited tokens</div>
-          </div>
-          <p style={{
-            fontSize: 11,
-            color: "var(--text-3)",
-            lineHeight: 1.4,
-            marginTop: 8
-          }}>
-            Most fees go to Orca protocol and are used to rent on-chain accounts. They are not recoverable.
-          </p>
+            Pool creation requires ~0.25 SOL (Orca protocol fees) + 0.1% of deposited tokens (service fee).
+          </span>
         </div>
-      </div>
 
-      {/* Balance Check */}
-      {publicKey && (
-        <div style={{
-          padding: "12px 16px",
-          borderRadius: 8,
-          background: "var(--surface)",
-          border: "1px solid var(--border)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between"
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 13, color: "var(--muted)" }}>
-              Your balance:
-            </span>
+        {/* Balance Display - inline */}
+        {publicKey && (
+          <div style={{ fontSize: 11, color: "var(--text-3)", display: "flex", alignItems: "center", gap: 8 }}>
+            <span>Your balance: </span>
             {loading ? (
-              <span style={{ fontSize: 13, color: "var(--muted)" }}>Loading...</span>
+              <span>Loading...</span>
             ) : (
-              <span style={{
-                fontSize: 13,
-                fontFamily: "'Geist Mono', monospace",
-                fontWeight: 500
-              }}>
-                {balance !== null ? `${balance.toFixed(4)} SOL` : "Unable to fetch"}
-              </span>
+              <>
+                <span style={{ fontFamily: "'Geist Mono', monospace", fontWeight: 500 }}>
+                  {balance !== null ? `${balance.toFixed(2)} SOL` : "Unable to fetch"}
+                </span>
+                {balance !== null && (
+                  <span style={{
+                    color: isBalanceSufficient ? "var(--green)" : "var(--red)",
+                    fontWeight: 500
+                  }}>
+                    {isBalanceSufficient ? "✓" : "✗"}
+                  </span>
+                )}
+              </>
             )}
           </div>
-          
-          {balance !== null && (
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{
-                fontSize: 12,
-                color: isBalanceSufficient ? "var(--green)" : "var(--red)",
-                fontWeight: 500
-              }}>
-                {isBalanceSufficient ? "✓ Sufficient" : "✗ Insufficient"}
-              </span>
-              {!isBalanceSufficient && (
-                <span style={{
-                  fontSize: 11,
-                  color: "var(--red)",
-                  fontStyle: "italic"
-                }}>
-                  — you need at least {MINIMUM_SOL_REQUIRED} SOL
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Jupiter Link */}
       {shouldShowJupiterLink && (

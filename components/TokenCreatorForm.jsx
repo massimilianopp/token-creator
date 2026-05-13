@@ -65,7 +65,10 @@ export default function TokenCreatorForm() {
 
   // Success animation
   useEffect(() => {
-    if (status === "done" && successRef.current) {
+    if (status === "done" && successRef.current && mintAddress) {
+      // Store mint address in localStorage for auto-filling
+      localStorage.setItem("lastCreatedMint", mintAddress);
+      
       showSuccessFeedback(successRef.current, {
         message: "Token created successfully!",
         showConfetti: true,
@@ -92,7 +95,7 @@ export default function TokenCreatorForm() {
         }
       }, 800);
     }
-  }, [status, showSuccessFeedback, showToastNotification, gsap]);
+  }, [status, showSuccessFeedback, showToastNotification, gsap, mintAddress]);
 
   // Transaction steps animations
   useEffect(() => {

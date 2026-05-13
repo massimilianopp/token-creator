@@ -5,7 +5,7 @@ import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { useWhirlpool } from "@/hooks/useWhirlpool";
 import { Card, SectionTitle, Input, Button, LogConsole, ErrorBox, Badge, Divider } from "@/components/ui/Card";
-import PoolFeeBanner from "@/components/PoolFeeBanner";
+import WalletButton from "@/components/WalletButton";
 
 export default function PoolForm() {
   const { createPool, status, logs, result, error } = useWhirlpool();
@@ -16,10 +16,29 @@ export default function PoolForm() {
     tokenMint: "", tokenDecimals: "9", pairedWith: "SOL",
     initialPrice: "", amountToken: "", amountPaired: "",
   });
+  
+  const [isAutoFilled, setIsAutoFilled] = useState(false);
 
   const set = (field) => (e) => setForm((p) => ({ ...p, [field]: e.target.value }));
   const isLoading = status === "loading";
   const MINIMUM_SOL_REQUIRED = 0.25;
+
+  // Auto-fill mint address from localStorage on component mount
+  useEffect(() => {
+    if (!form.tokenMint) {
+      const lastMint = localStorage.getItem("lastCreatedMint");
+      if (lastMint) {
+        setForm(f => ({ ...f, tokenMint: lastMint }));
+        setIsAutoFilled(true);
+      }
+    }
+  }, [form.tokenMint]);
+
+  const clearAutoFill = () => {
+    setForm(f => ({ ...f, tokenMint: "" }));
+    localStorage.removeItem("lastCreatedMint");
+    setIsAutoFilled(false);
+  };
 
   useEffect(() => {
     const fetchBalance = async () => {
@@ -56,17 +75,25 @@ export default function PoolForm() {
     amountPaired: parseFloat(form.amountPaired),
   });
 
+  // ── Not connected ──
+  if (!publicKey) {
+    return (
+      <div style={{ padding: "48px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+        <p style={{ fontSize: 14, color: "var(--muted)" }}>Connect your wallet to create a liquidity pool</p>
+        <WalletButton />
+      </div>
+    );
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: "100px" }}>
-
-      {/* Fee Banner */}
-      <PoolFeeBanner tokenAmount={form.amountToken} />
 
       {/* Mint */}
       <Card>
         <SectionTitle>Token</SectionTitle>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <Input label="Mint address" placeholder="Your token address..." value={form.tokenMint} onChange={set("tokenMint")} disabled={isLoading} onFocus={(e) => {
+          <div>
+            <Input label="Mint address" placeholder="Your token address..." value={form.tokenMint} onChange={set("tokenMint")} disabled={isLoading} onFocus={(e) => {
      setTimeout(() => {
        e.target.scrollIntoView({ 
          behavior: 'smooth', 
@@ -75,6 +102,27 @@ export default function PoolForm() {
        });
      }, 400);
    }} />
+            {isAutoFilled && form.tokenMint && (
+              <div style={{ marginTop: 6, fontSize: 11, color: "var(--text-3)", display: "flex", alignItems: "center", gap: 6 }}>
+                Auto-filled from your last created token ·{" "}
+                <button 
+                  onClick={clearAutoFill}
+                  style={{ 
+                    background: "none", 
+                    border: "none", 
+                    color: "var(--text-3)", 
+                    textDecoration: "underline", 
+                    cursor: "pointer", 
+                    fontSize: 11,
+                    padding: 0,
+                    fontFamily: "inherit"
+                  }}
+                >
+                  Clear
+                </button>
+              </div>
+            )}
+          </div>
           <div style={{ display: "flex", gap: 8 }}>
             <div style={{ width: 100 }}>
               <Input label="Decimals" type="number" min="0" max="9" value={form.tokenDecimals} onChange={set("tokenDecimals")} disabled={isLoading} onFocus={(e) => {
@@ -114,6 +162,47 @@ export default function PoolForm() {
       <Card>
         <SectionTitle>Liquidity</SectionTitle>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          
+          {/* Inline Fee Warning */}
+          <div style={{
+            borderLeft: "2px solid var(--amber)",
+            paddingLeft: 12,
+            background: "transparent"
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+              <span style={{ color: "var(--amber)", fontSize: 14 }}>⚠</span>
+              <span style={{
+                fontSize: 13,
+                color: "var(--text-2)",
+                fontFamily: "'Geist', sans-serif"
+              }}>
+                Pool creation requires ~0.25 SOL (Orca protocol fees) + 0.1% of deposited tokens (service fee).
+              </span>
+            </div>
+            
+            {/* Balance Display - inline */}
+            {publicKey && (
+              <div style={{ fontSize: 11, color: "var(--text-3)", display: "flex", alignItems: "center", gap: 8 }}>
+                <span>Your balance: </span>
+                {balance ? (
+                  <>
+                    <span style={{ fontFamily: "'Geist Mono', monospace", fontWeight: 500 }}>
+                      {balance.toFixed(2)} SOL
+                    </span>
+                    <span style={{
+                      color: isBalanceSufficient ? "var(--green)" : "var(--red)",
+                      fontWeight: 500
+                    }}>
+                      {isBalanceSufficient ? "✓" : "✗"}
+                    </span>
+                  </>
+                ) : (
+                  <span>Loading...</span>
+                )}
+              </div>
+            )}
+          </div>
+          
           <Input label="Initial price" hint="Ignored if pool already exists" type="number" step="any" placeholder="Ex: 0.001" value={form.initialPrice} onChange={set("initialPrice")} disabled={isLoading} onFocus={(e) => {
      setTimeout(() => {
        e.target.scrollIntoView({ 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useVesting } from "../hooks/useVesting";
 import { Card, SectionTitle, Input, Button, ErrorBox, Badge, Divider } from "@/components/ui/Card";
@@ -25,9 +25,27 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
   });
 
   const [error, setError] = useState(null);
+  const [isAutoFilled, setIsAutoFilled] = useState(false);
+
+  // Auto-fill mint address from localStorage on component mount
+  useEffect(() => {
+    if (!form.mintAddress) {
+      const lastMint = localStorage.getItem("lastCreatedMint");
+      if (lastMint) {
+        setForm(f => ({ ...f, mintAddress: lastMint }));
+        setIsAutoFilled(true);
+      }
+    }
+  }, [form.mintAddress]);
 
   const set = (field) => (e) => setForm(f => ({ ...f, [field]: e.target.value }));
   const setVal = (field) => (val) => setForm(f => ({ ...f, [field]: val }));
+
+  const clearAutoFill = () => {
+    setForm(f => ({ ...f, mintAddress: "" }));
+    localStorage.removeItem("lastCreatedMint");
+    setIsAutoFilled(false);
+  };
 
   const isCreating = status === "creating";
   const canSubmit = form.mintAddress && form.amount && publicKey && !isCreating;
@@ -108,7 +126,8 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
       <Card>
         <SectionTitle>Token</SectionTitle>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <Input label="Mint address" placeholder="Token address from step 1" value={form.mintAddress} onChange={set("mintAddress")} onFocus={(e) => {
+          <div>
+            <Input label="Mint address" placeholder="Token address from step 1" value={form.mintAddress} onChange={set("mintAddress")} onFocus={(e) => {
      setTimeout(() => {
        e.target.scrollIntoView({ 
          behavior: 'smooth', 
@@ -117,6 +136,27 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
        });
      }, 400);
    }} />
+            {isAutoFilled && form.mintAddress && (
+              <div style={{ marginTop: 6, fontSize: 11, color: "var(--text-3)", display: "flex", alignItems: "center", gap: 6 }}>
+                Auto-filled from your last created token ·{" "}
+                <button 
+                  onClick={clearAutoFill}
+                  style={{ 
+                    background: "none", 
+                    border: "none", 
+                    color: "var(--text-3)", 
+                    textDecoration: "underline", 
+                    cursor: "pointer", 
+                    fontSize: 11,
+                    padding: 0,
+                    fontFamily: "inherit"
+                  }}
+                >
+                  Clear
+                </button>
+              </div>
+            )}
+          </div>
           <div style={{ display: "flex", gap: 8 }}>
             <div style={{ flex: 1 }}>
               <Input label="Amount to lock" type="number" value={form.amount} onChange={e => setVal("amount")(Number(e.target.value))} onFocus={(e) => {
