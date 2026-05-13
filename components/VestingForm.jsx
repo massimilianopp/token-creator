@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { useRouter } from "next/navigation";
 import { useVesting } from "../hooks/useVesting";
 import { Card, SectionTitle, Input, Button, ErrorBox, Badge, Divider } from "@/components/ui/Card";
 
 export default function VestingForm({ mintAddress, decimals, devTokens, symbol }) {
   const { publicKey } = useWallet();
   const { createVesting, status, streamId, reset } = useVesting();
+  const router = useRouter();
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -45,6 +47,12 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
     setForm(f => ({ ...f, mintAddress: "" }));
     localStorage.removeItem("lastCreatedMint");
     setIsAutoFilled(false);
+  };
+
+  const handleAddLiquidity = () => {
+    // Store mint address for auto-fill in pool page
+    localStorage.setItem("lastCreatedMint", form.mintAddress);
+    router.push("/pool");
   };
 
   const isCreating = status === "creating";
@@ -113,7 +121,10 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
           </a>
         </Card>
 
-        <Button onClick={reset} variant="ghost">Create another stream</Button>
+        <div style={{ display: "flex", gap: 8 }}>
+          <Button onClick={reset} variant="ghost" style={{ flex: 1 }}>Create another stream</Button>
+          <Button onClick={handleAddLiquidity} variant="ghost" style={{ flex: 1 }}>Add Liquidity →</Button>
+        </div>
       </div>
     );
   }
