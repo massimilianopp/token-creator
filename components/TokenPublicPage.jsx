@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useTokenInfo } from "@/hooks/useTokenInfo";
 import { useVestingInfo } from "@/hooks/useVestingInfo";
 import TokenChart from "@/components/TokenChart";
@@ -85,6 +86,19 @@ export default function TokenPublicPage({ mint }) {
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
       <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px 80px", display: "flex", flexDirection: "column", gap: 40 }}>
+
+        {/* Back to Explore button */}
+        <Link href="/explore" style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          fontSize: 13,
+          color: "var(--text-3)",
+          textDecoration: "none",
+          marginBottom: 16,
+        }}>
+          ← Explore
+        </Link>
 
         {/* Top bar */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
