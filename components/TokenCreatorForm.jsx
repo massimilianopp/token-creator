@@ -40,6 +40,7 @@ export default function TokenCreatorForm() {
   const [revoked, setRevoked] = useState(false);
   const [revoking, setRevoking] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [copyFeedback, setCopyFeedback] = useState(false);
 
   const devTokens = Math.floor(form.totalSupply * form.devAllocation / 100);
   const poolTokens = form.totalSupply - devTokens;
@@ -158,8 +159,31 @@ export default function TokenCreatorForm() {
   };
 
   const handleReset = () => {
-    reset(); setError(null); setPreview(null); setRevoked(false); setShowAdvanced(false);
+    reset(); setError(null); setPreview(null); setRevoked(false); setShowAdvanced(false); setCopyFeedback(false);
     setForm({ name: "", symbol: "", description: "", imageFile: null, totalSupply: 1_000_000_000, decimals: 6, devAllocation: 15, revokeMint: false, revokeFreeze: false });
+  };
+
+  const handleCopyLink = async (url) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopyFeedback(true);
+      setTimeout(() => setCopyFeedback(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  const handleSocialShare = (platform, url, name, symbol) => {
+    const text = `I just launched ${name} (${symbol}) on Token Creator 🚀`;
+    let shareUrl = '';
+    
+    if (platform === 'twitter') {
+      shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+    } else if (platform === 'telegram') {
+      shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+    }
+    
+    window.open(shareUrl, '_blank', 'noopener,noreferrer');
   };
 
   // ── Not connected ──
@@ -219,6 +243,7 @@ export default function TokenCreatorForm() {
   if (status === "done") {
     const solscanUrl = `https://solscan.io/token/${mintAddress}`;
     const publicUrl = `/token/${mintAddress}`;
+    const tokenUrl = `https://app.token-creator.space/token/${mintAddress}`;
     return (
       <div ref={successRef} style={{ display: "flex", flexDirection: "column", gap: 12, opacity: 0 }}>
         <Card animated={false}>
@@ -289,6 +314,137 @@ export default function TokenCreatorForm() {
               Authorities revoked — fully decentralized
             </div>
           )}
+
+          <Divider />
+
+          {/* Shareable Link Section */}
+          <div style={{ marginTop: 20 }}>
+            <p style={{ fontSize: 11, color: "var(--muted)", marginBottom: 8, fontWeight: 500, letterSpacing: "0.04em", textTransform: "uppercase" }}>Share your token</p>
+            
+            {/* URL Field with Copy Button */}
+            <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+              <div style={{
+                flex: 1,
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: "var(--radius-md)",
+                padding: "10px 12px",
+                fontSize: 12,
+                fontFamily: "'Geist Mono', monospace",
+                color: "var(--text)",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap"
+              }}>
+                {tokenUrl}
+              </div>
+              <button
+                onClick={() => handleCopyLink(tokenUrl)}
+                style={{
+                  padding: "10px 16px",
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                  borderRadius: "var(--radius-md)",
+                  fontSize: 12,
+                  fontWeight: 500,
+                  color: copyFeedback ? "var(--green)" : "var(--text)",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  fontFamily: "'Geist', sans-serif",
+                  whiteSpace: "nowrap"
+                }}
+                onMouseEnter={(e) => {
+                  if (!copyFeedback) {
+                    e.target.style.background = "var(--surface-2)";
+                    e.target.style.borderColor = "var(--border-strong)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!copyFeedback) {
+                    e.target.style.background = "var(--surface)";
+                    e.target.style.borderColor = "var(--border)";
+                  }
+                }}
+              >
+                {copyFeedback ? "Copied!" : "Copy link"}
+              </button>
+            </div>
+
+            {/* Social Share Buttons */}
+            <div style={{ display: "flex", gap: 8 }}>
+              <button
+                onClick={() => handleSocialShare('twitter', tokenUrl, form.name, form.symbol)}
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                  padding: "8px 12px",
+                  background: "transparent",
+                  border: "1px solid var(--border)",
+                  borderRadius: "var(--radius-md)",
+                  fontSize: 12,
+                  fontWeight: 500,
+                  color: "var(--muted)",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  fontFamily: "'Geist', sans-serif"
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "var(--surface)";
+                  e.target.style.borderColor = "var(--border-strong)";
+                  e.target.style.color = "var(--text)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "transparent";
+                  e.target.style.borderColor = "var(--border)";
+                  e.target.style.color = "var(--muted)";
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                Share on Twitter
+              </button>
+              
+              <button
+                onClick={() => handleSocialShare('telegram', tokenUrl, form.name, form.symbol)}
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                  padding: "8px 12px",
+                  background: "transparent",
+                  border: "1px solid var(--border)",
+                  borderRadius: "var(--radius-md)",
+                  fontSize: 12,
+                  fontWeight: 500,
+                  color: "var(--muted)",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  fontFamily: "'Geist', sans-serif"
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "var(--surface)";
+                  e.target.style.borderColor = "var(--border-strong)";
+                  e.target.style.color = "var(--text)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "transparent";
+                  e.target.style.borderColor = "var(--border)";
+                  e.target.style.color = "var(--muted)";
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                </svg>
+                Share on Telegram
+              </button>
+            </div>
+          </div>
         </Card>
 
         {/* Post-creation actions */}
