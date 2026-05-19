@@ -6,6 +6,7 @@ import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { useWhirlpool } from "@/hooks/useWhirlpool";
 import { Card, SectionTitle, Input, Button, LogConsole, ErrorBox, Badge, Divider } from "@/components/ui/Card";
 import WalletButton from "@/components/WalletButton";
+import FeedbackModal from "./FeedbackModal";
 
 export default function PoolForm() {
   const { createPool, status, logs, result, error } = useWhirlpool();
@@ -18,6 +19,7 @@ export default function PoolForm() {
   });
   
   const [isAutoFilled, setIsAutoFilled] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   const set = (field) => (e) => setForm((p) => ({ ...p, [field]: e.target.value }));
   const isLoading = status === "loading";
@@ -33,6 +35,13 @@ export default function PoolForm() {
       }
     }
   }, [form.tokenMint]);
+
+  // Show feedback modal when pool creation is successful
+  useEffect(() => {
+    if (status === "success") {
+      setShowFeedback(true);
+    }
+  }, [status]);
 
   const clearAutoFill = () => {
     setForm(f => ({ ...f, tokenMint: "" }));
@@ -294,6 +303,7 @@ export default function PoolForm() {
         {publicKey && !isBalanceSufficient ? "Insufficient SOL balance" : "Create pool"}
       </Button>
 
+      {showFeedback && <FeedbackModal step="pool" onClose={() => setShowFeedback(false)} />}
     </div>
   );
 }

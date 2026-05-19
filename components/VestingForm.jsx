@@ -5,6 +5,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useRouter } from "next/navigation";
 import { useVesting } from "../hooks/useVesting";
 import { Card, SectionTitle, Input, Button, ErrorBox, Badge, Divider } from "@/components/ui/Card";
+import FeedbackModal from "./FeedbackModal";
 
 export default function VestingForm({ mintAddress, decimals, devTokens, symbol }) {
   const { publicKey } = useWallet();
@@ -28,6 +29,7 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
 
   const [error, setError] = useState(null);
   const [isAutoFilled, setIsAutoFilled] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   // Auto-fill mint address from localStorage on component mount
   useEffect(() => {
@@ -39,6 +41,13 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
       }
     }
   }, [form.mintAddress]);
+
+  // Show feedback modal when vesting is done
+  useEffect(() => {
+    if (status === "done") {
+      setShowFeedback(true);
+    }
+  }, [status]);
 
   const set = (field) => (e) => setForm(f => ({ ...f, [field]: e.target.value }));
   const setVal = (field) => (val) => setForm(f => ({ ...f, [field]: val }));
@@ -125,6 +134,7 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
           <Button onClick={reset} variant="ghost" style={{ flex: 1 }}>Create another stream</Button>
           <Button onClick={handleAddLiquidity} variant="ghost" style={{ flex: 1 }}>Add Liquidity →</Button>
         </div>
+        {showFeedback && <FeedbackModal step="vesting" onClose={() => setShowFeedback(false)} />}
       </div>
     );
   }

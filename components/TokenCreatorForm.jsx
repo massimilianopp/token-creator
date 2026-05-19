@@ -7,6 +7,7 @@ import { useScrollAnimation, useProgressAnimation } from "../hooks/useScrollAnim
 import { useGSAP, DURATIONS, EASE_CONFIGS } from "../hooks/useGSAP";
 import { useFeedbackAnimations, useTransactionFeedback } from "../hooks/useFeedbackAnimations";
 import { Card, SectionTitle, Input, Button, ErrorBox, Badge, Divider } from "@/components/ui/Card";
+import FeedbackModal from "./FeedbackModal";
 
 const STEPS = [
   { key: "uploading", label: "Uploading to IPFS" },
@@ -41,6 +42,7 @@ export default function TokenCreatorForm() {
   const [revoking, setRevoking] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   const currentStepIndex = STEPS.findIndex(s => s.key === status);
   const isCreating = status && status !== "done" && status !== "error";
@@ -95,6 +97,13 @@ export default function TokenCreatorForm() {
       }, 800);
     }
   }, [status, showSuccessFeedback, showToastNotification, gsap, mintAddress]);
+
+  // Show feedback modal when token creation is done
+  useEffect(() => {
+    if (status === "done") {
+      setShowFeedback(true);
+    }
+  }, [status]);
 
   // Transaction steps animations
   useEffect(() => {
@@ -532,6 +541,7 @@ export default function TokenCreatorForm() {
         </Card>
 
         <Button onClick={handleReset} variant="ghost">Create another token</Button>
+        {showFeedback && <FeedbackModal step="token" onClose={() => setShowFeedback(false)} />}
       </div>
     );
   }
