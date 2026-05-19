@@ -33,7 +33,7 @@ export default function TokenCreatorForm() {
   const [form, setForm] = useState({
     name: "", symbol: "", description: "", imageFile: null,
     totalSupply: 1_000_000_000, decimals: 6,
-    devAllocation: 15, revokeMint: false, revokeFreeze: false,
+    revokeMint: false, revokeFreeze: false,
   });
   const [preview, setPreview] = useState(null);
   const [error, setError] = useState(null);
@@ -42,8 +42,6 @@ export default function TokenCreatorForm() {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState(false);
 
-  const devTokens = Math.floor(form.totalSupply * form.devAllocation / 100);
-  const poolTokens = form.totalSupply - devTokens;
   const currentStepIndex = STEPS.findIndex(s => s.key === status);
   const isCreating = status && status !== "done" && status !== "error";
   const canSubmit = form.name && form.symbol && form.imageFile && publicKey && !isCreating;
@@ -160,7 +158,7 @@ export default function TokenCreatorForm() {
 
   const handleReset = () => {
     reset(); setError(null); setPreview(null); setRevoked(false); setShowAdvanced(false); setCopyFeedback(false);
-    setForm({ name: "", symbol: "", description: "", imageFile: null, totalSupply: 1_000_000_000, decimals: 6, devAllocation: 15, revokeMint: false, revokeFreeze: false });
+    setForm({ name: "", symbol: "", description: "", imageFile: null, totalSupply: 1_000_000_000, decimals: 6, revokeMint: false, revokeFreeze: false });
   };
 
   const handleCopyLink = async (url) => {
@@ -272,17 +270,11 @@ export default function TokenCreatorForm() {
           </div>
 
           {/* Stats */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 20 }}>
-            {[
-              { label: "Supply", value: (form.totalSupply / 1e9).toFixed(0) + "B" },
-              { label: "Dev", value: form.devAllocation + "%" },
-              { label: "Pool", value: (100 - form.devAllocation) + "%" },
-            ].map(s => (
-              <div key={s.label} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 12px", textAlign: "center" }}>
-                <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>{s.label}</div>
-                <div style={{ fontSize: 14, fontWeight: 600 }}>{s.value}</div>
-              </div>
-            ))}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 8, marginBottom: 20 }}>
+            <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 12px", textAlign: "center" }}>
+              <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>Supply</div>
+              <div style={{ fontSize: 14, fontWeight: 600 }}>{(form.totalSupply / 1e9).toFixed(0)}B</div>
+            </div>
           </div>
 
           <Divider />
@@ -681,7 +673,8 @@ export default function TokenCreatorForm() {
 
             {/* Supply + decimals */}
             <div style={{ display: "flex", gap: 8 }}>
-              <Input label="Total supply" type="number" value={form.totalSupply} onChange={e => setVal("totalSupply")(Number(e.target.value))} onFocus={(e) => {
+              <div style={{ flex: 1 }}>
+                <Input label="Total supply" type="number" value={form.totalSupply} onChange={e => setVal("totalSupply")(Number(e.target.value))} onFocus={(e) => {
      setTimeout(() => {
        e.target.scrollIntoView({ 
          behavior: 'smooth', 
@@ -690,6 +683,8 @@ export default function TokenCreatorForm() {
        });
      }, 400);
    }} />
+                <div style={{ fontSize: 12, color: "var(--dim)", marginTop: 6 }}>All tokens will be minted directly to your wallet.</div>
+              </div>
               <div style={{ width: 140, display: "flex", flexDirection: "column", gap: 6 }}>
                 <span style={{ fontSize: 13, fontWeight: 500, color: "var(--muted)" }}>Decimals</span>
                 <select value={form.decimals} onChange={e => setVal("decimals")(Number(e.target.value))} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px", fontSize: 14, color: "var(--text)", outline: "none", fontFamily: "'Geist', sans-serif" }}>
@@ -699,24 +694,6 @@ export default function TokenCreatorForm() {
               </div>
             </div>
 
-            {/* Dev allocation */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
-                <span style={{ color: "var(--muted)", fontWeight: 500 }}>Dev allocation</span>
-                <span style={{ color: "var(--text)", fontWeight: 600 }}>{form.devAllocation}%</span>
-              </div>
-              <input type="range" min={0} max={30} value={form.devAllocation} style={{ width: "100%", accentColor: "var(--text)", cursor: "pointer" }} onChange={e => setVal("devAllocation")(Number(e.target.value))} />
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px" }}>
-                  <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>Your wallet</div>
-                  <div style={{ fontSize: 13, fontWeight: 600, fontFamily: "'Geist Mono', monospace" }}>{devTokens.toLocaleString()}</div>
-                </div>
-                <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px" }}>
-                  <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>Public pool</div>
-                  <div style={{ fontSize: 13, fontWeight: 600, fontFamily: "'Geist Mono', monospace" }}>{poolTokens.toLocaleString()}</div>
-                </div>
-              </div>
-            </div>
 
             {/* Anti-rug */}
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
