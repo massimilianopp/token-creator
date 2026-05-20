@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { useWhirlpool } from "@/hooks/useWhirlpool";
@@ -20,6 +20,7 @@ export default function PoolForm() {
   
   const [isAutoFilled, setIsAutoFilled] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
+  const formRef = useRef(null);
 
   const set = (field) => (e) => setForm((p) => ({ ...p, [field]: e.target.value }));
   const isLoading = status === "loading";
@@ -42,6 +43,21 @@ export default function PoolForm() {
       setShowFeedback(true);
     }
   }, [status]);
+
+  // Handle mobile keyboard scrolling for inputs
+  useEffect(() => {
+    const inputs = formRef.current?.querySelectorAll('input');
+    if (!inputs) return;
+    
+    const handleFocus = (e) => {
+      setTimeout(() => {
+        e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+    };
+    
+    inputs.forEach(input => input.addEventListener('focus', handleFocus));
+    return () => inputs.forEach(input => input.removeEventListener('focus', handleFocus));
+  }, []);
 
   const clearAutoFill = () => {
     setForm(f => ({ ...f, tokenMint: "" }));
@@ -95,22 +111,14 @@ export default function PoolForm() {
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: "100px" }}>
+    <div ref={formRef} style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: "100px" }}>
 
       {/* Mint */}
       <Card>
         <SectionTitle>Token</SectionTitle>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <div>
-            <Input label="Mint address" placeholder="Your token address..." value={form.tokenMint} onChange={set("tokenMint")} disabled={isLoading} onFocus={(e) => {
-     setTimeout(() => {
-       e.target.scrollIntoView({ 
-         behavior: 'smooth', 
-         block: 'center',
-         inline: 'nearest'
-       });
-     }, 400);
-   }} />
+            <Input label="Mint address" placeholder="Your token address..." value={form.tokenMint} onChange={set("tokenMint")} disabled={isLoading} />
             {isAutoFilled && form.tokenMint && (
               <div style={{ marginTop: 6, fontSize: 11, color: "var(--text-3)", display: "flex", alignItems: "center", gap: 6 }}>
                 Auto-filled from your last created token ·{" "}
@@ -134,15 +142,7 @@ export default function PoolForm() {
           </div>
           <div style={{ display: "flex", gap: 8 }}>
             <div style={{ width: 100 }}>
-              <Input label="Decimals" type="number" min="0" max="9" value={form.tokenDecimals} onChange={set("tokenDecimals")} disabled={isLoading} onFocus={(e) => {
-     setTimeout(() => {
-       e.target.scrollIntoView({ 
-         behavior: 'smooth', 
-         block: 'center',
-         inline: 'nearest'
-       });
-     }, 400);
-   }} />
+              <Input label="Decimals" type="number" min="0" max="9" value={form.tokenDecimals} onChange={set("tokenDecimals")} disabled={isLoading} />
             </div>
 
             {/* Pair selector — big buttons */}
@@ -212,37 +212,13 @@ export default function PoolForm() {
             )}
           </div>
           
-          <Input label="Initial price" hint="Ignored if pool already exists" type="number" step="any" placeholder="Ex: 0.001" value={form.initialPrice} onChange={set("initialPrice")} disabled={isLoading} onFocus={(e) => {
-     setTimeout(() => {
-       e.target.scrollIntoView({ 
-         behavior: 'smooth', 
-         block: 'center',
-         inline: 'nearest'
-       });
-     }, 400);
-   }} />
+          <Input label="Initial price" hint="Ignored if pool already exists" type="number" step="any" placeholder="Ex: 0.001" value={form.initialPrice} onChange={set("initialPrice")} disabled={isLoading} />
           <div style={{ display: "flex", gap: 8 }}>
             <div style={{ flex: 1 }}>
-              <Input label="Token amount" type="number" step="any" placeholder="Ex: 1000" value={form.amountToken} onChange={set("amountToken")} disabled={isLoading} onFocus={(e) => {
-     setTimeout(() => {
-       e.target.scrollIntoView({ 
-         behavior: 'smooth', 
-         block: 'center',
-         inline: 'nearest'
-       });
-     }, 400);
-   }} />
+              <Input label="Token amount" type="number" step="any" placeholder="Ex: 1000" value={form.amountToken} onChange={set("amountToken")} disabled={isLoading} />
             </div>
             <div style={{ flex: 1 }}>
-              <Input label={`${form.pairedWith} amount`} type="number" step="any" placeholder={form.pairedWith === "SOL" ? "Ex: 0.5" : "Ex: 10"} value={form.amountPaired} onChange={set("amountPaired")} disabled={isLoading} onFocus={(e) => {
-     setTimeout(() => {
-       e.target.scrollIntoView({ 
-         behavior: 'smooth', 
-         block: 'center',
-         inline: 'nearest'
-       });
-     }, 400);
-   }} />
+              <Input label={`${form.pairedWith} amount`} type="number" step="any" placeholder={form.pairedWith === "SOL" ? "Ex: 0.5" : "Ex: 10"} value={form.amountPaired} onChange={set("amountPaired")} disabled={isLoading} />
             </div>
           </div>
         </div>
