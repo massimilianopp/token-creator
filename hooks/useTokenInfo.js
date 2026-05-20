@@ -97,15 +97,40 @@ async function fetchDexscreener(mint) {
 }
 
 async function fetchOffchainMetadata(uri) {
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
-    const res = await fetch(uri, { signal: controller.signal });
-    clearTimeout(timeout);
-    return await res.json();
-  } catch {
-    return null;
+  if (!uri) return null;
+
+  // Normalize URI — extract CID from any IPFS format
+  let cid = null;
+  if (uri.startsWith("ipfs://")) {
+    cid = uri.replace("ipfs://", "");
+  } else if (uri.includes("/ipfs/")) {
+    cid = uri.split("/ipfs/")[1];
   }
+
+  // Try multiple gateways in order
+  const urls = cid ? [
+    `https://cloudflare-ipfs.com/ipfs/${cid}`,
+    `https://ipfs.io/ipfs/${cid}`,
+    `https://gateway.pinata.cloud/ipfs/${cid}`,
+    `https://dweb.link/ipfs/${cid}`,
+  ] : [uri];
+
+  for (const url of urls) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
+      const res = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeout);
+      if (res.ok) {
+        const data = await res.json();
+        return data;
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  return null;
 }
 
 // ── Hook ───────────────────────────────────────────────────────────────────────
