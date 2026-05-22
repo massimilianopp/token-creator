@@ -149,16 +149,30 @@ export default function PoolForm() {
             <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
               <span style={{ fontSize: 13, fontWeight: 500, color: "var(--muted)" }}>Pair</span>
               <div style={{ display: "flex", gap: 6 }}>
-                {["SOL", "USDC"].map(pair => (
-                  <button key={pair} onClick={() => setForm(f => ({ ...f, pairedWith: pair }))} disabled={isLoading} style={{
-                    flex: 1, padding: "10px 0", borderRadius: 8, fontSize: 13, fontWeight: 500,
-                    fontFamily: "'Geist', sans-serif", cursor: isLoading ? "not-allowed" : "pointer",
-                    transition: "all 0.15s",
-                    background: form.pairedWith === pair ? "var(--text)" : "var(--surface)",
-                    border: form.pairedWith === pair ? "1px solid var(--text)" : "1px solid var(--border)",
-                    color: form.pairedWith === pair ? "var(--bg)" : "var(--muted)",
-                  }}>
-                    {pair}
+                {[
+                  { value: "SOL", label: "SOL", disabled: false },
+                  { value: "USDC", label: "USDC · Soon", disabled: true },
+                ].map(({ value, label, disabled }) => (
+                  <button
+                    key={value}
+                    onClick={() => !disabled && setForm(f => ({ ...f, pairedWith: value }))}
+                    disabled={isLoading || disabled}
+                    style={{
+                      flex: 1,
+                      padding: "10px 0",
+                      borderRadius: 8,
+                      fontSize: 13,
+                      fontWeight: 500,
+                      fontFamily: "'Geist', sans-serif",
+                      cursor: disabled ? "not-allowed" : isLoading ? "not-allowed" : "pointer",
+                      transition: "all 0.15s",
+                      background: form.pairedWith === value && !disabled ? "var(--text)" : "var(--surface)",
+                      border: form.pairedWith === value && !disabled ? "1px solid var(--text)" : "1px solid var(--border)",
+                      color: disabled ? "var(--dim)" : form.pairedWith === value ? "var(--bg)" : "var(--muted)",
+                      opacity: disabled ? 0.5 : 1,
+                    }}
+                  >
+                    {label}
                   </button>
                 ))}
               </div>
