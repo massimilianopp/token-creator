@@ -119,7 +119,6 @@ export function useTokenCreator() {
       const sig2 = await wallet.sendTransaction(tx2, connection);
       await connection.confirmTransaction({ signature: sig2, blockhash: blockhash2, lastValidBlockHeight: lastValidBlockHeight2 }, "finalized");
       console.log(`✅ ${totalSupply} tokens minted`);
-      await new Promise(resolve => setTimeout(resolve, 2000));
 
       // 4. On-chain Metadata
       setStatus("metadata");
@@ -133,10 +132,11 @@ export function useTokenCreator() {
       );
       const tx4 = new Transaction().add(metadataIx);
       tx4.feePayer = wallet.publicKey;
-      const { blockhash: blockhash4, lastValidBlockHeight: lastValidBlockHeight4 } = await connection.getLatestBlockhash();
+      const { blockhash: blockhash4 } = await connection.getLatestBlockhash();
       tx4.recentBlockhash = blockhash4;
-      const sig4 = await wallet.sendTransaction(tx4, connection);
-      await connection.confirmTransaction({ signature: sig4, blockhash: blockhash4, lastValidBlockHeight: lastValidBlockHeight4 }, "confirmed");
+      const signedTx4 = await wallet.signTransaction(tx4);
+      const sig4 = await connection.sendRawTransaction(signedTx4.serialize());
+      await connection.confirmTransaction(sig4, "confirmed");
       console.log("✅ On-chain metadata created");
 
       // 5. Fee — prélevé APRÈS succès complet
