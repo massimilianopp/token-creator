@@ -318,6 +318,11 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
         </div>
       )}
 
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", borderRadius: 8, background: "var(--surface)", border: "1px solid var(--border)" }}>
+        <span style={{ fontSize: 13, color: "var(--muted)" }}>Service fee</span>
+        <span style={{ fontSize: 13, fontWeight: 500, color: "var(--text)", fontFamily: "'Geist Mono', monospace" }}>0.05 SOL</span>
+      </div>
+
       <Button onClick={handleSubmit} disabled={!canSubmit} loading={isCreating}>
         Lock tokens
       </Button>

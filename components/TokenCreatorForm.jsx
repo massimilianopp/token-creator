@@ -727,19 +727,20 @@ export default function TokenCreatorForm() {
               ))}
             </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "var(--dim)", paddingTop: 8, borderTop: "1px solid var(--border)" }}>
-              <span>Estimated fees</span>
-              <span>~0.062 SOL</span>
-            </div>
           </div>
         )}
       </div>
 
       {error && <div className="animate-scaleIn"><ErrorBox message={error} /></div>}
 
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", borderRadius: 8, background: "var(--surface)", border: "1px solid var(--border)" }}>
+        <span style={{ fontSize: 13, color: "var(--muted)" }}>Service fee</span>
+        <span style={{ fontSize: 13, fontWeight: 500, color: "var(--text)", fontFamily: "'Geist Mono', monospace" }}>0.05 SOL</span>
+      </div>
+
       <div className="animate-fadeInUp stagger-4">
         <Button onClick={handleSubmit} disabled={!canSubmit} loading={isCreating}>
-          Create Token — 0.05 SOL
+          Create token
         </Button>
       </div>
 
