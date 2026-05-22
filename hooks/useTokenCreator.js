@@ -117,8 +117,9 @@ export function useTokenCreator() {
       const { blockhash: blockhash2, lastValidBlockHeight: lastValidBlockHeight2 } = await connection.getLatestBlockhash();
       tx2.recentBlockhash = blockhash2;
       const sig2 = await wallet.sendTransaction(tx2, connection);
-      await connection.confirmTransaction({ signature: sig2, blockhash: blockhash2, lastValidBlockHeight: lastValidBlockHeight2 }, "confirmed");
+      await connection.confirmTransaction({ signature: sig2, blockhash: blockhash2, lastValidBlockHeight: lastValidBlockHeight2 }, "finalized");
       console.log(`✅ ${totalSupply} tokens minted`);
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
       // 4. On-chain Metadata
       setStatus("metadata");
