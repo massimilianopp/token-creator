@@ -99,12 +99,10 @@ export function useTokenCreator() {
         createInitializeMintInstruction(mintPubkey, decimals, wallet.publicKey, wallet.publicKey)
       );
       tx1.feePayer = wallet.publicKey;
-      const { blockhash: blockhash1 } = await connection.getLatestBlockhash();
+      const { blockhash: blockhash1, lastValidBlockHeight: lvh1 } = await connection.getLatestBlockhash();
       tx1.recentBlockhash = blockhash1;
-      tx1.partialSign(mintKeypair);
-      const signedTx1 = await wallet.signTransaction(tx1);
-      const sig1 = await connection.sendRawTransaction(signedTx1.serialize());
-      await connection.confirmTransaction(sig1, "confirmed");
+      const sig1 = await wallet.sendTransaction(tx1, connection, { signers: [mintKeypair] });
+      await connection.confirmTransaction({ signature: sig1, blockhash: blockhash1, lastValidBlockHeight: lvh1 }, "confirmed");
       console.log("✅ Mint created:", mintPubkey.toBase58());
 
       // 3. Create ATA + Mint tokens
@@ -134,11 +132,10 @@ export function useTokenCreator() {
       );
       const tx4 = new Transaction().add(metadataIx);
       tx4.feePayer = wallet.publicKey;
-      const { blockhash: blockhash4 } = await connection.getLatestBlockhash();
+      const { blockhash: blockhash4, lastValidBlockHeight: lvh4 } = await connection.getLatestBlockhash();
       tx4.recentBlockhash = blockhash4;
-      const signedTx4 = await wallet.signTransaction(tx4);
-      const sig4 = await connection.sendRawTransaction(signedTx4.serialize());
-      await connection.confirmTransaction(sig4, "confirmed");
+      const sig4 = await wallet.sendTransaction(tx4, connection);
+      await connection.confirmTransaction({ signature: sig4, blockhash: blockhash4, lastValidBlockHeight: lvh4 }, "confirmed");
       console.log("✅ On-chain metadata created");
 
       // 5. Fee — prélevé APRÈS succès complet
