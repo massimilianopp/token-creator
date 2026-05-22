@@ -733,9 +733,21 @@ export default function TokenCreatorForm() {
 
       {error && <div className="animate-scaleIn"><ErrorBox message={error} /></div>}
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", borderRadius: 8, background: "var(--surface)", border: "1px solid var(--border)" }}>
-        <span style={{ fontSize: 13, color: "var(--muted)" }}>Service fee</span>
-        <span style={{ fontSize: 13, fontWeight: 500, color: "var(--text)", fontFamily: "'Geist Mono', monospace" }}>0.05 SOL</span>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, padding: "12px 16px", borderRadius: 8, background: "var(--surface)", border: "1px solid var(--border)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontSize: 13, color: "var(--muted)" }}>Service fee</span>
+          <span style={{ fontSize: 13, color: "var(--text)", fontFamily: "'Geist Mono', monospace" }}>0.05 SOL</span>
+        </div>
+        <div style={{ height: 1, background: "var(--border)" }} />
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontSize: 13, color: "var(--muted)" }}>Network fees</span>
+          <span style={{ fontSize: 13, color: "var(--text)", fontFamily: "'Geist Mono', monospace" }}>~0.012 SOL</span>
+        </div>
+        <div style={{ height: 1, background: "var(--border)" }} />
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontSize: 13, fontWeight: 500, color: "var(--text)" }}>Total estimated</span>
+          <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", fontFamily: "'Geist Mono', monospace" }}>~0.062 SOL</span>
+        </div>
       </div>
 
       <div className="animate-fadeInUp stagger-4">
