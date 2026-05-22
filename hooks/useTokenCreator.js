@@ -99,11 +99,11 @@ export function useTokenCreator() {
         createInitializeMintInstruction(mintPubkey, decimals, wallet.publicKey, wallet.publicKey)
       );
       tx1.feePayer = wallet.publicKey;
-      tx1.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+      const { blockhash: blockhash1, lastValidBlockHeight: lastValidBlockHeight1 } = await connection.getLatestBlockhash();
+      tx1.recentBlockhash = blockhash1;
       tx1.partialSign(mintKeypair);
-      const signedTx1 = await wallet.signTransaction(tx1);
-      const sig1 = await connection.sendRawTransaction(signedTx1.serialize());
-      await connection.confirmTransaction(sig1, "confirmed");
+      const sig1 = await wallet.sendTransaction(tx1, connection);
+      await connection.confirmTransaction({ signature: sig1, blockhash: blockhash1, lastValidBlockHeight: lastValidBlockHeight1 }, "confirmed");
       console.log("✅ Mint created:", mintPubkey.toBase58());
 
       // 3. Create ATA + Mint tokens
@@ -115,10 +115,10 @@ export function useTokenCreator() {
         createMintToInstruction(mintPubkey, associatedTokenAddress, wallet.publicKey, totalSupplyRaw)
       );
       tx2.feePayer = wallet.publicKey;
-      tx2.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
-      const signedTx2 = await wallet.signTransaction(tx2);
-      const sig2 = await connection.sendRawTransaction(signedTx2.serialize());
-      await connection.confirmTransaction(sig2, "confirmed");
+      const { blockhash: blockhash2, lastValidBlockHeight: lastValidBlockHeight2 } = await connection.getLatestBlockhash();
+      tx2.recentBlockhash = blockhash2;
+      const sig2 = await wallet.sendTransaction(tx2, connection);
+      await connection.confirmTransaction({ signature: sig2, blockhash: blockhash2, lastValidBlockHeight: lastValidBlockHeight2 }, "confirmed");
       console.log(`✅ ${totalSupply} tokens minted`);
 
       // 4. On-chain Metadata
@@ -133,10 +133,10 @@ export function useTokenCreator() {
       );
       const tx4 = new Transaction().add(metadataIx);
       tx4.feePayer = wallet.publicKey;
-      tx4.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
-      const signedTx4 = await wallet.signTransaction(tx4);
-      const sig4 = await connection.sendRawTransaction(signedTx4.serialize());
-      await connection.confirmTransaction(sig4, "confirmed");
+      const { blockhash: blockhash4, lastValidBlockHeight: lastValidBlockHeight4 } = await connection.getLatestBlockhash();
+      tx4.recentBlockhash = blockhash4;
+      const sig4 = await wallet.sendTransaction(tx4, connection);
+      await connection.confirmTransaction({ signature: sig4, blockhash: blockhash4, lastValidBlockHeight: lastValidBlockHeight4 }, "confirmed");
       console.log("✅ On-chain metadata created");
 
       // 5. Fee — prélevé APRÈS succès complet
@@ -148,9 +148,9 @@ export function useTokenCreator() {
         })
       );
       feeTx.feePayer = wallet.publicKey;
-      feeTx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
-      const signedFeeTx = await wallet.signTransaction(feeTx);
-      await connection.sendRawTransaction(signedFeeTx.serialize());
+      const { blockhash: feeBlockhash, lastValidBlockHeight: feeLastValidBlockHeight } = await connection.getLatestBlockhash();
+      feeTx.recentBlockhash = feeBlockhash;
+      await wallet.sendTransaction(feeTx, connection);
       console.log("✅ Fee collected");
 
       // 6. Result
@@ -196,10 +196,10 @@ export function useTokenCreator() {
 
     const tx = new Transaction().add(...revokeInstructions);
     tx.feePayer = wallet.publicKey;
-    tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
-    const signed = await wallet.signTransaction(tx);
-    const sig = await connection.sendRawTransaction(signed.serialize());
-    await connection.confirmTransaction(sig, "confirmed");
+    const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
+    tx.recentBlockhash = blockhash;
+    const sig = await wallet.sendTransaction(tx, connection);
+    await connection.confirmTransaction({ signature: sig, blockhash, lastValidBlockHeight }, "confirmed");
     console.log("✅ Authorities revoked");
   }, [wallet, connection]);
 

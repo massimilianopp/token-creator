@@ -131,9 +131,9 @@ export function useVesting() {
         })
       );
       feeTx.feePayer = wallet.publicKey;
-      feeTx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
-      const signedFeeTx = await wallet.signTransaction(feeTx);
-      await connection.sendRawTransaction(signedFeeTx.serialize());
+      const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
+      feeTx.recentBlockhash = blockhash;
+      await wallet.sendTransaction(feeTx, connection);
       console.log("✅ Vesting fee charged");
 
       setStreamId(finalTx);
