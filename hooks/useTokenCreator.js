@@ -99,11 +99,10 @@ export function useTokenCreator() {
         createInitializeMintInstruction(mintPubkey, decimals, wallet.publicKey, wallet.publicKey)
       );
       tx1.feePayer = wallet.publicKey;
-      const { blockhash: blockhash1, lastValidBlockHeight: lastValidBlockHeight1 } = await connection.getLatestBlockhash();
+      const { blockhash: blockhash1, lastValidBlockHeight: lvh1 } = await connection.getLatestBlockhash();
       tx1.recentBlockhash = blockhash1;
-      tx1.partialSign(mintKeypair);
-      const sig1 = await wallet.sendTransaction(tx1, connection);
-      await connection.confirmTransaction({ signature: sig1, blockhash: blockhash1, lastValidBlockHeight: lastValidBlockHeight1 }, "confirmed");
+      const sig1 = await wallet.sendTransaction(tx1, connection, { signers: [mintKeypair] });
+      await connection.confirmTransaction({ signature: sig1, blockhash: blockhash1, lastValidBlockHeight: lvh1 }, "confirmed");
       console.log("✅ Mint created:", mintPubkey.toBase58());
 
       // 3. Create ATA + Mint tokens
