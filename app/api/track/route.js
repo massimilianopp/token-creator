@@ -18,7 +18,7 @@ async function appendToSheet(data) {
   
   await sheets.spreadsheets.values.append({
     spreadsheetId: SPREADSHEET_ID,
-    range: `${SHEET_NAME}!A:F`,
+    range: `${SHEET_NAME}!A:G`,
     valueInputOption: 'RAW',
     requestBody: {
       values: [[
@@ -27,7 +27,8 @@ async function appendToSheet(data) {
         data.mint,
         data.steps_completed.join(', '),
         data.steps_completed.length,
-        data.event
+        data.event,
+        data.network || 'mainnet'
       ]],
     },
   });
@@ -37,13 +38,13 @@ export async function POST(request) {
   try {
     const body = await request.json();
     
-    const { event, ref, mint, timestamp, steps_completed } = body;
+    const { event, ref, mint, timestamp, steps_completed, network } = body;
     
     if (!event || !mint || !timestamp) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
     
-    await appendToSheet({ event, ref, mint, timestamp, steps_completed });
+    await appendToSheet({ event, ref, mint, timestamp, steps_completed, network });
     
     return Response.json({ success: true });
   } catch (error) {

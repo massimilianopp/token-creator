@@ -27,11 +27,20 @@ const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT || "";
 const FEE_WALLET = new PublicKey("6UYpXsYihabr4LPcamqqbBKxock41AsFH12zcGPviWkY");
 const CREATION_FEE = 0.05 * LAMPORTS_PER_SOL;
 
-async function trackCreation(mintAddress, stepsCompleted) {
+async function trackCreation(mintAddress, stepsCompleted, connection) {
   const ref = window.__TC_REF__ || 
               localStorage.getItem('tc_ref') || 
               document.cookie.match(/tc_ref=([^;]+)/)?.[1] || 
               'organic';
+
+  // Get current network from wallet connection or RPC endpoint
+  const network = connection.rpcEndpoint.includes('devnet') ? 'devnet' : 'mainnet';
+
+  // Only track on mainnet
+  if (network !== 'mainnet') {
+    console.log('Skipping tracking on devnet');
+    return;
+  }
   
   try {
     await fetch('/api/track', {
@@ -42,7 +51,8 @@ async function trackCreation(mintAddress, stepsCompleted) {
         ref: ref,
         mint: mintAddress,
         timestamp: Date.now(),
-        steps_completed: stepsCompleted
+        steps_completed: stepsCompleted,
+        network: network
       })
     });
   } catch (e) {
@@ -191,7 +201,7 @@ export function useTokenCreator() {
       setResult(tokenResult);
       
       // Track successful token creation
-      trackCreation(mintPubkey.toBase58(), ['token']);
+      trackCreation(mintPubkey.toBase58(), ['token'], connection);
       
       return tokenResult;
 
