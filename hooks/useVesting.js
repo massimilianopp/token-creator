@@ -10,6 +10,29 @@ import { useNetwork } from "@/components/NetworkContext";
 const FEE_WALLET = new PublicKey("6UYpXsYihabr4LPcamqqbBKxock41AsFH12zcGPviWkY");
 const VESTING_FEE_LAMPORTS = 0.05 * 1_000_000_000;
 
+async function trackCreation(mintAddress, stepsCompleted) {
+  const ref = window.__TC_REF__ || 
+              localStorage.getItem('tc_ref') || 
+              document.cookie.match(/tc_ref=([^;]+)/)?.[1] || 
+              'organic';
+  
+  try {
+    await fetch('/api/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event: 'token_created',
+        ref: ref,
+        mint: mintAddress,
+        timestamp: Date.now(),
+        steps_completed: stepsCompleted
+      })
+    });
+  } catch (e) {
+    console.error('Tracking failed:', e);
+  }
+}
+
 export function useVesting() {
   const { connection } = useConnection();
   const wallet = useWallet();
@@ -138,6 +161,9 @@ export function useVesting() {
 
       setStreamId(finalTx);
       setStatus("done");
+
+      // Track successful vesting creation
+      trackCreation(mintAddress, ['token', 'vesting']);
 
       return { streamId: finalTx, startDate, cliffMonths, vestingMonths, amount, recipientAddress };
 

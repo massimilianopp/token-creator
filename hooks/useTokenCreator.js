@@ -27,6 +27,29 @@ const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT || "";
 const FEE_WALLET = new PublicKey("6UYpXsYihabr4LPcamqqbBKxock41AsFH12zcGPviWkY");
 const CREATION_FEE = 0.05 * LAMPORTS_PER_SOL;
 
+async function trackCreation(mintAddress, stepsCompleted) {
+  const ref = window.__TC_REF__ || 
+              localStorage.getItem('tc_ref') || 
+              document.cookie.match(/tc_ref=([^;]+)/)?.[1] || 
+              'organic';
+  
+  try {
+    await fetch('/api/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event: 'token_created',
+        ref: ref,
+        mint: mintAddress,
+        timestamp: Date.now(),
+        steps_completed: stepsCompleted
+      })
+    });
+  } catch (e) {
+    console.error('Tracking failed:', e);
+  }
+}
+
 async function uploadToPinata(imageFile, { name, symbol, description }) {
   const imageForm = new FormData();
   imageForm.append("file", imageFile);
@@ -166,6 +189,10 @@ export function useTokenCreator() {
       };
       setMintAddress(mintPubkey.toBase58());
       setResult(tokenResult);
+      
+      // Track successful token creation
+      trackCreation(mintPubkey.toBase58(), ['token']);
+      
       return tokenResult;
 
     } catch (err) {
