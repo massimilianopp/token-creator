@@ -437,7 +437,7 @@ export default function ExplorePage() {
           
           <input
             type="text"
-            placeholder="Search by name, symbol or paste mint address..."
+            placeholder="Paste mint address..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
