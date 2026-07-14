@@ -56,6 +56,22 @@ export default function WalletButton() {
     setHasSeenOnboarding(!!seenOnboarding);
   }, []);
 
+  const hasTrackedConnection = useRef(false);
+
+  useEffect(() => {
+    if (connected && publicKey && !hasTrackedConnection.current) {
+      hasTrackedConnection.current = true;
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'wallet_connected',
+        wallet_type: wallet?.adapter?.name || 'unknown'
+      });
+    }
+    if (!connected) {
+      hasTrackedConnection.current = false;
+    }
+  }, [connected, publicKey, wallet]);
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
