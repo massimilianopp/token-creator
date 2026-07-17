@@ -44,6 +44,17 @@ export default function TokenCreatorForm() {
   const [copyFeedback, setCopyFeedback] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
 
+  const hasTrackedStart = useRef(false);
+
+  useEffect(() => {
+    if ((form.name || form.symbol) && !hasTrackedStart.current) {
+      hasTrackedStart.current = true;
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'token_creation_started' });
+    }
+  }, [form.name, form.symbol]);
+
+
   const currentStepIndex = STEPS.findIndex(s => s.key === status);
   const isCreating = status && status !== "done" && status !== "error";
   const canSubmit = form.name && form.symbol && form.imageFile && publicKey && !isCreating;
@@ -69,6 +80,13 @@ export default function TokenCreatorForm() {
     if (status === "done" && successRef.current && mintAddress) {
       // Store mint address in localStorage for auto-filling
       localStorage.setItem("lastCreatedMint", mintAddress);
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'token_created',
+        token_symbol: form.symbol,
+        token_supply: form.totalSupply
+      });
       
       showSuccessFeedback(successRef.current, {
         message: "Token created successfully!",
