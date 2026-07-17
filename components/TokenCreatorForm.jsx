@@ -212,13 +212,13 @@ export default function TokenCreatorForm() {
   };
 
   // ── Not connected ──
-  if (!publicKey) {
-    return (
-      <div style={{ padding: "48px 0", textAlign: "center" }}>
-        <p style={{ fontSize: 14, color: "var(--muted)" }}>Connect your wallet to continue</p>
-      </div>
-    );
-  }
+  //if (!publicKey) {
+  //  return (
+  //    <div style={{ padding: "48px 0", textAlign: "center" }}>
+  //      <p style={{ fontSize: 14, color: "var(--muted)" }}>Connect your wallet to continue</p>
+  //     </div>
+  //  );
+  //}
 
   // ── Creating ──
   if (isCreating) {
