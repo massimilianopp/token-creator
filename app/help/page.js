@@ -25,6 +25,13 @@ const SECTIONS = [
         external: true,
         tag: "YouTube",
       },
+      {
+        label: "Documentation",
+        desc: "Complete guide to token creation, vesting, and liquidity pools.",
+        href: "/docs",
+        external: false,
+        tag: "Guide",
+      },
     ],
   },
   {
