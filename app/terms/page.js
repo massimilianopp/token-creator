@@ -1,7 +1,7 @@
 import Link from "next/link";
 export default function TermsPage() {
     return (
-      <main style={{ padding: "32px 24px 80px" }}>
+      <main style={{ padding: "48px 24px 80px" }}>
         <div style={{ marginBottom: 40 }}>
         <Link href="/help" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, color: "var(--muted)", textDecoration: "none", marginBottom: 24 }}>
           ← Help
