@@ -8,6 +8,8 @@ import DocHero from "@/components/docs/DocHero";
 
 import DocSection from "@/components/docs/DocSection";
 
+import TableOfContents from "@/components/docs/TableOfContents";
+
 export default function DocPage({ params }) {
 
   const article = docs[params.slug];
@@ -41,6 +43,8 @@ export default function DocPage({ params }) {
         readingTime={article.readingTime}
         lastUpdated={article.lastUpdated}
       />
+
+      <TableOfContents sections={article.sections} />
 
       <div
         style={{

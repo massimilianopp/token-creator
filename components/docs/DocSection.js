@@ -1,6 +1,7 @@
 export default function DocSection({ section }) {
     return (
       <div
+        id={section.id}
         style={{
           display: "flex",
           flexDirection: "column",
