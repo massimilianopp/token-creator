@@ -10,13 +10,15 @@ import DocSection from "@/components/docs/DocSection";
 
 import TableOfContents from "@/components/docs/TableOfContents";
 
-export default function DocPage({ params }) {
+export default async function DocPage({ params }) {
 
-  const article = docs[params.slug];
-
-  if (!article) {
-    notFound();
-  }
+    const { slug } = await params;
+  
+    const article = docs[slug];
+  
+    if (!article) {
+      notFound();
+    }
 
   return (
     <main style={{ padding: "48px 24px 80px" }}>
