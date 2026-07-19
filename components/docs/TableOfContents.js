@@ -11,15 +11,14 @@ export default function TableOfContents({ sections }) {
         background: "var(--card)",
       }}
     >
-      <p
-        style={{
-          fontWeight: 600,
-          marginBottom: 14,
-          color: "var(--text)",
-        }}
-      >
-        On this page
-      </p>
+    <h2
+    style={{
+        color: "red",
+        fontSize: 40,
+    }}
+    >
+    TABLE OF CONTENTS
+    </h2>
 
       <div
         style={{
