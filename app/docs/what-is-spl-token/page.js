@@ -1,5 +1,5 @@
 import Link from "next/link";
-import article from "@/content/docs/what-is-spl-token";
+import docs from "@/content/docs";
 import DocHero from "@/components/docs/DocHero";
 import DocSection from "@/components/docs/DocSection";
 
@@ -9,6 +9,7 @@ export const metadata = {
 };
 
 export default function WhatIsSPLToken() {
+  const article = docs["what-is-spl-token"];
   return (
     <main style={{ padding: "48px 24px 80px" }}>
       <Link href="/docs" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, color: "var(--muted)", textDecoration: "none", marginBottom: 32 }}>← Docs</Link>
