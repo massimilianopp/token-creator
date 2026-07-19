@@ -26,6 +26,37 @@ const article = {
         "On Solana, every token uses the same SPL Token Program. This makes token creation cheaper, faster and more secure."
       ]
     }
+  ],
+  faq: [
+    {
+      question: "Can anyone create an SPL token?",
+      answer:
+        "Yes. Anyone with a Solana wallet can create an SPL token. No programming knowledge is required when using Token Creator.",
+    },
+    {
+      question: "Do I need to know how to code?",
+      answer:
+        "No. Token Creator lets you create and configure an SPL token through a simple interface.",
+    },
+    {
+      question: "Can I mint more tokens later?",
+      answer:
+        "Yes, if you keep the Mint Authority. If you revoke it, the supply becomes permanently fixed.",
+    },
+  ],
+  related: [
+    {
+      title: "What is Token2022?",
+      slug: "what-is-token2022",
+    },
+    {
+      title: "What is Mint Authority?",
+      slug: "what-is-mint-authority",
+    },
+    {
+      title: "How to Launch a Memecoin on Solana",
+      slug: "how-to-launch-a-memecoin-on-solana",
+    },
   ]
 }
 
