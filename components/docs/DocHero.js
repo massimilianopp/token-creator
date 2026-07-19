@@ -1,4 +1,10 @@
-export default function DocHero({ category, title, description }) {
+export default function DocHero({
+    category,
+    title,
+    description,
+    readingTime,
+    lastUpdated,
+  }) {
     return (
       <div style={{ marginBottom: 40 }}>
         <p
@@ -32,10 +38,28 @@ export default function DocHero({ category, title, description }) {
             fontSize: 14,
             color: "var(--muted)",
             lineHeight: 1.65,
+            marginBottom: 16,
           }}
         >
           {description}
         </p>
+  
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            fontSize: 12,
+            color: "var(--muted)",
+            fontFamily: "'Geist Mono', monospace",
+          }}
+        >
+          <span>🕒 {readingTime} min read</span>
+  
+          <span>•</span>
+  
+          <span>Updated {lastUpdated}</span>
+        </div>
       </div>
     );
   }

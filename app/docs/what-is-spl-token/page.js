@@ -18,6 +18,8 @@ export default function WhatIsSPLToken() {
         category={article.category}
         title={article.title}
         description={article.description}
+        readingTime={article.readingTime}
+        lastUpdated={article.lastUpdated}
       />
       <div
         style={{

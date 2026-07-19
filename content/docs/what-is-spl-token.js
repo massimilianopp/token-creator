@@ -8,6 +8,10 @@ const article = {
   description:
     "Learn what SPL tokens are, how they work on Solana, and how to create one without writing code.",
 
+  readingTime: 6,
+
+  lastUpdated: "July 2026",
+
   sections: [
     {
       id: "spl-program",
