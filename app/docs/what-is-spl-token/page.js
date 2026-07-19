@@ -1,6 +1,7 @@
 import Link from "next/link";
 import article from "@/content/docs/what-is-spl-token";
 import DocHero from "@/components/docs/DocHero";
+import DocSection from "@/components/docs/DocSection";
 
 export const metadata = {
   title: "What is an SPL Token? — Token Creator",
@@ -17,6 +18,20 @@ export default function WhatIsSPLToken() {
         title={article.title}
         description={article.description}
       />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 32,
+        }}
+      >
+        {article.sections.map((section) => (
+          <DocSection
+            key={section.id}
+            section={section}
+          />
+        ))}
+      </div>
     </main>
   );
 }
