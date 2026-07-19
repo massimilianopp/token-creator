@@ -1,4 +1,5 @@
 import Link from "next/link";
+import article from "@/content/docs/what-is-spl-token";
 
 export const metadata = {
   title: "What is an SPL Token? — Token Creator",
@@ -11,9 +12,9 @@ export default function WhatIsSPLToken() {
       <Link href="/docs" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, color: "var(--muted)", textDecoration: "none", marginBottom: 32 }}>← Docs</Link>
 
       <div style={{ marginBottom: 40 }}>
-        <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 8, fontFamily: "'Geist Mono', monospace" }}>Beginner guide</p>
-        <h1 style={{ fontSize: 24, fontWeight: 600, letterSpacing: "-0.02em", color: "var(--text)", marginBottom: 12 }}>What is an SPL Token?</h1>
-        <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.65 }}>SPL tokens are the standard for fungible assets on Solana — from stablecoins to memecoins to community tokens.</p>
+        <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 8, fontFamily: "'Geist Mono', monospace" }}>{article.category}</p>
+        <h1 style={{ fontSize: 24, fontWeight: 600, letterSpacing: "-0.02em", color: "var(--text)", marginBottom: 12 }}>{article.title}</h1>
+        <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.65 }}>{article.description}</p>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
