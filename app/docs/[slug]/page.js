@@ -10,6 +10,8 @@ import DocSection from "@/components/docs/DocSection";
 
 import TableOfContents from "@/components/docs/TableOfContents";
 
+import FAQ from "@/components/docs/FAQ";
+
 export default async function DocPage({ params }) {
 
     const { slug } = await params;
@@ -62,6 +64,8 @@ export default async function DocPage({ params }) {
           />
         ))}
       </div>
+
+      <FAQ items={article.faq} />
 
     </main>
   );
