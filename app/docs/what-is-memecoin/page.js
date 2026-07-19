@@ -36,7 +36,7 @@ export default function WhatIsMemecoin() {
           },
           {
             title: "How to launch a memecoin with Token Creator",
-            body: `Token Creator provides everything you need to launch a credible memecoin on Solana:\n\n1. Create your token — name, symbol, logo, supply. All uploaded to IPFS.\n2. Set up vesting — lock your allocation to show commitment.\n3. Add liquidity — make your token tradeable on Orca.\n4. Share your token page — a public URL with live price, chart, and holder data.\n\nThe entire process takes under 10 minutes and costs less than $0.15.`,
+            body: `Token Creator provides everything you need to launch a credible memecoin on Solana:\n\n1. Create your token — name, symbol, logo, supply. All uploaded to IPFS.\n2. Set up vesting — lock your allocation to show commitment.\n3. Add liquidity — make your token tradeable on Orca.\n4. Share your token page — a public URL with live price, chart, and holder data.\n\nThe entire process takes under 10 minutes and costs less than 0.15 SOL.`,
           },
         ].map(s => (
           <div key={s.title} style={{ display: "flex", flexDirection: "column", gap: 10, padding: "20px", borderRadius: 8, background: "var(--card)", border: "1px solid var(--border)" }}>
