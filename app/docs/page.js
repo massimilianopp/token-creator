@@ -10,38 +10,23 @@ const SECTIONS = [
     title: "Beginner guides",
     pages: [
       { href: "/docs/what-is-spl-token", label: "What is an SPL Token?", desc: "The standard behind every Solana token." },
-      { href: "/docs/what-is-token2022", label: "What is Token-2022?", desc: "The next generation token standard on Solana." },
-      { href: "/docs/what-is-memecoin", label: "What is a memecoin?", desc: "Origins, mechanics, and how to launch one." },
-      { href: "/docs/what-is-mint-authority", label: "What is Mint Authority?", desc: "Control over token supply and why you should revoke it." },
-      { href: "/docs/what-is-freeze-authority", label: "What is Freeze Authority?", desc: "What it is, why it matters, and when to remove it." },
     ],
   },
   {
     title: "Tutorials",
     pages: [
-      { href: "/docs/create-a-token", label: "How to create a token on Solana", desc: "Step-by-step from name to mint address." },
-      { href: "/docs/launch-a-memecoin", label: "How to launch a memecoin", desc: "The full checklist for a successful launch." },
-      { href: "/docs/add-liquidity", label: "How to add liquidity on Solana", desc: "Make your token tradeable on Orca." },
-      { href: "/docs/lock-liquidity", label: "How to lock liquidity", desc: "Prove to your community you won't rug." },
-      { href: "/docs/verify-your-token", label: "How to verify your token", desc: "Get listed and recognized on explorers." },
-      { href: "/docs/burn-tokens", label: "How to burn tokens on Solana", desc: "Reduce supply and signal commitment." },
     ],
   },
   {
     title: "Comparisons",
     pages: [
-      { href: "/docs/token2022-vs-spl", label: "Token-2022 vs SPL Token", desc: "Which standard should you use?" },
-      { href: "/docs/orca-vs-raydium", label: "Orca vs Raydium", desc: "The two main DEXs on Solana compared." },
-      { href: "/docs/pump-fun-vs-token-creator", label: "Pump.fun vs Token Creator", desc: "Two different approaches to token launching." },
-      { href: "/docs/best-solana-token-creator", label: "Best Solana token creator in 2025", desc: "Tools compared side by side." },
+
     ],
   },
   {
     title: "Security",
     pages: [
-      { href: "/docs/common-token-launch-mistakes", label: "Common token launch mistakes", desc: "What to avoid before, during, and after launch." },
-      { href: "/docs/how-to-avoid-rug-pulls", label: "How to avoid rug pulls", desc: "Red flags and protective measures for holders." },
-      { href: "/docs/how-to-secure-your-token-launch", label: "How to secure your token launch", desc: "Best practices for a trustworthy launch." },
+
     ],
   },
 ];
