@@ -55,11 +55,28 @@ const article = {
 
     {
       id: "should-you",
+    
       title: "Should you revoke Mint Authority?",
-      paragraphs: [
-        "It depends on your project.",
-        "If you are launching a memecoin or a fixed-supply community token, revoking the mint authority is generally considered best practice.",
-        "If your token will require future emissions, staking rewards or ecosystem incentives, you may decide to keep the mint authority active until those tokens have been distributed."
+    
+      blocks: [
+    
+        {
+          type: "paragraph",
+          text: "It depends on your project."
+        },
+    
+        {
+          type: "callout",
+          variant: "tip",
+          title: "Best practice",
+          text: "If you are launching a memecoin or a fixed-supply community token, revoking the mint authority after minting the initial supply is generally considered best practice."
+        },
+    
+        {
+          type: "paragraph",
+          text: "If your token will require future emissions, staking rewards or ecosystem incentives, you may decide to keep the mint authority active until those tokens have been distributed."
+        }
+    
       ]
     },
 

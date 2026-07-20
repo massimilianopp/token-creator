@@ -1,3 +1,5 @@
+import Callout from "./Callout";
+
 export default function DocSection({ section }) {
     return (
       <div
@@ -37,6 +39,17 @@ export default function DocSection({ section }) {
           >
             {block.text}
           </p>
+        );
+      }
+
+      if (block.type === "callout") {
+        return (
+          <Callout
+            key={index}
+            variant={block.variant}
+            title={block.title}
+            text={block.text}
+          />
         );
       }
 
