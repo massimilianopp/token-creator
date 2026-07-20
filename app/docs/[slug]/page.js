@@ -12,6 +12,25 @@ import TableOfContents from "@/components/docs/TableOfContents";
 
 import FAQ from "@/components/docs/FAQ";
 
+import { notFound } from "next/navigation";
+
+export async function generateMetadata({ params }) {
+
+  const { slug } = await params;
+
+  const article = docs[slug];
+
+  if (!article) {
+    return {};
+  }
+
+  return {
+    title: `${article.title} | Token Creator`,
+    description: article.description,
+    keywords: article.keywords,
+  };
+}
+
 export default async function DocPage({ params }) {
 
     const { slug } = await params;

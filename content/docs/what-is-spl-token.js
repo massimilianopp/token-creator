@@ -8,6 +8,14 @@ const article = {
   description:
     "Learn what SPL tokens are, how they work on Solana, and how to create one without writing code.",
 
+  keywords: [
+  "SPL Token",
+  "Solana Token",
+  "Create SPL Token",
+  "Memecoin",
+  "Token Creator",
+],
+
   readingTime: 6,
 
   lastUpdated: "July 2026",
