@@ -57,19 +57,10 @@ const article = {
     },
   ],
   related: [
-    {
-      title: "What is Token2022?",
-      slug: "what-is-token2022",
-    },
-    {
-      title: "What is Mint Authority?",
-      slug: "what-is-mint-authority",
-    },
-    {
-      title: "How to Launch a Memecoin on Solana",
-      slug: "how-to-launch-a-memecoin-on-solana",
-    },
+    "what-is-mint-authority",
+    "what-is-token2022",
+    "how-to-launch-a-memecoin-on-solana",
   ]
-}
+};
 
 export default article;
