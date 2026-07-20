@@ -12,8 +12,6 @@ import TableOfContents from "@/components/docs/TableOfContents";
 
 import FAQ from "@/components/docs/FAQ";
 
-import { notFound } from "next/navigation";
-
 export async function generateMetadata({ params }) {
 
   const { slug } = await params;
