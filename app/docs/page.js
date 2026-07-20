@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { articles } from "@/content/docs";
 
 export const metadata = {
   title: "Documentation — Token Creator",
@@ -7,27 +8,16 @@ export const metadata = {
 
 const SECTIONS = [
   {
-    title: "Beginner guides",
-    pages: [
-      { href: "/docs/what-is-spl-token", label: "What is an SPL Token?", desc: "The standard behind every Solana token." },
-    ],
+    title: "Beginner guide",
   },
   {
     title: "Tutorials",
-    pages: [
-    ],
   },
   {
     title: "Comparisons",
-    pages: [
-
-    ],
   },
   {
     title: "Security",
-    pages: [
-
-    ],
   },
 ];
 
@@ -53,15 +43,17 @@ export default function DocsIndexPage() {
               {section.title}
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              {section.pages.map(page => (
-                <Link key={page.href} href={page.href} style={{
+            {articles
+  .filter(article => article.category === section.title)
+  .map(article => (
+                <Link key={article.slug} href={`/docs/${article.slug}`} style={{
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                   padding: "14px 16px", borderRadius: 8, background: "var(--card)",
                   border: "1px solid var(--border)", textDecoration: "none", gap: 12,
                 }}>
                   <div>
-                    <p style={{ fontSize: 14, fontWeight: 500, color: "var(--text)", marginBottom: 2 }}>{page.label}</p>
-                    <p style={{ fontSize: 12, color: "var(--muted)" }}>{page.desc}</p>
+                    <p style={{ fontSize: 14, fontWeight: 500, color: "var(--text)", marginBottom: 2 }}>{article.title}</p>
+                    <p style={{ fontSize: 12, color: "var(--muted)" }}>{article.description}</p>
                   </div>
                   <span style={{ color: "var(--dim)", fontSize: 16, flexShrink: 0 }}>→</span>
                 </Link>
