@@ -1,7 +1,9 @@
 import splToken from "./what-is-spl-token";
+import mintAuthority from "./what-is-mint-authority";
 
 export const articles = [
   splToken,
+  mintAuthority,
 ];
 
 const docs = Object.fromEntries(
@@ -9,3 +11,4 @@ const docs = Object.fromEntries(
 );
 
 export default docs;
+
