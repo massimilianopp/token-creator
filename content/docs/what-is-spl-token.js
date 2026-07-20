@@ -27,10 +27,19 @@ const article = {
   sections: [
     {
       id: "spl-program",
+    
       title: "SPL stands for Solana Program Library",
-      paragraphs: [
-        "SPL (Solana Program Library) is a collection of on-chain programs maintained by the Solana Foundation. The SPL Token program is responsible for creating and managing fungible tokens on Solana.",
-        "Every token you see on Solana, including USDC, BONK, JUP and WIF, is an SPL token. They all use the same underlying program, making them compatible with wallets, DEXs and explorers."
+    
+      blocks: [
+        {
+          type: "paragraph",
+          text: "SPL (Solana Program Library) is a collection of on-chain programs maintained by the Solana Foundation. The SPL Token program is responsible for creating and managing fungible tokens on Solana."
+        },
+    
+        {
+          type: "paragraph",
+          text: "Every token you see on Solana, including USDC, BONK, JUP and WIF, is an SPL token. They all use the same underlying program, making them compatible with wallets, DEXs and explorers."
+        }
       ]
     },
 

@@ -22,7 +22,11 @@ export default function DocSection({ section }) {
           {section.title}
         </h2>
   
-        {section.paragraphs.map((paragraph, index) => (
+        {section.blocks
+  ? section.blocks.map((block, index) => {
+
+      if (block.type === "paragraph") {
+        return (
           <p
             key={index}
             style={{
@@ -31,9 +35,28 @@ export default function DocSection({ section }) {
               lineHeight: 1.75,
             }}
           >
-            {paragraph}
+            {block.text}
           </p>
-        ))}
+        );
+      }
+
+      return null;
+
+    })
+
+  : section.paragraphs.map((paragraph, index) => (
+      <p
+        key={index}
+        style={{
+          fontSize: 13,
+          color: "var(--muted)",
+          lineHeight: 1.75,
+        }}
+      >
+        {paragraph}
+      </p>
+    ))
+}
       </div>
     );
   }
