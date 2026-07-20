@@ -14,6 +14,8 @@ import FAQ from "@/components/docs/FAQ";
 
 import DocCTA from "@/components/docs/DocCTA";
 
+import RelatedArticles from "@/components/docs/RelatedArticles";
+
 export async function generateMetadata({ params }) {
 
   const { slug } = await params;
@@ -87,6 +89,8 @@ export default async function DocPage({ params }) {
       <FAQ items={article.faq} />
 
       <DocCTA />
+
+      <RelatedArticles slugs={article.related} />
 
     </main>
   );
