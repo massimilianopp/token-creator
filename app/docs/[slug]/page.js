@@ -12,6 +12,8 @@ import TableOfContents from "@/components/docs/TableOfContents";
 
 import FAQ from "@/components/docs/FAQ";
 
+import DocCTA from "@/components/docs/DocCTA";
+
 export async function generateMetadata({ params }) {
 
   const { slug } = await params;
@@ -83,6 +85,8 @@ export default async function DocPage({ params }) {
       </div>
 
       <FAQ items={article.faq} />
+
+      <DocCTA />
 
     </main>
   );
