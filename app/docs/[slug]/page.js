@@ -66,7 +66,7 @@ export default async function DocPage({ params }) {
         title={article.title}
         description={article.description}
         readingTime={article.readingTime}
-        lastUpdated={article.lastUpdated}
+        updatedAt={article.updatedAt}
       />
 
       <TableOfContents sections={article.sections} />

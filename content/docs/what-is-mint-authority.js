@@ -8,9 +8,12 @@ const article = {
   description:
     "Learn what mint authority is on Solana, why it matters for your token, and when you should revoke it.",
 
-  readingTime: "5 min read",
 
-  lastUpdated: "July 2026",
+  readingTime: "6 min read",
+
+  publishedAt: "2026-07-20",
+    
+  updatedAt: "2026-07-20",
 
   keywords: [
     "Mint Authority",

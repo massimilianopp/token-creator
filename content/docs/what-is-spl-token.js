@@ -16,9 +16,13 @@ const article = {
   "Token Creator",
 ],
 
-  readingTime: 6,
 
-  lastUpdated: "July 2026",
+
+  readingTime: "6 min read",
+
+  publishedAt: "2026-07-20",
+
+  updatedAt: "2026-07-20",
 
   sections: [
     {

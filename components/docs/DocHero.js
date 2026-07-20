@@ -3,7 +3,7 @@ export default function DocHero({
     title,
     description,
     readingTime,
-    lastUpdated,
+    updatedAt,
   }) {
     return (
       <div style={{ marginBottom: 40 }}>
@@ -58,7 +58,11 @@ export default function DocHero({
   
           <span>•</span>
   
-          <span>Updated {lastUpdated}</span>
+          <span>Updated {new Date(updatedAt).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+})}</span>
         </div>
       </div>
     );
