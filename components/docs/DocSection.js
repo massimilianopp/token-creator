@@ -1,4 +1,4 @@
-import Callout from "./Callout";
+import BlockRenderer from "./BlockRenderer";
 
 export default function DocSection({ section }) {
     return (
@@ -25,49 +25,21 @@ export default function DocSection({ section }) {
         </h2>
   
         {section.blocks
-  ? section.blocks.map((block, index) => {
-
-      if (block.type === "paragraph") {
-        return (
-          <p
-            key={index}
-            style={{
-              fontSize: 13,
-              color: "var(--muted)",
-              lineHeight: 1.75,
-            }}
-          >
-            {block.text}
-          </p>
-        );
-      }
-
-      if (block.type === "callout") {
-        return (
-          <Callout
-            key={index}
-            variant={block.variant}
-            title={block.title}
-            text={block.text}
-          />
-        );
-      }
-
-      return null;
-
-    })
+  ? section.blocks.map((block, index) => (
+      <BlockRenderer
+        key={index}
+        block={block}
+      />
+    ))
 
   : section.paragraphs.map((paragraph, index) => (
-      <p
+      <BlockRenderer
         key={index}
-        style={{
-          fontSize: 13,
-          color: "var(--muted)",
-          lineHeight: 1.75,
+        block={{
+          type: "paragraph",
+          text: paragraph,
         }}
-      >
-        {paragraph}
-      </p>
+      />
     ))
 }
       </div>
