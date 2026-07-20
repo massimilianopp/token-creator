@@ -6,70 +6,103 @@ const article = {
   title: "What is Mint Authority?",
 
   description:
-  "Learn what mint authority is on Solana, why it matters, and when you should revoke it.",
+    "Learn what mint authority is on Solana, why it matters for your token, and when you should revoke it.",
+
+  readingTime: "5 min read",
+
+  lastUpdated: "July 2026",
 
   keywords: [
     "Mint Authority",
     "Solana",
-    "Revoke Mint Authority",
     "SPL Token",
-    "Token Creator",
-],
-
-  readingTime: 6,
-
-  lastUpdated: "July 2026",
+    "Revoke Mint Authority",
+    "Token Creator"
+  ],
 
   sections: [
     {
-      id: "spl-program",
-      title: "SPL stands for Solana Program Library",
+      id: "what-is",
+      title: "What is Mint Authority?",
       paragraphs: [
-        "SPL (Solana Program Library) is a collection of on-chain programs maintained by the Solana Foundation. The SPL Token program is responsible for creating and managing fungible tokens on Solana.",
-        "Every token you see on Solana, including USDC, BONK, JUP and WIF, is an SPL token. They all use the same underlying program, making them compatible with wallets, DEXs and explorers."
+        "Mint authority is the permission that allows a wallet to create new tokens for an SPL token mint. Whoever controls the mint authority can increase the token supply at any time.",
+        "When you create a token on Solana, your wallet is usually assigned as the initial mint authority. This gives you complete control over the supply until you decide to revoke that permission."
       ]
     },
 
     {
-      id: "erc20",
-      title: "How SPL tokens differ from ERC-20 tokens",
+      id: "why-important",
+      title: "Why Mint Authority matters",
       paragraphs: [
-        "On Ethereum, each token is deployed as its own smart contract.",
-        "On Solana, every token uses the same SPL Token Program. This makes token creation cheaper, faster and more secure."
+        "Mint authority is one of the first things experienced crypto users check before buying a token.",
+        "If the mint authority is still active, the creator can mint additional tokens in the future. Increasing the supply may dilute existing holders and can negatively affect the token price.",
+        "For this reason, many projects revoke their mint authority after the initial supply has been minted."
+      ]
+    },
+
+    {
+      id: "revoke",
+      title: "What happens when you revoke Mint Authority?",
+      paragraphs: [
+        "Revoking the mint authority permanently removes the ability to mint new tokens.",
+        "Once revoked, the total supply becomes fixed forever. No wallet, including the creator, can create additional tokens.",
+        "This provides stronger guarantees to investors because the supply cannot be inflated later."
+      ]
+    },
+
+    {
+      id: "should-you",
+      title: "Should you revoke Mint Authority?",
+      paragraphs: [
+        "It depends on your project.",
+        "If you are launching a memecoin or a fixed-supply community token, revoking the mint authority is generally considered best practice.",
+        "If your token will require future emissions, staking rewards or ecosystem incentives, you may decide to keep the mint authority active until those tokens have been distributed."
+      ]
+    },
+
+    {
+      id: "verify",
+      title: "How to verify Mint Authority",
+      paragraphs: [
+        "Anyone can verify whether a token still has an active mint authority using blockchain explorers such as Solscan or Solana Explorer.",
+        "The mint authority status is stored on-chain, making it publicly verifiable without trusting the token creator."
+      ]
+    },
+
+    {
+      id: "token-creator",
+      title: "Manage Mint Authority with Token Creator",
+      paragraphs: [
+        "Token Creator allows you to revoke your mint authority with a few clicks directly from your wallet.",
+        "The transaction is executed on-chain and remains permanently verifiable by anyone."
       ]
     }
   ],
+
   faq: [
     {
-      question: "Can anyone create an SPL token?",
-      answer:
-        "Yes. Anyone with a Solana wallet can create an SPL token. No programming knowledge is required when using Token Creator.",
+      question: "What is Mint Authority on Solana?",
+      answer: "Mint authority is the permission that allows a wallet to create new tokens for an SPL token."
     },
     {
-      question: "Do I need to know how to code?",
-      answer:
-        "No. Token Creator lets you create and configure an SPL token through a simple interface.",
+      question: "Can Mint Authority be restored?",
+      answer: "No. Once the mint authority has been revoked, it cannot be restored. The token supply becomes permanently fixed."
     },
     {
-      question: "Can I mint more tokens later?",
-      answer:
-        "Yes, if you keep the Mint Authority. If you revoke it, the supply becomes permanently fixed.",
+      question: "Should I revoke Mint Authority for a memecoin?",
+      answer: "In most cases, yes. A fixed supply increases transparency and is generally preferred by investors."
     },
+    {
+      question: "How can I verify if Mint Authority has been revoked?",
+      answer: "You can check the token's mint authority on Solscan or another Solana explorer. The information is stored directly on-chain."
+    }
   ],
+
   related: [
-    {
-      title: "What is Token2022?",
-      slug: "what-is-token2022",
-    },
-    {
-      title: "What is Mint Authority?",
-      slug: "what-is-mint-authority",
-    },
-    {
-      title: "How to Launch a Memecoin on Solana",
-      slug: "how-to-launch-a-memecoin-on-solana",
-    },
+    "what-is-spl-token",
+    "what-is-freeze-authority",
+    "how-to-launch-a-memecoin-on-solana"
   ]
-}
+};
 
 export default article;
