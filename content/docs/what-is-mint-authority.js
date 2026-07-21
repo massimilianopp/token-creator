@@ -112,6 +112,15 @@ const article = {
         "Token Creator allows you to revoke your mint authority with a few clicks directly from your wallet.",
         "The transaction is executed on-chain and remains permanently verifiable by anyone."
       ]
+    },
+    {
+      type: "steps",
+      items: [
+        "Create your token",
+        "Mint the initial supply",
+        "Revoke Mint Authority",
+        "Verify the transaction on Solscan"
+      ]
     }
   ],
 
