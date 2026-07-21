@@ -83,9 +83,25 @@ const article = {
     {
       id: "verify",
       title: "How to verify Mint Authority",
-      paragraphs: [
-        "Anyone can verify whether a token still has an active mint authority using blockchain explorers such as Solscan or Solana Explorer.",
-        "The mint authority status is stored on-chain, making it publicly verifiable without trusting the token creator."
+      blocks: [
+
+        {
+          type: "paragraph",
+          text: "Anyone can verify whether a token still has an active Mint Authority using blockchain explorers such as Solscan."
+        },
+    
+        {
+          type: "image",
+          src: "/docs/mint-authority-solscan.png",
+          alt: "Mint Authority field on Solscan",
+          caption: "The Mint Authority field displayed on Solscan."
+        },
+    
+        {
+          type: "paragraph",
+          text: "If the Mint Authority is set to null, no wallet can mint additional tokens."
+        }
+    
       ]
     },
 
