@@ -9,7 +9,7 @@ const article = {
     "Learn what mint authority is on Solana, why it matters for your token, and when you should revoke it.",
 
 
-  readingTime: "6 min read",
+  readingTime: 6,
 
   publishedAt: "2026-07-20",
     

@@ -18,7 +18,7 @@ const article = {
 
 
 
-  readingTime: "6 min read",
+  readingTime: 6,
 
   publishedAt: "2026-07-20",
 
