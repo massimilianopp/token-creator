@@ -113,15 +113,26 @@ const article = {
         "The transaction is executed on-chain and remains permanently verifiable by anyone."
       ]
     },
+    
     {
-      type: "steps",
-      items: [
-        "Create your token",
-        "Mint the initial supply",
-        "Revoke Mint Authority",
-        "Verify the transaction on Solscan"
+      id: "how-to",
+    
+      title: "Typical workflow",
+    
+      blocks: [
+    
+        {
+          type: "steps",
+          items: [
+            "Create your token",
+            "Mint the initial supply",
+            "Revoke Mint Authority",
+            "Verify the transaction on Solscan"
+          ]
+        }
+    
       ]
-    }
+    },
   ],
 
   faq: [
