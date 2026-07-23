@@ -26,32 +26,64 @@ const article = {
 
   sections: [
     {
-      id: "spl-program",
+      id: "what-is",
     
-      title: "SPL stands for Solana Program Library",
+      title: "What is an SPL Token?",
     
       blocks: [
+    
         {
           type: "paragraph",
-          text: "SPL (Solana Program Library) is a collection of on-chain programs maintained by the Solana Foundation. The SPL Token program is responsible for creating and managing fungible tokens on Solana."
+          text: "An SPL Token is a fungible digital asset created using Solana's SPL Token Program. It defines the standard that wallets, exchanges, and decentralized applications use to interact with tokens on the Solana blockchain."
+        },
+    
+        {
+          type: "callout",
+          variant: "tip",
+          title: "Key takeaway",
+          text: "An SPL Token is Solana's standard for fungible tokens. Every token is defined by a single Mint account, while users own their balances through Token Accounts controlled by their wallets."
         },
     
         {
           type: "paragraph",
-          text: "Every token you see on Solana, including USDC, BONK, JUP and WIF, is an SPL token. They all use the same underlying program, making them compatible with wallets, DEXs and explorers."
+          text: "Most tokens on Solana, including memecoins, governance tokens, utility tokens, and many stablecoins, are SPL Tokens."
         }
+    
       ]
     },
 
     {
-      id: "erc20",
-      title: "How SPL tokens differ from ERC-20 tokens",
-      paragraphs: [
-        "On Ethereum, each token is deployed as its own smart contract.",
-        "On Solana, every token uses the same SPL Token Program. This makes token creation cheaper, faster and more secure."
+      id: "how-it-works",
+    
+      title: "How does an SPL Token work?",
+    
+      blocks: [
+    
+        {
+          type: "paragraph",
+          text: "Every SPL Token is represented by a unique Mint account stored on the Solana blockchain."
+        },
+    
+        {
+          type: "paragraph",
+          text: "The Mint account stores the token's configuration, including the total supply, decimals, Mint Authority and Freeze Authority."
+        },
+    
+        {
+          type: "callout",
+          variant: "info",
+          title: "Architecture diagram",
+          text: "We'll replace this callout with an SVG diagram in the next step."
+        },
+    
+        {
+          type: "paragraph",
+          text: "When users receive tokens, they do not receive the Mint account itself. Each wallet owns one or more Token Accounts that hold balances for a specific SPL Token."
+        }
+    
       ]
-    }
-  ],
+    },
+
   faq: [
     {
       question: "Can anyone create an SPL token?",
