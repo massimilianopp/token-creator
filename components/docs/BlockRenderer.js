@@ -2,6 +2,7 @@ import Paragraph from "./blocks/Paragraph";
 import Callout from "./blocks/Callout";
 import ImageBlock from "./blocks/ImageBlock";
 import Steps from "./blocks/Steps";
+import ComparisonTable from "./blocks/ComparisonTable";
 
 export default function BlockRenderer({ block }) {
 
@@ -33,6 +34,15 @@ export default function BlockRenderer({ block }) {
     return (
       <Steps
         items={block.items}
+      />
+    );
+  }
+
+  if (block.type === "comparison") {
+    return (
+      <ComparisonTable
+        headers={block.headers}
+        rows={block.rows}
       />
     );
   }
