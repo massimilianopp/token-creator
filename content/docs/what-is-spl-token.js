@@ -150,10 +150,10 @@ const article = {
         },
     
         {
-          type: "callout",
-          variant: "info",
-          title: "Illustration",
-          text: "A screenshot showing a Token Account on Solscan will be added here."
+          type: "image",
+          src: "/docs/token-account.png",
+          alt: "Example of a Token Account on Solscan",
+          caption: "A Token Account stores the balance of one SPL Token and is owned by a wallet address."
         },
     
         {
