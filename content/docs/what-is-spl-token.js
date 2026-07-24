@@ -33,8 +33,10 @@ const article = {
       blocks: [
     
         {
-          type: "paragraph",
-          text: "An SPL Token is a fungible digital asset created using Solana's SPL Token Program. It defines the standard that wallets, exchanges, and decentralized applications use to interact with tokens on the Solana blockchain."
+          type: "definition",
+          term: "SPL Token",
+          definition:
+            "The standard used on Solana to create fungible and non-fungible tokens."
         },
     
         {

@@ -3,6 +3,7 @@ import Callout from "./blocks/Callout";
 import ImageBlock from "./blocks/ImageBlock";
 import Steps from "./blocks/Steps";
 import ComparisonTable from "./blocks/ComparisonTable";
+import Definition from "./Definition";
 
 export default function BlockRenderer({ block }) {
 
@@ -43,6 +44,16 @@ export default function BlockRenderer({ block }) {
       <ComparisonTable
         headers={block.headers}
         rows={block.rows}
+      />
+    );
+  }
+
+  if (block.type === "definition") {
+    return (
+      <Definition
+        key={index}
+        term={block.term}
+        definition={block.definition}
       />
     );
   }
