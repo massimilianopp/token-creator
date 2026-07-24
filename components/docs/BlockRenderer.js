@@ -3,7 +3,7 @@ import Callout from "./blocks/Callout";
 import ImageBlock from "./blocks/ImageBlock";
 import Steps from "./blocks/Steps";
 import ComparisonTable from "./blocks/ComparisonTable";
-import Definition from "/Definition";
+import Definition from "./Definition";
 
 export default function BlockRenderer({ block }) {
 
