@@ -9,7 +9,7 @@
   <style>
     .title {
       font: 700 28px Arial, sans-serif;
-      fill: #111827;
+      fill: #F8FAFC;
     }
 
     .subtitle {
