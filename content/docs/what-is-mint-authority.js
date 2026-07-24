@@ -123,11 +123,32 @@ const article = {
     
         {
           type: "steps",
+        
+          title: "Launch process",
+        
           items: [
-            "Create your token",
-            "Mint the initial supply",
-            "Revoke Mint Authority",
-            "Verify the transaction on Solscan"
+            {
+              emoji: "🪙",
+              title: "Create your token",
+              description: "Choose the token name, symbol and initial supply.",
+              badge: "~30 sec"
+            },
+            {
+              emoji: "⚡",
+              title: "Mint the supply",
+              description: "Generate the initial supply on-chain."
+            },
+            {
+              emoji: "🔒",
+              title: "Revoke Mint Authority",
+              description: "Prevent any future token minting.",
+              badge: "Recommended"
+            },
+            {
+              emoji: "🔍",
+              title: "Verify on Solscan",
+              description: "Confirm that the authority has been revoked."
+            }
           ]
         }
     
