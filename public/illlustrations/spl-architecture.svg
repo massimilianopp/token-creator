@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560">
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#7C3AED"/>
+    </marker>
+  </defs>
+
+  <style>
+    .title {
+      font: 700 28px Arial, sans-serif;
+      fill: #111827;
+    }
+
+    .subtitle {
+      font: 15px Arial, sans-serif;
+      fill: #6B7280;
+    }
+
+    .boxTitle {
+      font: bold 18px Arial, sans-serif;
+      fill: #111827;
+    }
+
+    .text {
+      font: 15px Arial, sans-serif;
+      fill: #374151;
+    }
+
+    .caption {
+      font: 14px Arial, sans-serif;
+      fill: #6B7280;
+    }
+
+    .card {
+      fill: white;
+      stroke: #E5E7EB;
+      stroke-width: 2;
+      rx: 14;
+    }
+
+    .wallet {
+      fill: #F9FAFB;
+      stroke: #E5E7EB;
+      stroke-width: 2;
+      rx: 12;
+    }
+
+    .arrow {
+      stroke: #7C3AED;
+      stroke-width: 3;
+      fill: none;
+      marker-end: url(#arrow);
+    }
+  </style>
+
+  <text x="450" y="45" text-anchor="middle" class="title">
+    How an SPL Token Works
+  </text>
+
+  <text x="450" y="70" text-anchor="middle" class="subtitle">
+    One Mint Account defines the token. Token Accounts store balances.
+  </text>
+
+  <!-- Mint -->
+
+  <rect class="card" x="250" y="110" width="400" height="140"/>
+
+  <text x="450" y="145" text-anchor="middle" class="boxTitle">
+    Mint Account
+  </text>
+
+  <text x="450" y="170" text-anchor="middle" class="subtitle">
+    Defines the SPL Token
+  </text>
+
+  <text x="285" y="205" class="text">Token: ANA</text>
+  <text x="285" y="228" class="text">Supply: 1,000,000,000</text>
+
+  <text x="510" y="205" class="text">Decimals: 6</text>
+  <text x="510" y="228" class="text">Mint Authority</text>
+
+  <!-- Lines -->
+
+  <line class="arrow" x1="450" y1="250" x2="450" y2="300"/>
+
+  <line class="arrow" x1="450" y1="300" x2="250" y2="340"/>
+
+  <line class="arrow" x1="450" y1="300" x2="650" y2="340"/>
+
+  <!-- Wallet A -->
+
+  <rect class="wallet" x="90" y="340" width="320" height="130"/>
+
+  <text x="250" y="375" text-anchor="middle" class="boxTitle">
+    Wallet A
+  </text>
+
+  <text x="250" y="400" text-anchor="middle" class="subtitle">
+    Owns a Token Account
+  </text>
+
+  <text x="120" y="435" class="text">
+    Balance: 500 ANA
+  </text>
+
+  <!-- Wallet B -->
+
+  <rect class="wallet" x="490" y="340" width="320" height="130"/>
+
+  <text x="650" y="375" text-anchor="middle" class="boxTitle">
+    Wallet B
+  </text>
+
+  <text x="650" y="400" text-anchor="middle" class="subtitle">
+    Owns a Token Account
+  </text>
+
+  <text x="520" y="435" class="text">
+    Balance: 250 ANA
+  </text>
+
+  <!-- Footer -->
+
+  <text x="450" y="525" text-anchor="middle" class="caption">
+    Every wallet can own multiple Token Accounts. All Token Accounts reference the same Mint Account.
+  </text>
+
+</svg>

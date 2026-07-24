@@ -70,10 +70,10 @@ const article = {
         },
     
         {
-          type: "callout",
-          variant: "info",
-          title: "Architecture diagram",
-          text: "We'll replace this callout with an SVG diagram in the next step."
+          type: "image",
+          src: "/illustrations/spl-architecture.svg",
+          alt: "How an SPL Token works",
+          caption: "One Mint account defines the token while Token Accounts store balances."
         },
     
         {
