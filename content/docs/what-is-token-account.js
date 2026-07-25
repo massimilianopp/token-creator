@@ -154,7 +154,7 @@ const article = {
   
           {
             type: "image",
-            src: "/docs/token-account-solscan.png",
+            src: "/docs/token-account.png",
             alt: "Token Account displayed on Solscan",
             caption: "Example of a Token Account on Solscan."
           }
