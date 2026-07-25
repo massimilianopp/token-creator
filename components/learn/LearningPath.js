@@ -19,6 +19,7 @@ export default function LearningPath() {
     },
     {
       title: "What is a Token Account?",
+      href: "/docs/what-is-token-account",
       status: "available",
     },
     {
