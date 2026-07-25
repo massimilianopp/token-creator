@@ -51,7 +51,6 @@ export default function BlockRenderer({ block }) {
   if (block.type === "definition") {
     return (
       <Definition
-        key={index}
         term={block.term}
         definition={block.definition}
       />
