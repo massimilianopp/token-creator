@@ -1,11 +1,13 @@
 import splToken from "./what-is-spl-token";
 import mintAuthority from "./what-is-mint-authority";
 import freezeAuthority from "./what-is-freeze-authority";
+import tokenAccount from "./what-is-token-account";
 
 export const articles = [
   splToken,
   mintAuthority,
   freezeAuthority,
+  tokenAccount,
 ];
 
 const docs = Object.fromEntries(
