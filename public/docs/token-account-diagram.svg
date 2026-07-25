@@ -137,7 +137,7 @@ class="label"
 x="180"
 y="325"
 text-anchor="middle">
-Alice
+👛 Wallet A
 </text>
 
 <text
@@ -178,7 +178,7 @@ class="label"
 x="450"
 y="325"
 text-anchor="middle">
-Bob
+👛 Wallet B
 </text>
 
 <text
@@ -219,7 +219,7 @@ class="label"
 x="720"
 y="325"
 text-anchor="middle">
-Charlie
+👛 Wallet C
 </text>
 
 <text
