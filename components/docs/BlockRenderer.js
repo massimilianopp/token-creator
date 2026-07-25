@@ -4,6 +4,7 @@ import ImageBlock from "./blocks/ImageBlock";
 import Steps from "./blocks/Steps";
 import ComparisonTable from "./blocks/ComparisonTable";
 import Definition from "./Definition";
+import SeeAlso from "./SeeAlso";
 
 export default function BlockRenderer({ block }) {
 
@@ -53,6 +54,15 @@ export default function BlockRenderer({ block }) {
       <Definition
         term={block.term}
         definition={block.definition}
+      />
+    );
+  }
+
+  if (block.type === "see-also") {
+    return (
+      <SeeAlso
+        title={block.title}
+        links={block.links}
       />
     );
   }

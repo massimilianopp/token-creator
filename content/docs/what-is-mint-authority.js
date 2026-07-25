@@ -154,6 +154,27 @@ const article = {
     
       ]
     },
+
+    {
+      type: "see-also",
+    
+      title: "Continue learning",
+    
+      links: [
+        {
+          label: "What is Mint Authority?",
+          href: "/docs/what-is-mint-authority"
+        },
+        {
+          label: "What is Freeze Authority?",
+          href: "/docs/what-is-freeze-authority"
+        },
+        {
+          label: "How to Launch a Memecoin",
+          href: "/docs/how-to-launch-a-memecoin-on-solana"
+        }
+      ]
+    }
   ],
 
   faq: [
