@@ -12,16 +12,17 @@ export default function Definition({ term, definition }) {
         }}
       >
         <span
-          style={{
-            fontSize: 11,
-            textTransform: "uppercase",
-            letterSpacing: "0.06em",
-            color: "var(--muted)",
-            fontWeight: 600,
-          }}
-        >
-          📖 Definition
-        </span>
+  style={{
+    fontSize: 11,
+    textTransform: "uppercase",
+    letterSpacing: "0.08em",
+    color: "var(--muted)",
+    fontWeight: 600,
+    fontFamily: "'Geist Mono', monospace",
+  }}
+>
+  Definition
+</span>
   
         <strong
           style={{
