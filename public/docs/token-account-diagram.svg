@@ -1,0 +1,257 @@
+<svg width="900" height="560" viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+<style>
+
+.title{
+font:700 30px Arial,sans-serif;
+fill:#ffffff;
+}
+
+.subtitle{
+font:15px Arial,sans-serif;
+fill:#A1A1AA;
+}
+
+.label{
+font:700 18px Arial,sans-serif;
+fill:#111827;
+}
+
+.text{
+font:14px Arial,sans-serif;
+fill:#6B7280;
+}
+
+.small{
+font:13px Arial,sans-serif;
+fill:#6B7280;
+}
+
+.box{
+fill:#ffffff;
+stroke:#E5E7EB;
+stroke-width:2;
+rx:14;
+}
+
+.arrow{
+stroke:#7C3AED;
+stroke-width:4;
+fill:none;
+marker-end:url(#arrow);
+}
+
+</style>
+
+<marker id="arrow"
+markerWidth="10"
+markerHeight="10"
+refX="8"
+refY="5"
+orient="auto">
+
+<polygon
+points="0,0 10,5 0,10"
+fill="#7C3AED"/>
+
+</marker>
+
+</defs>
+
+<rect width="900" height="560" fill="#0B0B0F"/>
+
+<text
+x="450"
+y="45"
+text-anchor="middle"
+class="title">
+One Mint Account, many Token Accounts
+</text>
+
+<text
+x="450"
+y="74"
+text-anchor="middle"
+class="subtitle">
+Every wallet owns its own Token Account for the same SPL Token.
+</text>
+
+<!-- Mint -->
+
+<rect
+class="box"
+x="310"
+y="110"
+width="280"
+height="90"/>
+
+<text
+class="label"
+x="450"
+y="145"
+text-anchor="middle">
+SPL Token
+</text>
+
+<text
+class="text"
+x="450"
+y="170"
+text-anchor="middle">
+Mint Account
+</text>
+
+<!-- arrows -->
+
+<line class="arrow"
+x1="450"
+y1="200"
+x2="180"
+y2="275"/>
+
+<line class="arrow"
+x1="450"
+y1="200"
+x2="450"
+y2="275"/>
+
+<line class="arrow"
+x1="450"
+y1="200"
+x2="720"
+y2="275"/>
+
+<!-- Alice -->
+
+<rect
+class="box"
+x="70"
+y="290"
+width="220"
+height="150"/>
+
+<text
+class="label"
+x="180"
+y="325"
+text-anchor="middle">
+Alice
+</text>
+
+<text
+class="text"
+x="180"
+y="352"
+text-anchor="middle">
+Token Account
+</text>
+
+<text
+class="small"
+x="180"
+y="392"
+text-anchor="middle">
+Balance
+</text>
+
+<text
+class="label"
+x="180"
+y="418"
+text-anchor="middle">
+250 TOKEN
+</text>
+
+<!-- Bob -->
+
+<rect
+class="box"
+x="340"
+y="290"
+width="220"
+height="150"/>
+
+<text
+class="label"
+x="450"
+y="325"
+text-anchor="middle">
+Bob
+</text>
+
+<text
+class="text"
+x="450"
+y="352"
+text-anchor="middle">
+Token Account
+</text>
+
+<text
+class="small"
+x="450"
+y="392"
+text-anchor="middle">
+Balance
+</text>
+
+<text
+class="label"
+x="450"
+y="418"
+text-anchor="middle">
+40 TOKEN
+</text>
+
+<!-- Charlie -->
+
+<rect
+class="box"
+x="610"
+y="290"
+width="220"
+height="150"/>
+
+<text
+class="label"
+x="720"
+y="325"
+text-anchor="middle">
+Charlie
+</text>
+
+<text
+class="text"
+x="720"
+y="352"
+text-anchor="middle">
+Token Account
+</text>
+
+<text
+class="small"
+x="720"
+y="392"
+text-anchor="middle">
+Balance
+</text>
+
+<text
+class="label"
+x="720"
+y="418"
+text-anchor="middle">
+900 TOKEN
+</text>
+
+<text
+x="450"
+y="510"
+text-anchor="middle"
+class="subtitle">
+The Mint Account defines the token. Token Accounts store balances for each wallet.
+</text>
+
+</svg>

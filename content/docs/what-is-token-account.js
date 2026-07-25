@@ -55,17 +55,37 @@ const article = {
   
       {
         id: "why",
-  
+      
         title: "Why are Token Accounts needed?",
-  
-        paragraphs: [
-  
-          "The Mint Account only stores information about the token, such as its total supply, decimals and authorities.",
-  
-          "Individual balances are stored separately inside Token Accounts.",
-  
-          "This design allows millions of wallets to own the same token without modifying the Mint Account itself."
-  
+      
+        blocks: [
+      
+          {
+            type: "paragraph",
+            text:
+              "The Mint Account only stores information about the token, such as its total supply, decimals and authorities."
+          },
+      
+          {
+            type: "paragraph",
+            text:
+              "Individual balances are stored separately inside Token Accounts."
+          },
+      
+          {
+            type: "image",
+            src: "/docs/token-account-diagram.svg",
+            alt: "One Mint Account connected to multiple Token Accounts",
+            caption:
+              "A single Mint Account defines the token, while each wallet owns its own Token Account."
+          },
+      
+          {
+            type: "paragraph",
+            text:
+              "This architecture allows millions of wallets to hold the same SPL Token without modifying the Mint Account."
+          }
+      
         ]
       },
   
