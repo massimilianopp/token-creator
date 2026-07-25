@@ -93,7 +93,7 @@ const article = {
         }
     
       ]
-    }
+    },
 
     {
       id: "should-you",
