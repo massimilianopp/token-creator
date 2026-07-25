@@ -1,5 +1,6 @@
 import { articles } from "@/content/docs";
 import Link from "next/link";
+import LearningPath from "@/components/learn/LearningPath";
 
 export const metadata = {
   title: "Learn Solana Token Creation",
@@ -113,6 +114,65 @@ export default function LearnPage() {
           </Link>
         ))}
       </div>
+
+      <h2
+  style={{
+    marginTop: 80,
+    marginBottom: 30,
+  }}
+>
+  Recommended learning path
+</h2>
+
+<LearningPath />
+
+   <div
+  style={{
+    marginTop: 90,
+    padding: 40,
+    borderRadius: 12,
+    background: "var(--card)",
+    border: "1px solid var(--border)",
+    textAlign: "center",
+  }}
+>
+  <h2
+    style={{
+      margin: 0,
+    }}
+  >
+    Ready to create your token?
+  </h2>
+
+  <p
+    style={{
+      color: "var(--muted)",
+      maxWidth: 600,
+      margin: "20px auto 0",
+      lineHeight: 1.8,
+    }}
+  >
+    Once you understand the fundamentals, you can create your SPL Token directly on-chain.
+  </p>
+
+  <Link
+    href="/"
+    style={{
+      display: "inline-block",
+      marginTop: 28,
+      padding: "12px 22px",
+      borderRadius: 8,
+      background: "var(--primary)",
+      color: "#fff",
+      textDecoration: "none",
+      fontWeight: 600,
+    }}
+  >
+    Open Token Creator
+  </Link>
+</div>
+
+  
     </main>
   );
 }

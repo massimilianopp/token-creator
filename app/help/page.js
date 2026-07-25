@@ -19,18 +19,25 @@ const SECTIONS = [
     title: "Learn",
     items: [
       {
+        label: "Learning Hub",
+        desc: "Start here if you're new to Solana token creation. Follow a guided learning path from SPL Tokens to token launch.",
+        href: "/learn",
+        external: false,
+        tag: "Start here",
+      },
+      {
+        label: "Documentation",
+        desc: "Browse the complete documentation and technical guides.",
+        href: "/docs",
+        external: false,
+        tag: "Docs",
+      },
+      {
         label: "Video tutorial",
         desc: "Watch a step-by-step walkthrough of how to launch a token with Token Creator.",
         href: "https://www.youtube.com/watch?v=iDuHLiVYkg0",
         external: true,
         tag: "YouTube",
-      },
-      {
-        label: "Documentation",
-        desc: "Complete guide to token creation, vesting, and liquidity pools.",
-        href: "/docs",
-        external: false,
-        tag: "Guide",
       },
     ],
   },
