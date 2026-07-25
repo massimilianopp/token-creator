@@ -19,7 +19,7 @@ export default function LearningPath() {
     },
     {
       title: "What is a Token Account?",
-      status: "coming",
+      status: "available",
     },
     {
       title: "What is Metadata?",
