@@ -1,257 +1,243 @@
 <svg width="900" height="560" viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg">
 
-<defs>
+  <defs>
 
-<style>
+    <style>
+      .title{
+        font:700 30px Arial,sans-serif;
+        fill:#ffffff;
+      }
 
-.title{
-font:700 30px Arial,sans-serif;
-fill:#ffffff;
-}
+      .subtitle{
+        font:15px Arial,sans-serif;
+        fill:#A1A1AA;
+      }
 
-.subtitle{
-font:15px Arial,sans-serif;
-fill:#A1A1AA;
-}
+      .label{
+        font:700 18px Arial,sans-serif;
+        fill:#111827;
+      }
 
-.label{
-font:700 18px Arial,sans-serif;
-fill:#111827;
-}
+      .text{
+        font:14px Arial,sans-serif;
+        fill:#6B7280;
+      }
 
-.text{
-font:14px Arial,sans-serif;
-fill:#6B7280;
-}
+      .balance{
+        font:700 18px Arial,sans-serif;
+        fill:#7C3AED;
+      }
 
-.small{
-font:13px Arial,sans-serif;
-fill:#6B7280;
-}
+      .box{
+        fill:#ffffff;
+        stroke:#E5E7EB;
+        stroke-width:2;
+        rx:14;
+      }
 
-.box{
-fill:#ffffff;
-stroke:#E5E7EB;
-stroke-width:2;
-rx:14;
-}
+      .mint{
+        fill:#F5F3FF;
+        stroke:#7C3AED;
+        stroke-width:2.5;
+        rx:14;
+      }
 
-.arrow{
-stroke:#7C3AED;
-stroke-width:4;
-fill:none;
-marker-end:url(#arrow);
-}
+      .arrow{
+        stroke:#7C3AED;
+        stroke-width:4;
+        fill:none;
+        marker-end:url(#arrowhead);
+      }
 
-</style>
+    </style>
 
-<marker id="arrow"
-markerWidth="10"
-markerHeight="10"
-refX="8"
-refY="5"
-orient="auto">
+    <marker
+      id="arrowhead"
+      markerWidth="12"
+      markerHeight="12"
+      refX="10"
+      refY="6"
+      orient="auto">
 
-<polygon
-points="0,0 10,5 0,10"
-fill="#7C3AED"/>
+      <polygon
+        points="0 0,12 6,0 12"
+        fill="#7C3AED"/>
 
-</marker>
+    </marker>
 
-</defs>
+  </defs>
 
-<rect width="900" height="560" fill="#0B0B0F"/>
+  <!-- Background -->
 
-<text
-x="450"
-y="45"
-text-anchor="middle"
-class="title">
-One Mint Account, many Token Accounts
-</text>
+  <rect
+    width="900"
+    height="560"
+    fill="#0B0B0F"/>
 
-<text
-x="450"
-y="74"
-text-anchor="middle"
-class="subtitle">
-Every wallet owns its own Token Account for the same SPL Token.
-</text>
+  <!-- Title -->
 
-<!-- Mint -->
+  <text
+    x="450"
+    y="48"
+    text-anchor="middle"
+    class="title">
+    One Mint Account, Many Token Accounts
+  </text>
 
-<rect
-class="box"
-x="310"
-y="110"
-width="280"
-height="90"/>
+  <text
+    x="450"
+    y="78"
+    text-anchor="middle"
+    class="subtitle">
+    The Mint Account defines the token. Every wallet owns its own Token Account.
+  </text>
 
-<text
-class="label"
-x="450"
-y="145"
-text-anchor="middle">
-SPL Token
-</text>
+  <!-- Mint -->
 
-<text
-class="text"
-x="450"
-y="170"
-text-anchor="middle">
-Mint Account
-</text>
+  <rect
+    class="mint"
+    x="305"
+    y="110"
+    width="290"
+    height="95"/>
 
-<!-- arrows -->
+  <text
+    x="450"
+    y="145"
+    text-anchor="middle"
+    class="label">
+    🪙 Mint Account
+  </text>
 
-<line class="arrow"
-x1="450"
-y1="200"
-x2="180"
-y2="275"/>
+  <text
+    x="450"
+    y="170"
+    text-anchor="middle"
+    class="text">
+    SPL Token (ANA)
+  </text>
 
-<line class="arrow"
-x1="450"
-y1="200"
-x2="450"
-y2="275"/>
+  <text
+    x="450"
+    y="190"
+    text-anchor="middle"
+    class="text">
+    Total supply • Decimals • Authorities
+  </text>
 
-<line class="arrow"
-x1="450"
-y1="200"
-x2="720"
-y2="275"/>
+  <!-- Arrows -->
 
-<!-- Alice -->
+  <line class="arrow" x1="450" y1="205" x2="180" y2="285"/>
+  <line class="arrow" x1="450" y1="205" x2="450" y2="285"/>
+  <line class="arrow" x1="450" y1="205" x2="720" y2="285"/>
 
-<rect
-class="box"
-x="70"
-y="290"
-width="220"
-height="150"/>
+  <!-- Wallet A -->
 
-<text
-class="label"
-x="180"
-y="325"
-text-anchor="middle">
-👛 Wallet A
-</text>
+  <rect
+    class="box"
+    x="60"
+    y="300"
+    width="240"
+    height="150"/>
 
-<text
-class="text"
-x="180"
-y="352"
-text-anchor="middle">
-Token Account
-</text>
+  <text
+    class="label"
+    x="180"
+    y="335"
+    text-anchor="middle">
+    👛 Wallet A
+  </text>
 
-<text
-class="small"
-x="180"
-y="392"
-text-anchor="middle">
-Balance
-</text>
+  <text
+    class="text"
+    x="180"
+    y="365"
+    text-anchor="middle">
+    Token Account
+  </text>
 
-<text
-class="label"
-x="180"
-y="418"
-text-anchor="middle">
-250 TOKEN
-</text>
+  <text
+    class="balance"
+    x="180"
+    y="410"
+    text-anchor="middle">
+    250 ANA
+  </text>
 
-<!-- Bob -->
+  <!-- Wallet B -->
 
-<rect
-class="box"
-x="340"
-y="290"
-width="220"
-height="150"/>
+  <rect
+    class="box"
+    x="330"
+    y="300"
+    width="240"
+    height="150"/>
 
-<text
-class="label"
-x="450"
-y="325"
-text-anchor="middle">
-👛 Wallet B
-</text>
+  <text
+    class="label"
+    x="450"
+    y="335"
+    text-anchor="middle">
+    👛 Wallet B
+  </text>
 
-<text
-class="text"
-x="450"
-y="352"
-text-anchor="middle">
-Token Account
-</text>
+  <text
+    class="text"
+    x="450"
+    y="365"
+    text-anchor="middle">
+    Token Account
+  </text>
 
-<text
-class="small"
-x="450"
-y="392"
-text-anchor="middle">
-Balance
-</text>
+  <text
+    class="balance"
+    x="450"
+    y="410"
+    text-anchor="middle">
+    40 ANA
+  </text>
 
-<text
-class="label"
-x="450"
-y="418"
-text-anchor="middle">
-40 TOKEN
-</text>
+  <!-- Wallet C -->
 
-<!-- Charlie -->
+  <rect
+    class="box"
+    x="600"
+    y="300"
+    width="240"
+    height="150"/>
 
-<rect
-class="box"
-x="610"
-y="290"
-width="220"
-height="150"/>
+  <text
+    class="label"
+    x="720"
+    y="335"
+    text-anchor="middle">
+    👛 Wallet C
+  </text>
 
-<text
-class="label"
-x="720"
-y="325"
-text-anchor="middle">
-👛 Wallet C
-</text>
+  <text
+    class="text"
+    x="720"
+    y="365"
+    text-anchor="middle">
+    Token Account
+  </text>
 
-<text
-class="text"
-x="720"
-y="352"
-text-anchor="middle">
-Token Account
-</text>
+  <text
+    class="balance"
+    x="720"
+    y="410"
+    text-anchor="middle">
+    900 ANA
+  </text>
 
-<text
-class="small"
-x="720"
-y="392"
-text-anchor="middle">
-Balance
-</text>
+  <!-- Footer -->
 
-<text
-class="label"
-x="720"
-y="418"
-text-anchor="middle">
-900 TOKEN
-</text>
-
-<text
-x="450"
-y="510"
-text-anchor="middle"
-class="subtitle">
-The Mint Account defines the token. Token Accounts store balances for each wallet.
-</text>
+  <text
+    x="450"
+    y="515"
+    text-anchor="middle"
+    class="subtitle">
+    Every wallet has its own Token Account, but they all reference the same Mint Account.
+  </text>
 
 </svg>
