@@ -26,10 +26,28 @@ const article = {
   sections: [
     {
       id: "what-is",
+    
       title: "What is Mint Authority?",
-      paragraphs: [
-        "Mint authority is the permission that allows a wallet to create new tokens for an SPL token mint. Whoever controls the mint authority can increase the token supply at any time.",
-        "When you create a token on Solana, your wallet is usually assigned as the initial mint authority. This gives you complete control over the supply until you decide to revoke that permission."
+    
+      blocks: [
+    
+        {
+          type: "definition",
+          term: "Mint Authority",
+          definition:
+            "The permission that allows a wallet to mint additional tokens for an SPL Token."
+        },
+    
+        {
+          type: "paragraph",
+          text: "Mint authority is the permission that allows a wallet to create new tokens for an SPL token mint. Whoever controls the mint authority can increase the token supply at any time."
+        },
+    
+        {
+          type: "paragraph",
+          text: "When you create a token on Solana, your wallet is usually assigned as the initial mint authority. This gives you complete control over the supply until you decide to revoke that permission."
+        }
+    
       ]
     },
 
@@ -37,21 +55,45 @@ const article = {
       id: "why-important",
       title: "Why Mint Authority matters",
       paragraphs: [
-        "Mint authority is one of the first things experienced crypto users check before buying a token.",
-        "If the mint authority is still active, the creator can mint additional tokens in the future. Increasing the supply may dilute existing holders and can negatively affect the token price.",
-        "For this reason, many projects revoke their mint authority after the initial supply has been minted."
+        "Mint Authority is one of the first things experienced crypto investors check before buying a token.",
+      
+        "Imagine a token with a supply of 1,000,000 tokens. If the creator still controls the Mint Authority, they could mint another 10,000,000 tokens at any time. Existing holders would immediately own a much smaller percentage of the total supply.",
+      
+        "For this reason, many legitimate projects revoke their Mint Authority after minting the initial supply. A fixed supply provides stronger guarantees and improves transparency."
       ]
     },
 
     {
       id: "revoke",
+    
       title: "What happens when you revoke Mint Authority?",
-      paragraphs: [
-        "Revoking the mint authority permanently removes the ability to mint new tokens.",
-        "Once revoked, the total supply becomes fixed forever. No wallet, including the creator, can create additional tokens.",
-        "This provides stronger guarantees to investors because the supply cannot be inflated later."
+    
+      blocks: [
+    
+        {
+          type: "paragraph",
+          text: "Revoking the mint authority permanently removes the ability to mint new tokens."
+        },
+    
+        {
+          type: "image",
+          src: "/docs/mint-authority-diagram.svg",
+          alt: "Comparison between an active and revoked Mint Authority",
+          caption: "With an active Mint Authority, new tokens can be created. Once revoked, the supply becomes permanently fixed."
+        },
+    
+        {
+          type: "paragraph",
+          text: "Once revoked, the total supply becomes fixed forever. No wallet, including the creator, can create additional tokens."
+        },
+    
+        {
+          type: "paragraph",
+          text: "With Token Creator, you can revoke Mint Authority immediately after minting your initial supply, directly from your wallet."
+        }
+    
       ]
-    },
+    }
 
     {
       id: "should-you",
@@ -158,8 +200,8 @@ const article = {
         
           links: [
             {
-              label: "What is Mint Authority?",
-              href: "/docs/what-is-mint-authority"
+              label: "What is SPL token?",
+              href: "/docs/what-is-spl-token"
             },
             {
               label: "What is Freeze Authority?",

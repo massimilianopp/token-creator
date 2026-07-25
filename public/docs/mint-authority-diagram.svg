@@ -1,0 +1,127 @@
+<svg width="900" height="520" viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+<style>
+.title{
+font:700 30px Arial,sans-serif;
+fill:#ffffff;
+}
+
+.subtitle{
+font:15px Arial,sans-serif;
+fill:#A1A1AA;
+}
+
+.label{
+font:700 18px Arial,sans-serif;
+fill:#111827;
+}
+
+.text{
+font:14px Arial,sans-serif;
+fill:#6B7280;
+}
+
+.box{
+fill:white;
+stroke:#E5E7EB;
+stroke-width:2;
+rx:14;
+}
+
+.good{
+fill:#16A34A;
+font:700 16px Arial,sans-serif;
+}
+
+.bad{
+fill:#DC2626;
+font:700 16px Arial,sans-serif;
+}
+
+.arrow{
+stroke:#7C3AED;
+stroke-width:4;
+fill:none;
+marker-end:url(#arrow);
+}
+</style>
+
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+<polygon points="0,0 10,5 0,10" fill="#7C3AED"/>
+</marker>
+
+</defs>
+
+<rect width="900" height="520" fill="#0B0B0F"/>
+
+<text x="450" y="48" text-anchor="middle" class="title">
+Mint Authority controls token creation
+</text>
+
+<text x="450" y="76" text-anchor="middle" class="subtitle">
+Revoking Mint Authority permanently fixes the token supply.
+</text>
+
+<!-- LEFT -->
+
+<rect x="70" y="130" width="330" height="300" rx="16" fill="#14141A"/>
+
+<text x="235" y="170" text-anchor="middle" class="good">
+Active Mint Authority
+</text>
+
+<rect class="box" x="120" y="205" width="230" height="70"/>
+
+<text class="label" x="235" y="235" text-anchor="middle">
+Wallet
+</text>
+
+<text class="text" x="235" y="257" text-anchor="middle">
+Owns Mint Authority
+</text>
+
+<line class="arrow" x1="235" y1="276" x2="235" y2="335"/>
+
+<rect class="box" x="120" y="340" width="230" height="70"/>
+
+<text class="label" x="235" y="370" text-anchor="middle">
+Mint new tokens
+</text>
+
+<text class="text" x="235" y="392" text-anchor="middle">
+Supply can increase
+</text>
+
+<!-- RIGHT -->
+
+<rect x="500" y="130" width="330" height="300" rx="16" fill="#14141A"/>
+
+<text x="665" y="170" text-anchor="middle" class="bad">
+Mint Authority Revoked
+</text>
+
+<rect class="box" x="550" y="205" width="230" height="70"/>
+
+<text class="label" x="665" y="235" text-anchor="middle">
+No authority
+</text>
+
+<text class="text" x="665" y="257" text-anchor="middle">
+Authority = null
+</text>
+
+<line class="arrow" x1="665" y1="276" x2="665" y2="335"/>
+
+<rect class="box" x="550" y="340" width="230" height="70"/>
+
+<text class="label" x="665" y="370" text-anchor="middle">
+Fixed Supply
+</text>
+
+<text class="text" x="665" y="392" text-anchor="middle">
+No new tokens can ever exist
+</text>
+
+</svg>
