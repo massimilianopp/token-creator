@@ -24,7 +24,8 @@ export default function LearningPath() {
     },
     {
       title: "What is Metadata?",
-      status: "coming",
+      href: "/docs/what-is-token-metadata",
+      status: "available",
     },
     {
       title: "Create your first token",
