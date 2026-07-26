@@ -129,6 +129,30 @@ const article = {
         ]
   
       },
+
+      {
+        id: "how-it-works",
+      
+        title: "How an ATA works",
+      
+        blocks: [
+      
+          {
+            type: "paragraph",
+            text:
+              "A wallet owns one Associated Token Account for every SPL Token it holds. Each ATA stores the balance of a single token."
+          },
+      
+          {
+            type: "diagram",
+            src: "/docs/associated-token-account-diagram.svg",
+            alt: "Associated Token Account diagram",
+            caption:
+              "Each wallet automatically derives one ATA for every SPL Token."
+          }
+      
+        ]
+      },
   
       {
         id: "solscan",

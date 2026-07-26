@@ -5,6 +5,7 @@ import Steps from "./blocks/Steps";
 import ComparisonTable from "./blocks/ComparisonTable";
 import Definition from "./Definition";
 import SeeAlso from "./SeeAlso";
+import Diagram from "./blocks/Diagram";
 
 export default function BlockRenderer({ block }) {
 
@@ -63,6 +64,16 @@ export default function BlockRenderer({ block }) {
       <SeeAlso
         title={block.title}
         links={block.links}
+      />
+    );
+  }
+
+  if (block.type === "diagram") {
+    return (
+      <Diagram
+        src={block.src}
+        alt={block.alt}
+        caption={block.caption}
       />
     );
   }

@@ -1,0 +1,225 @@
+<svg width="900" height="600" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+
+    <style>
+
+      .title{
+        font:700 30px Arial,sans-serif;
+        fill:#ffffff;
+      }
+
+      .subtitle{
+        font:15px Arial,sans-serif;
+        fill:#A1A1AA;
+      }
+
+      .wallet{
+        font:700 22px Arial,sans-serif;
+        fill:#111827;
+      }
+
+      .label{
+        font:700 17px Arial,sans-serif;
+        fill:#111827;
+      }
+
+      .small{
+        font:14px Arial,sans-serif;
+        fill:#6B7280;
+      }
+
+      .balance{
+        font:700 18px Arial,sans-serif;
+        fill:#7C3AED;
+      }
+
+      .walletBox{
+        fill:#F5F3FF;
+        stroke:#7C3AED;
+        stroke-width:2.5;
+        rx:14;
+      }
+
+      .box{
+        fill:white;
+        stroke:#E5E7EB;
+        stroke-width:2;
+        rx:14;
+      }
+
+      .arrow{
+        stroke:#7C3AED;
+        stroke-width:4;
+        fill:none;
+        marker-end:url(#arrow);
+      }
+
+    </style>
+
+    <marker id="arrow"
+      markerWidth="12"
+      markerHeight="12"
+      refX="10"
+      refY="6"
+      orient="auto">
+
+      <polygon
+        points="0,0 12,6 0,12"
+        fill="#7C3AED"/>
+
+    </marker>
+
+  </defs>
+
+  <rect width="900" height="600" fill="#0B0B0F"/>
+
+  <text
+    x="450"
+    y="48"
+    text-anchor="middle"
+    class="title">
+    One Wallet, One ATA per Token
+  </text>
+
+  <text
+    x="450"
+    y="78"
+    text-anchor="middle"
+    class="subtitle">
+    Every SPL Token has its own Associated Token Account inside your wallet.
+  </text>
+
+  <!-- Wallet -->
+
+  <rect
+    class="walletBox"
+    x="315"
+    y="110"
+    width="270"
+    height="80"/>
+
+  <text
+    x="450"
+    y="158"
+    text-anchor="middle"
+    class="wallet">
+    👛 Wallet
+  </text>
+
+  <!-- arrows -->
+
+  <line class="arrow" x1="450" y1="190" x2="180" y2="285"/>
+
+  <line class="arrow" x1="450" y1="190" x2="450" y2="285"/>
+
+  <line class="arrow" x1="450" y1="190" x2="720" y2="285"/>
+
+  <!-- ANA -->
+
+  <rect
+    class="box"
+    x="60"
+    y="300"
+    width="240"
+    height="180"/>
+
+  <text
+    class="label"
+    x="180"
+    y="332"
+    text-anchor="middle">
+    🪙 ANA
+  </text>
+
+  <text
+    class="small"
+    x="180"
+    y="360"
+    text-anchor="middle">
+    Associated Token Account
+  </text>
+
+  <text
+    class="balance"
+    x="180"
+    y="430"
+    text-anchor="middle">
+    Balance: 250 ANA
+  </text>
+
+  <!-- USDC -->
+
+  <rect
+    class="box"
+    x="330"
+    y="300"
+    width="240"
+    height="180"/>
+
+  <text
+    class="label"
+    x="450"
+    y="332"
+    text-anchor="middle">
+    💵 USDC
+  </text>
+
+  <text
+    class="small"
+    x="450"
+    y="360"
+    text-anchor="middle">
+    Associated Token Account
+  </text>
+
+  <text
+    class="balance"
+    x="450"
+    y="430"
+    text-anchor="middle">
+    Balance: 35 USDC
+  </text>
+
+  <!-- BONK -->
+
+  <rect
+    class="box"
+    x="600"
+    y="300"
+    width="240"
+    height="180"/>
+
+  <text
+    class="label"
+    x="720"
+    y="332"
+    text-anchor="middle">
+    🐶 BONK
+  </text>
+
+  <text
+    class="small"
+    x="720"
+    y="360"
+    text-anchor="middle">
+    Associated Token Account
+  </text>
+
+  <text
+    class="balance"
+    x="720"
+    y="430"
+    text-anchor="middle">
+    Balance: 900 BONK
+  </text>
+
+  <text
+    x="450"
+    y="545"
+    text-anchor="middle"
+    class="subtitle">
+    Wallets automatically use the Associated Token Account when sending or receiving SPL Tokens.
+  </text>
+
+</svg>
