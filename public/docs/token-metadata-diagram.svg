@@ -1,0 +1,225 @@
+<svg width="960" height="700" viewBox="0 0 960 700" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+<style>
+
+.title{
+font:700 30px Arial,sans-serif;
+fill:white;
+}
+
+.subtitle{
+font:15px Arial,sans-serif;
+fill:#A1A1AA;
+}
+
+.boxTitle{
+font:700 20px Arial,sans-serif;
+fill:#111827;
+}
+
+.text{
+font:15px Arial,sans-serif;
+fill:#374151;
+}
+
+.caption{
+font:14px Arial,sans-serif;
+fill:#A1A1AA;
+}
+
+.box{
+fill:white;
+stroke:#E5E7EB;
+stroke-width:2;
+rx:16;
+}
+
+.arrow{
+stroke:#7C3AED;
+stroke-width:4;
+fill:none;
+marker-end:url(#arrowhead);
+}
+
+.badge{
+fill:#F5F3FF;
+stroke:#DDD6FE;
+rx:8;
+}
+
+.badgeText{
+font:13px Arial,sans-serif;
+fill:#6D28D9;
+font-weight:bold;
+}
+
+</style>
+
+<marker
+id="arrowhead"
+markerWidth="12"
+markerHeight="12"
+refX="10"
+refY="6"
+orient="auto">
+
+<polygon
+points="0 0 12 6 0 12"
+fill="#7C3AED"/>
+
+</marker>
+
+</defs>
+
+<rect
+width="960"
+height="700"
+fill="#0B0B0F"/>
+
+<!-- Title -->
+
+<text
+x="480"
+y="48"
+text-anchor="middle"
+class="title">
+How Token Metadata Works
+</text>
+
+<text
+x="480"
+y="76"
+text-anchor="middle"
+class="subtitle">
+The Mint Account stores technical data. The Metadata Account stores information shown to users.
+</text>
+
+<!-- Mint -->
+
+<rect
+class="box"
+x="90"
+y="140"
+width="300"
+height="290"/>
+
+<text
+x="240"
+y="180"
+text-anchor="middle"
+class="boxTitle">
+🪙 Mint Account
+</text>
+
+<rect class="badge" x="150" y="198" width="180" height="26"/>
+<text x="240" y="216" text-anchor="middle" class="badgeText">
+Technical data
+</text>
+
+<text x="120" y="255" class="text">✓ Total Supply</text>
+<text x="120" y="290" class="text">✓ Decimals</text>
+<text x="120" y="325" class="text">✓ Mint Authority</text>
+<text x="120" y="360" class="text">✓ Freeze Authority</text>
+
+<text x="120" y="405" class="text">✗ Logo</text>
+
+<!-- Metadata -->
+
+<rect
+class="box"
+x="570"
+y="140"
+width="300"
+height="290"/>
+
+<text
+x="720"
+y="180"
+text-anchor="middle"
+class="boxTitle">
+📝 Metadata Account
+</text>
+
+<rect class="badge" x="630" y="198" width="180" height="26"/>
+<text x="720" y="216" text-anchor="middle" class="badgeText">
+Visual data
+</text>
+
+<text x="600" y="255" class="text">✓ Name</text>
+<text x="600" y="290" class="text">✓ Symbol</text>
+<text x="600" y="325" class="text">✓ Logo</text>
+<text x="600" y="360" class="text">✓ Description</text>
+<text x="600" y="395" class="text">✓ Website</text>
+
+<!-- Relation -->
+
+<line
+class="arrow"
+x1="390"
+y1="285"
+x2="570"
+y2="285"/>
+
+<text
+x="480"
+y="265"
+text-anchor="middle"
+class="subtitle">
+references
+</text>
+
+<!-- Arrow Down -->
+
+<line
+class="arrow"
+x1="720"
+y1="430"
+x2="720"
+y2="500"/>
+
+<!-- Applications -->
+
+<rect
+class="box"
+x="220"
+y="520"
+width="520"
+height="110"/>
+
+<text
+x="480"
+y="555"
+text-anchor="middle"
+class="boxTitle">
+👛 Wallets & Explorers
+</text>
+
+<text
+x="480"
+y="590"
+text-anchor="middle"
+class="text">
+Phantom • Solflare • Backpack • Solscan • Jupiter
+</text>
+
+<text
+x="480"
+y="615"
+text-anchor="middle"
+class="caption">
+These applications read the Metadata Account to display your token name, symbol and logo.
+</text>
+
+<!-- Footer -->
+
+<text
+x="480"
+y="675"
+text-anchor="middle"
+class="caption">
+Without a Metadata Account, most wallets can only display the token address.
+</text>
+
+</svg>
