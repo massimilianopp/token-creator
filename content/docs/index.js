@@ -4,6 +4,7 @@ import freezeAuthority from "./what-is-freeze-authority";
 import tokenAccount from "./what-is-token-account";
 import associatedTokenAccount from "./what-is-associated-token-account";
 import tokenMetadata from "./what-is-token-metadata";
+import solanaToken from "./how-to-create-a-solana-token";
 
 export const articles = [
   splToken,
@@ -12,6 +13,7 @@ export const articles = [
   tokenAccount,
   associatedTokenAccount,
   tokenMetadata,
+  solanaToken,
 ];
 
 const docs = Object.fromEntries(
