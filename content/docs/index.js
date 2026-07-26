@@ -3,6 +3,7 @@ import mintAuthority from "./what-is-mint-authority";
 import freezeAuthority from "./what-is-freeze-authority";
 import tokenAccount from "./what-is-token-account";
 import associatedTokenAccount from "./what-is-associated-token-account";
+import associatedTokenAccount from "./what-is-token-metadata";
 
 export const articles = [
   splToken,
@@ -10,6 +11,7 @@ export const articles = [
   freezeAuthority,
   tokenAccount,
   associatedTokenAccount,
+  tokenMetadata,
 ];
 
 const docs = Object.fromEntries(
