@@ -145,7 +145,7 @@ const article = {
   
           {
             type: "image",
-            src: "/docs/associated-token-account-diagram.svg",
+            src: "/docs/ata.png",
             alt: "Associated Token Account diagram",
             caption:
               "Each wallet owns one Associated Token Account for each SPL Token."
