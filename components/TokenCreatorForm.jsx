@@ -34,7 +34,6 @@ export default function TokenCreatorForm() {
   const [form, setForm] = useState({
     name: "", symbol: "", description: "", imageFile: null,
     totalSupply: 1_000_000_000, decimals: 6,
-    revokeMint: false, revokeFreeze: false,
   });
   const [preview, setPreview] = useState(null);
   const [error, setError] = useState(null);
@@ -177,7 +176,7 @@ export default function TokenCreatorForm() {
   const handleRevoke = async () => {
     setRevoking(true);
     try {
-      await revokeAuthorities({ mintAddress, revokeMint: form.revokeMint, revokeFreeze: form.revokeFreeze });
+      await revokeAuthorities({ mintAddress, revokeMint: true, revokeFreeze: true });
       setRevoked(true);
     } catch (e) { setError(e.message); }
     setRevoking(false);
@@ -185,7 +184,7 @@ export default function TokenCreatorForm() {
 
   const handleReset = () => {
     reset(); setError(null); setPreview(null); setRevoked(false); setShowAdvanced(false); setCopyFeedback(false);
-    setForm({ name: "", symbol: "", description: "", imageFile: null, totalSupply: 1_000_000_000, decimals: 6, revokeMint: false, revokeFreeze: false });
+    setForm({ name: "", symbol: "", description: "", imageFile: null, totalSupply: 1_000_000_000, decimals: 6});
   };
 
   const handleCopyLink = async (url) => {
@@ -317,7 +316,7 @@ export default function TokenCreatorForm() {
           </div>
 
           {/* Revoke */}
-          {!revoked && (form.revokeMint || form.revokeFreeze) && (
+          {!revoked && (
             <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
               <p style={{ fontSize: 12, color: "var(--muted)", padding: "10px 12px", borderRadius: 8, background: "var(--surface)", border: "1px solid var(--border)" }}>
                 Complete vesting setup before revoking authorities.
@@ -723,27 +722,7 @@ export default function TokenCreatorForm() {
             </div>
 
 
-            {/* Anti-rug */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <span style={{ fontSize: 11, fontWeight: 500, color: "var(--muted)", letterSpacing: "0.06em", textTransform: "uppercase" }}>Anti-rug</span>
-              {[
-                { key: "revokeMint", label: "Revoke Mint Authority", sub: "Fixed supply forever" },
-                { key: "revokeFreeze", label: "Revoke Freeze Authority", sub: "Wallets cannot be frozen" },
-              ].map(opt => (
-                <label key={opt.key} style={{
-                  display: "flex", alignItems: "center", gap: 12, cursor: "pointer",
-                  padding: "12px 14px", borderRadius: 8,
-                  background: form[opt.key] ? "var(--green-dim)" : "var(--surface)",
-                  border: form[opt.key] ? "1px solid var(--green-border)" : "1px solid var(--border)",
-                }}>
-                  <input type="checkbox" checked={form[opt.key]} style={{ width: 15, height: 15, accentColor: "var(--green)", cursor: "pointer" }} onChange={e => setForm(f => ({ ...f, [opt.key]: e.target.checked }))} />
-                  <div>
-                    <div style={{ fontSize: 13, fontWeight: 500 }}>{opt.label}</div>
-                    <div style={{ fontSize: 11, color: "var(--green)", marginTop: 2 }}>{opt.sub}</div>
-                  </div>
-                </label>
-              ))}
-            </div>
+
 
           </div>
         )}
