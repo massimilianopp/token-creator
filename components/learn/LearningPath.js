@@ -30,7 +30,7 @@ export default function LearningPath() {
     {
       title: "Create your first token",
       href: "/docs/how-to-create-a-solana-token",
-      status: "avaialble",
+      status: "available",
     },
   ];
 
