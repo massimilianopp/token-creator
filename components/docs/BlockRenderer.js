@@ -6,6 +6,7 @@ import ComparisonTable from "./blocks/ComparisonTable";
 import Definition from "./Definition";
 import SeeAlso from "./SeeAlso";
 import Diagram from "./blocks/Diagram";
+import TutorialInfo from "./blocks/TutorialInfo";
 
 export default function BlockRenderer({ block }) {
 
@@ -74,6 +75,17 @@ export default function BlockRenderer({ block }) {
         src={block.src}
         alt={block.alt}
         caption={block.caption}
+      />
+    );
+  }
+
+  if (block.type === "tutorial-info") {
+    return (
+      <TutorialInfo
+        time={block.time}
+        difficulty={block.difficulty}
+        cost={block.cost}
+        requirements={block.requirements}
       />
     );
   }

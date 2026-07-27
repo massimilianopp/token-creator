@@ -33,12 +33,21 @@ const article = {
         blocks: [
   
           {
-            type: "callout",
-            variant: "tip",
-            title: "You'll need",
-  
-            text:
-              "A Solana wallet (such as Phantom), a small amount of SOL to pay network fees, a token name, a symbol and optionally a logo."
+            type: "tutorial-info",
+          
+            time: "5 minutes",
+          
+            difficulty: "Beginner",
+          
+            cost: "~0.05 SOL + network fees",
+          
+            requirements: [
+              "Phantom wallet",
+              "Some SOL",
+              "Token name",
+              "Token symbol",
+              "Logo (optional)"
+            ]
           }
   
         ]
