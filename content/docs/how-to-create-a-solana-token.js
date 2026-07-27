@@ -27,60 +27,115 @@ const article = {
   
       {
         id: "before",
-  
+      
         title: "Before you start",
-  
+      
         blocks: [
-  
+      
           {
             type: "tutorial-info",
-          
+      
             time: "5 minutes",
-          
+      
             difficulty: "Beginner",
-          
-            cost: "~0.05 SOL + network fees",
-          
+      
+            cost: "0.05 SOL + network fees",
+      
             requirements: [
               "Phantom wallet",
               "Some SOL",
               "Token name",
               "Token symbol",
-              "Logo (optional)"
+              "Logo"
             ]
           }
-  
+      
         ]
       },
   
       {
         id: "step1",
-  
-        title: "1. Choose a name and symbol",
-  
-        paragraphs: [
-  
-          "Every token has a name and a ticker symbol.",
-  
-          "Choose something unique and easy to recognize."
-  
+      
+        title: "1. Configure your token",
+      
+        blocks: [
+      
+          {
+            type: "paragraph",
+            text:
+              "Start by choosing how your token will appear across the Solana ecosystem. Enter a name, choose a symbol, write a short description and optionally upload a logo."
+          },
+      
+          {
+            type: "image",
+            src: "/docs/create-token-identity.png",
+            alt: "Configure token identity in Token Creator",
+            caption:
+              "Enter the token name, symbol, description and upload a logo before creating your token."
+          },
+      
+          {
+            type: "callout",
+            variant: "tip",
+            title: "Best practice",
+            text:
+              "Use a square logo (512×512 pixels or larger) and a short symbol so your token displays correctly across wallets and explorers."
+          }
+      
         ]
-  
       },
   
       {
         id: "step2",
-  
-        title: "2. Upload your logo",
-  
-        paragraphs: [
-  
-          "A logo helps wallets and explorers identify your token.",
-  
-          "Token Creator uploads the logo to IPFS and automatically links it to the Metadata Account."
-  
+      
+        title: "2. Review supply and fees",
+      
+        blocks: [
+      
+          {
+            type: "paragraph",
+            text:
+              "Choose the initial token supply and the number of decimals. Before signing the transaction, Token Creator displays a complete breakdown of the transaction costs."
+          },
+      
+          {
+            type: "image",
+            src: "/docs/create-token-supply-fees.png",
+            alt: "Supply and fee breakdown",
+            caption:
+              "Review the supply, decimals and transaction costs before creating your token."
+          },
+      
+          {
+            type: "comparison",
+      
+            headers: [
+              "Fee",
+              "Purpose"
+            ],
+      
+            rows: [
+      
+              [
+                "Token Creator fee",
+                "Covers the token creation service."
+              ],
+      
+              [
+                "Account creation",
+                "Creates the required on-chain accounts."
+              ],
+      
+              [
+                "Network fee",
+                "Paid to the Solana blockchain."
+              ]
+      
+            ]
+      
+          }
+      
         ]
-  
       },
   
       {
