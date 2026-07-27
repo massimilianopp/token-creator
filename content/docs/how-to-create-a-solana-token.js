@@ -2,7 +2,7 @@ const article = {
 
     slug: "how-to-create-a-solana-token",
   
-    category: "Tutorial",
+    category: "Tutorials",
   
     title: "How to Create a Solana Token",
   
