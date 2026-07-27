@@ -63,7 +63,7 @@ const article = {
           {
             type: "paragraph",
             text:
-              "Start by choosing how your token will appear across the Solana ecosystem. Enter a name, choose a symbol, write a short description and optionally upload a logo."
+              "Start by choosing how your token will appear across the Solana ecosystem. Enter a name, choose a symbol, write a short description and upload a logo."
           },
       
           {
@@ -140,77 +140,47 @@ const article = {
   
       {
         id: "step3",
-  
-        title: "3. Set the token supply",
-  
+      
+        title: "3. Create your token",
+      
         paragraphs: [
-  
-          "Choose how many tokens will exist initially.",
-  
-          "If you revoke the Mint Authority later, this initial supply becomes permanent."
-  
+      
+          "Review the information carefully before approving the transaction in your wallet.",
+      
+          "Once confirmed, your SPL Token is immediately created on-chain."
+      
         ]
-  
       },
   
       {
         id: "step4",
-  
-        title: "4. Configure Mint Authority",
-  
+      
+        title: "4. Secure your token",
+      
         blocks: [
-  
+      
           {
-            type:"callout",
-  
-            variant:"info",
-  
-            title:"Important",
-  
-            text:"Keeping Mint Authority allows future token minting. Revoking it creates a fixed supply."
-  
+            type: "paragraph",
+            text:
+              "After creating your token, you can revoke the Mint Authority and Freeze Authority. This is optional but recommended for most fixed-supply community tokens."
+          },
+      
+          {
+            type: "callout",
+            variant: "tip",
+            title: "Best practice",
+            text:
+              "Revoking both authorities increases transparency because no wallet can mint additional tokens or freeze token accounts."
           }
-  
+      
         ]
-  
       },
   
-      {
-        id: "step5",
-  
-        title: "5. Configure Freeze Authority",
-  
-        paragraphs:[
-  
-          "Freeze Authority allows token accounts to be frozen.",
-  
-          "Many community tokens revoke it to increase decentralization."
-  
-        ]
-  
-      },
   
       {
-        id:"step6",
+        id:"step5",
   
-        title:"6. Create your token",
-  
-        paragraphs:[
-  
-          "Review your settings carefully.",
-  
-          "Approve the transaction in your wallet.",
-  
-          "Your token will immediately exist on-chain."
-  
-        ]
-  
-      },
-  
-      {
-        id:"step7",
-  
-        title:"7. Verify your token",
+        title:"5. Verify your token",
   
         paragraphs:[
   
