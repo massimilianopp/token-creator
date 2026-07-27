@@ -137,7 +137,13 @@ const article = {
             text:
               "A token cannot be traded until liquidity is available. Deposit your token and SOL into a liquidity pool to establish the initial market price."
           },
-  
+          
+          {
+            type: "diagram",
+            src: "/docs/memecoin-launch-flow.svg",
+            caption: "From token creation to public trading."
+          },
+          
           {
             type: "image",
             src: "/docs/create-liquidity-pool.png",

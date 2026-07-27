@@ -1,0 +1,231 @@
+<svg width="960" height="760" viewBox="0 0 960 760" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+<style>
+
+.title{
+font:700 30px Arial,sans-serif;
+fill:white;
+}
+
+.subtitle{
+font:15px Arial,sans-serif;
+fill:#A1A1AA;
+}
+
+.boxTitle{
+font:700 20px Arial,sans-serif;
+fill:#111827;
+}
+
+.text{
+font:15px Arial,sans-serif;
+fill:#374151;
+}
+
+.caption{
+font:14px Arial,sans-serif;
+fill:#6B7280;
+}
+
+.box{
+fill:white;
+stroke:#E5E7EB;
+stroke-width:2;
+rx:16;
+}
+
+.arrow{
+stroke:#7C3AED;
+stroke-width:4;
+fill:none;
+marker-end:url(#arrowhead);
+}
+
+.badge{
+fill:#F5F3FF;
+stroke:#DDD6FE;
+rx:8;
+}
+
+.badgeText{
+font:13px Arial,sans-serif;
+fill:#6D28D9;
+font-weight:bold;
+}
+
+</style>
+
+<marker
+id="arrowhead"
+markerWidth="12"
+markerHeight="12"
+refX="10"
+refY="6"
+orient="auto">
+
+<polygon
+points="0 0 12 6 0 12"
+fill="#7C3AED"/>
+
+</marker>
+
+</defs>
+
+<rect
+width="960"
+height="760"
+fill="#0B0B0F"/>
+
+<!-- Title -->
+
+<text
+x="480"
+y="50"
+text-anchor="middle"
+class="title">
+How a Memecoin Launch Works
+</text>
+
+<text
+x="480"
+y="78"
+text-anchor="middle"
+class="subtitle">
+Creating a token is only the first step. Liquidity makes it tradable.
+</text>
+
+<!-- Step 1 -->
+
+<rect
+class="box"
+x="280"
+y="130"
+width="400"
+height="90"/>
+
+<text
+x="480"
+y="170"
+text-anchor="middle"
+class="boxTitle">
+Create your SPL Token
+</text>
+
+<text
+x="480"
+y="195"
+text-anchor="middle"
+class="text">
+Choose a name, symbol, logo and supply.
+</text>
+
+<!-- Arrow -->
+
+<line class="arrow" x1="480" y1="220" x2="480" y2="280"/>
+
+<!-- Step 2 -->
+
+<rect
+class="box"
+x="280"
+y="280"
+width="400"
+height="90"/>
+
+<text
+x="480"
+y="320"
+text-anchor="middle"
+class="boxTitle">
+Configure Authorities
+</text>
+
+<text
+x="480"
+y="345"
+text-anchor="middle"
+class="text">
+Optional: revoke Mint and Freeze Authority.
+</text>
+
+<!-- Arrow -->
+
+<line class="arrow" x1="480" y1="370" x2="480" y2="430"/>
+
+<!-- Step 3 -->
+
+<rect
+class="box"
+x="280"
+y="430"
+width="400"
+height="110"/>
+
+<text
+x="480"
+y="470"
+text-anchor="middle"
+class="boxTitle">
+Create a Liquidity Pool
+</text>
+
+<text
+x="480"
+y="495"
+text-anchor="middle"
+class="text">
+Deposit your token together with SOL.
+</text>
+
+<rect class="badge" x="405" y="510" width="150" height="26"/>
+
+<text
+x="480"
+y="528"
+text-anchor="middle"
+class="badgeText">
+Token + SOL
+</text>
+
+<!-- Arrow -->
+
+<line class="arrow" x1="480" y1="540" x2="480" y2="610"/>
+
+<!-- Step 4 -->
+
+<rect
+class="box"
+x="220"
+y="610"
+width="520"
+height="100"/>
+
+<text
+x="480"
+y="650"
+text-anchor="middle"
+class="boxTitle">
+Your Token Can Be Traded
+</text>
+
+<text
+x="480"
+y="675"
+text-anchor="middle"
+class="text">
+Wallets and decentralized exchanges can now buy and sell your token.
+</text>
+
+<!-- Footer -->
+
+<text
+x="480"
+y="742"
+text-anchor="middle"
+class="caption">
+Liquidity is what transforms a newly created token into a tradable asset.
+</text>
+
+</svg>
