@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useWallet, useConnection } from "@solana/wallet-adapter-react";
+import { useWallet} from "@solana/wallet-adapter-react";
 import { Metadata } from "@metaplex-foundation/mpl-token-metadata";
 import { PublicKey, Connection } from "@solana/web3.js";
 
@@ -37,9 +37,11 @@ async function fetchOffchainMeta(uri) {
   return null;
 }
 
+const PUBLIC_RPC = "https://api.mainnet-beta.solana.com";
+
 export function useDashboard() {
   const { publicKey } = useWallet();
-  const { connection } = useConnection();
+  const connection = new Connection(PUBLIC_RPC, "confirmed");
   const [loading, setLoading] = useState(true);
   const [tokenCreatorTokens, setTokenCreatorTokens] = useState([]);
   const [otherTokens, setOtherTokens] = useState([]);
