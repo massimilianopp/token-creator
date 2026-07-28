@@ -153,9 +153,19 @@ const article = {
           },
 
           {
+            type: "callout",
+          
+            variant: "info",
+          
+            title: "Want to understand these settings?",
+          
+            text:
+              "This guide focuses on launching a memecoin. If you want to learn how the Initial Price, Token Amount, SOL Amount and Orca Whirlpool settings work in detail, read our complete Liquidity Pool guide."
+          },
+          {
             type: "see-also",
           
-            title: "Need help choosing your pool settings?",
+            title: "Related guide",
           
             links: [
               {
