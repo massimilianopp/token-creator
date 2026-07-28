@@ -39,7 +39,7 @@ const article = {
   
             difficulty: "Intermediate",
   
-            cost: "0.1% + network fees",
+            cost: "~0.25 SOL + 0.1% service fee",
   
             requirements: [
               "A Solana token",
@@ -52,28 +52,34 @@ const article = {
       },
   
       {
-        id: "what",
-  
-        title: "What is a liquidity pool?",
-  
+        id: "understanding",
+      
+        title: "Understanding liquidity pools",
+      
         blocks: [
-  
+      
           {
             type: "paragraph",
             text:
-              "A liquidity pool contains two assets that traders can exchange without relying on a traditional order book. For most new Solana tokens, the pool consists of your token and SOL."
+              "A liquidity pool contains two assets that traders can exchange without relying on a traditional order book. For most new Solana tokens, this pair consists of your token and SOL."
           },
-  
+      
+          {
+            type: "paragraph",
+            text:
+              "Token Creator creates an Orca Whirlpool, one of the most widely used decentralized exchanges (DEXs) on Solana. Orca uses concentrated liquidity to make trading more capital efficient."
+          },
+      
           {
             type: "diagram",
             src: "/docs/liquidity-pool-diagram.svg",
             caption:
-              "A liquidity pool holds both your token and SOL."
+              "A liquidity pool contains both your token and SOL."
           }
-  
+      
         ]
       },
-  
+
       {
         id: "why",
   
@@ -93,71 +99,351 @@ const article = {
             title: "Important",
             text:
               "Without liquidity, your token exists on-chain but cannot be traded efficiently."
+          },
+
+          {
+            type:"paragraph",
+          
+            text:
+            "Without a liquidity pool, your token exists on-chain but most users cannot easily buy or sell it through wallets and decentralized exchanges."
           }
   
         ]
       },
-  
+
       {
-        id: "create",
-  
-        title: "Create your liquidity pool",
-  
-        blocks: [
-  
+        id:"initial-price",
+      
+        title:"Understanding the initial price",
+      
+        blocks:[
+      
           {
-            type: "paragraph",
+            type:"paragraph",
+      
             text:
-              "Choose the token, the amount of tokens to deposit and the amount of SOL you want to pair with it. Together, these deposits determine your token's initial market price."
+            "When launching a brand-new token, you are defining its first market price."
           },
-  
+      
           {
-            type: "image",
-            src: "/docs/create-liquidity-pool.png",
-            alt: "Create liquidity pool in Token Creator",
+            type:"paragraph",
+      
+            text:
+            "The Initial Price, Token Amount and SOL Amount all describe the same relationship. Changing one value automatically updates the others because they represent the ratio between the two assets deposited into the pool."
+          },
+      
+          {
+            type:"comparison",
+      
+            headers:[
+              "Tokens",
+              "SOL",
+              "Initial Price"
+            ],
+      
+            rows:[
+      
+              [
+                "1,000,000",
+                "10",
+                "0.00001 SOL"
+              ],
+      
+              [
+                "1,000,000",
+                "50",
+                "0.00005 SOL"
+              ],
+      
+              [
+                "10,000,000",
+                "50",
+                "0.000005 SOL"
+              ]
+      
+            ]
+          },
+      
+          {
+            type:"image",
+      
+            src:"/docs/create-liquidity-pool.png",
+      
+            alt:"Liquidity pool settings",
+      
             caption:
-              "Configure your initial liquidity directly from Token Creator."
+            "Choose the trading pair, initial price and liquidity directly from Token Creator."
+          },
+      
+          {
+            type:"callout",
+      
+            variant:"info",
+      
+            title:"How Token Creator works",
+      
+            text:
+            "You can edit the Initial Price, Token Amount or SOL Amount. These values stay synchronized because they all represent the same price ratio."
           }
-  
+      
         ]
       },
+
+      {
+        id:"liquidity-size",
+      
+        title:"How much liquidity should you add?",
+      
+        blocks:[
+      
+          {
+            type:"paragraph",
+      
+            text:
+            "There is no universal amount of liquidity. The right choice depends on your project, budget and launch strategy."
+          },
+      
+          {
+            type:"comparison",
+      
+            headers:[
+              "Liquidity",
+              "Advantages",
+              "Trade-offs"
+            ],
+      
+            rows:[
+      
+              [
+                "Small",
+                "Lower capital required",
+                "Higher price volatility"
+              ],
+      
+              [
+                "Medium",
+                "Balanced launch",
+                "Requires more capital"
+              ],
+      
+              [
+                "Large",
+                "Lower slippage",
+                "Higher initial investment"
+              ]
+      
+            ]
+      
+          },
+
+          {
+            type:"paragraph",
+          
+            text:
+            "Adding too little liquidity increases slippage, meaning even small trades can move the market price significantly."
+          },
+      
+          {
+            type:"callout",
+      
+            variant:"tip",
+      
+            title:"Remember",
+      
+            text:
+            "More liquidity generally creates a better trading experience because large trades have less impact on the market price."
+      
+          }
+
+          
+      
+        ]
+      },
+
+      {
+        id:"pricing",
+      
+        title:"Avoid pricing mistakes",
+      
+        blocks:[
+      
+            {
+                type:"paragraph",
+              
+                text:
+                "If this is the first liquidity pool for your token, you are free to choose its starting price."
+              },
+      
+              {
+                type:"paragraph",
+              
+                text:
+                "If your token is already trading elsewhere, try to use a similar starting price. Otherwise arbitrage traders may quickly buy or sell against your pool until prices converge."
+              },
+      
+          {
+            type:"callout",
+      
+            variant:"warning",
+      
+            title:"Important",
+      
+            text:
+            "Large price differences between liquidity pools are usually corrected very quickly by arbitrage trading."
+      
+          }
+      
+        ]
+      },
+  
+      
   
       {
-        id: "price",
-  
-        title: "How is the initial price determined?",
-  
-        blocks: [
-  
+        id:"create",
+      
+        title:"Create your liquidity pool",
+      
+        blocks:[
+      
           {
-            type: "paragraph",
+            type:"paragraph",
+      
             text:
-              "The initial price depends on the ratio between the amount of tokens and the amount of SOL deposited into the pool. Adding more SOL relative to your token increases the starting price."
+            "Token Creator guides you through the entire process. Select the trading pair, choose the initial price and specify how many tokens and how much SOL you want to deposit."
           },
-  
+      
           {
-            type: "callout",
-            variant: "tip",
-            title: "Remember",
-            text:
-              "The market price will change immediately once people start trading."
+            type:"steps",
+      
+            title:"Configuration",
+      
+            items:[
+      
+              {
+                emoji:"💱",
+      
+                title:"Choose the trading pair",
+      
+                description:"Currently SOL is supported."
+              },
+      
+              {
+                emoji:"🏷️",
+      
+                title:"Set the initial price",
+      
+                description:"Define the first market price of your token."
+              },
+      
+              {
+                emoji:"🪙",
+      
+                title:"Choose your liquidity",
+      
+                description:"Enter the amount of tokens and SOL to deposit."
+              },
+      
+              {
+                emoji:"✅",
+      
+                title:"Confirm",
+      
+                description:"Approve the transaction to create the Orca Whirlpool."
+              }
+      
+            ]
+      
+          },
+      
+          {
+            type:"image",
+      
+            src:"/docs/create-liquidity-pool.png",
+      
+            alt:"Create liquidity pool",
+      
+            caption:
+            "Review every parameter before signing the transaction."
           }
-  
+      
         ]
       },
+
+      {
+        id:"fees",
+      
+        title:"Understanding pool creation fees",
+      
+        blocks:[
+      
+          {
+            type:"paragraph",
+      
+            text:
+            "Creating a liquidity pool is more expensive than creating a token because several on-chain accounts must be initialized for the Orca Whirlpool."
+          },
+      
+          {
+            type:"paragraph",
+      
+            text:
+            "Before you sign the transaction, Token Creator displays an estimate of the Orca protocol costs together with the service fee."
+          },
+      
+          {
+            type:"comparison",
+      
+            headers:[
+              "Fee",
+              "Purpose"
+            ],
+      
+            rows:[
+      
+              [
+                "Orca protocol fees",
+      
+                "Create the Whirlpool and required on-chain accounts."
+              ],
+      
+              [
+                "0.1% service fee",
+      
+                "Token Creator service."
+              ]
+      
+            ]
+      
+          },
+      
+          {
+            type:"callout",
+      
+            variant:"info",
+      
+            title:"One-time cost",
+      
+            text:
+            "Pool creation fees are paid only when the liquidity pool is created. Normal trading afterwards does not require paying these setup costs again."
+          }
+      
+        ]
+      },
+  
+      
   
       {
         id: "verify",
   
         title: "Verify your liquidity",
   
-        paragraphs: [
-  
-          "After creating the pool, verify that your token is tradable on supported decentralized exchanges.",
-  
-          "You can also confirm that the liquidity pool was successfully created using Solscan."
-  
-        ]
+        paragraphs:[
+
+            "Once the transaction is confirmed, your token becomes tradable through the newly created Orca Whirlpool.",
+            
+            "You can verify the pool on Solscan or by opening your token inside supported wallets and decentralized exchanges."
+            
+            ]
       },
   
       {
@@ -175,10 +461,55 @@ const article = {
             title: "Avoid these mistakes",
   
             text:
-              "Double-check the amount of tokens and SOL before creating the pool. Your initial deposits determine the starting market price."
+"Double-check the initial price, deposited liquidity and trading pair before creating the pool. These choices determine how your token enters the market."
   
           }
   
+        ]
+      },
+      {
+        id:"next",
+      
+        title:"What's next?",
+      
+        blocks:[
+      
+          {
+            type:"paragraph",
+      
+            text:
+            "Your token is now tradable. You can continue by locking team allocations with a vesting contract or sharing your token page with your community."
+          },
+      
+          {
+            type:"see-also",
+      
+            title:"Continue learning",
+      
+            links:[
+      
+              {
+                label:"How to Create a Vesting Contract",
+      
+                href:"/docs/how-to-create-a-vesting-contract"
+              },
+      
+              {
+                label:"How to Launch a Memecoin",
+      
+                href:"/docs/how-to-launch-a-memecoin-on-solana"
+              },
+      
+              {
+                label:"How to Create a Solana Token",
+      
+                href:"/docs/how-to-create-a-solana-token"
+              }
+      
+            ]
+      
+          }
+      
         ]
       }
   
