@@ -6,6 +6,7 @@ import associatedTokenAccount from "./what-is-associated-token-account";
 import tokenMetadata from "./what-is-token-metadata";
 import solanaToken from "./how-to-create-a-solana-token";
 import memecoin from "./how-to-launch-a-memecoin-on-solana";
+import liquidityPool from "./how-to-create-a-liquidity-pool";
 
 export const articles = [
   splToken,
@@ -16,6 +17,7 @@ export const articles = [
   tokenMetadata,
   solanaToken,
   memecoin,
+  liquidityPool,
 ];
 
 const docs = Object.fromEntries(
