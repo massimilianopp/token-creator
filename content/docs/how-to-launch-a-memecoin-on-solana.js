@@ -150,6 +150,19 @@ const article = {
             alt: "Create liquidity pool",
             caption:
               "Create the initial liquidity pool directly from Token Creator."
+          },
+
+          {
+            type: "see-also",
+          
+            title: "Need help choosing your pool settings?",
+          
+            links: [
+              {
+                label: "How to Create a Liquidity Pool",
+                href: "/docs/how-to-create-a-liquidity-pool"
+              }
+            ]
           }
   
         ]
