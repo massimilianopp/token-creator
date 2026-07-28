@@ -164,16 +164,6 @@ const article = {
             ]
           },
       
-          {
-            type:"image",
-      
-            src:"/docs/create-liquidity-pool.png",
-      
-            alt:"Liquidity pool settings",
-      
-            caption:
-            "Choose the trading pair, initial price and liquidity directly from Token Creator."
-          },
       
           {
             type:"callout",
@@ -353,9 +343,18 @@ const article = {
       
             ]
       
-          }
+          },
       
-
+          {
+            type:"image",
+      
+            src:"/docs/create-liquidity-pool.png",
+      
+            alt:"Create liquidity pool",
+      
+            caption:
+            "Review every parameter before signing the transaction."
+          }
       
         ]
       },
