@@ -72,7 +72,7 @@ const article = {
       
           {
             type: "diagram",
-            src: "/docs/liquidity-pool-diagram.svg",
+            src: "/docs/initial-price-diagram.svg",
             caption:
               "A liquidity pool contains both your token and SOL."
           }
