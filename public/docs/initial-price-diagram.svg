@@ -1,0 +1,159 @@
+<svg width="960" height="620" viewBox="0 0 960 620" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+<style>
+.title{
+font:700 30px Arial,sans-serif;
+fill:white;
+}
+
+.subtitle{
+font:15px Arial,sans-serif;
+fill:#A1A1AA;
+}
+
+.boxTitle{
+font:700 19px Arial,sans-serif;
+fill:#111827;
+}
+
+.text{
+font:15px Arial,sans-serif;
+fill:#374151;
+}
+
+.small{
+font:13px Arial,sans-serif;
+fill:#6B7280;
+}
+
+.box{
+fill:white;
+stroke:#E5E7EB;
+stroke-width:2;
+}
+
+.arrow{
+stroke:#7C3AED;
+stroke-width:4;
+fill:none;
+marker-end:url(#arrow);
+}
+
+.centerTitle{
+font:700 22px Arial,sans-serif;
+fill:#6D28D9;
+}
+
+.centerText{
+font:15px Arial,sans-serif;
+fill:#4B5563;
+text-anchor:middle;
+}
+
+.caption{
+font:14px Arial,sans-serif;
+fill:#A1A1AA;
+}
+</style>
+
+<marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+<polygon points="0 0 12 6 0 12" fill="#7C3AED"/>
+</marker>
+
+</defs>
+
+<rect width="960" height="620" fill="#0B0B0F"/>
+
+<text x="480" y="48" text-anchor="middle" class="title">
+How the Initial Price is Calculated
+</text>
+
+<text x="480" y="76" text-anchor="middle" class="subtitle">
+Three values describe the same relationship inside your liquidity pool.
+</text>
+
+<!-- Token Amount -->
+
+<rect x="70" y="180" width="220" height="170" class="box"/>
+
+<text x="180" y="220" text-anchor="middle" class="boxTitle">
+🪙 Token Amount
+</text>
+
+<text x="180" y="260" text-anchor="middle" class="text">
+1,000,000 Tokens
+</text>
+
+<text x="180" y="300" text-anchor="middle" class="small">
+Amount deposited
+</text>
+
+<!-- Center -->
+
+<rect x="340" y="150" width="280" height="230" class="box"/>
+
+<text x="480" y="205" text-anchor="middle" class="centerTitle">
+Initial Price
+</text>
+
+<text x="480" y="245" class="centerText">
+0.00001 SOL
+</text>
+
+<text x="480" y="285" class="centerText">
+per token
+</text>
+
+<text x="480" y="330" class="centerText">
+Changing any value
+</text>
+
+<text x="480" y="355" class="centerText">
+updates the others
+</text>
+
+<!-- SOL -->
+
+<rect x="670" y="180" width="220" height="170" class="box"/>
+
+<text x="780" y="220" text-anchor="middle" class="boxTitle">
+◎ SOL Amount
+</text>
+
+<text x="780" y="260" text-anchor="middle" class="text">
+10 SOL
+</text>
+
+<text x="780" y="300" text-anchor="middle" class="small">
+Liquidity deposited
+</text>
+
+<!-- arrows -->
+
+<line x1="290" y1="265" x2="340" y2="265" class="arrow"/>
+
+<line x1="620" y1="265" x2="670" y2="265" class="arrow"/>
+
+<!-- Bottom -->
+
+<rect x="180" y="450" width="600" height="95" class="box"/>
+
+<text x="480" y="490" text-anchor="middle" class="boxTitle">
+Relationship
+</text>
+
+<text x="480" y="520" text-anchor="middle" class="text">
+More SOL with the same number of tokens → Higher initial price
+</text>
+
+<text x="480" y="545" text-anchor="middle" class="text">
+More tokens with the same SOL → Lower initial price
+</text>
+
+<text x="480" y="595" text-anchor="middle" class="caption">
+Token Creator keeps these values synchronized automatically before creating the Orca Whirlpool.
+</text>
+
+</svg>
