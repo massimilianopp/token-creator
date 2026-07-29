@@ -53,7 +53,7 @@ const article = {
           },
 
           {
-            id: "what-is",
+            id: "what-is-vesting",
           
             title: "What is a vesting contract?",
           
@@ -61,16 +61,30 @@ const article = {
           
               {
                 type: "paragraph",
-          
                 text:
-                  "A vesting contract locks tokens and releases them gradually over time according to a predefined schedule."
+                  "A vesting contract locks tokens and releases them gradually according to a predefined schedule. Instead of receiving the entire allocation immediately, recipients unlock tokens over time."
               },
           
               {
-                type: "paragraph",
+                type: "diagram",
+          
+                src: "/docs/vesting-overview-diagram.svg",
+          
+                alt: "How a vesting contract works",
+          
+                caption:
+                  "A vesting contract locks tokens on-chain and releases them progressively according to the vesting schedule."
+              },
+          
+              {
+                type: "callout",
+          
+                variant: "info",
+          
+                title: "Why use vesting?",
           
                 text:
-                  "Instead of sending all tokens immediately, projects can distribute them progressively to founders, team members, advisors or investors."
+                  "Vesting is commonly used for founders, team members, advisors and investors to demonstrate long-term commitment and reduce immediate selling pressure."
               }
           
             ]
@@ -239,6 +253,17 @@ const article = {
           
                 ]
           
+              },
+
+              {
+                type: "diagram",
+              
+                src: "/docs/vesting-timeline-diagram.svg",
+              
+                alt: "Typical vesting timeline",
+              
+                caption:
+                  "During the cliff period, no tokens can be claimed. Once the cliff ends, tokens unlock progressively according to the vesting schedule."
               }
           
             ]

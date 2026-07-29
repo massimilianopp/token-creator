@@ -1,0 +1,153 @@
+<svg width="960" height="600" viewBox="0 0 960 600" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+<style>
+
+.title{
+font:700 30px Arial,sans-serif;
+fill:white;
+}
+
+.subtitle{
+font:15px Arial,sans-serif;
+fill:#A1A1AA;
+}
+
+.label{
+font:15px Arial,sans-serif;
+fill:#374151;
+}
+
+.caption{
+font:14px Arial,sans-serif;
+fill:#A1A1AA;
+}
+
+.box{
+fill:white;
+stroke:#E5E7EB;
+stroke-width:2;
+rx:16;
+}
+
+.axis{
+stroke:#7C3AED;
+stroke-width:4;
+}
+
+.unlock{
+fill:#7C3AED;
+}
+
+.arrow{
+stroke:#7C3AED;
+stroke-width:3;
+marker-end:url(#arrowhead);
+}
+
+</style>
+
+<marker
+id="arrowhead"
+markerWidth="12"
+markerHeight="12"
+refX="10"
+refY="6"
+orient="auto">
+
+<polygon points="0 0 12 6 0 12" fill="#7C3AED"/>
+
+</marker>
+
+</defs>
+
+<rect width="960" height="600" fill="#0B0B0F"/>
+
+<text x="480" y="48" text-anchor="middle" class="title">
+Typical Vesting Timeline
+</text>
+
+<text x="480" y="78" text-anchor="middle" class="subtitle">
+Tokens remain locked during the cliff, then unlock gradually over time.
+</text>
+
+<rect class="box" x="100" y="130" width="760" height="340"/>
+
+<!-- Timeline -->
+
+<line class="axis" x1="170" y1="360" x2="760" y2="360"/>
+
+<!-- Start -->
+
+<line x1="170" y1="345" x2="170" y2="375" stroke="#7C3AED" stroke-width="4"/>
+
+<text x="170" y="395" text-anchor="middle" class="label">
+Start
+</text>
+
+<!-- Cliff -->
+
+<rect
+x="170"
+y="320"
+width="180"
+height="40"
+fill="#DDD6FE"
+/>
+
+<text
+x="260"
+y="345"
+text-anchor="middle"
+class="label">
+Cliff
+</text>
+
+<!-- Unlock dots -->
+
+<circle class="unlock" cx="430" cy="360" r="8"/>
+<circle class="unlock" cx="510" cy="360" r="8"/>
+<circle class="unlock" cx="590" cy="360" r="8"/>
+<circle class="unlock" cx="670" cy="360" r="8"/>
+<circle class="unlock" cx="760" cy="360" r="8"/>
+
+<text x="430" y="395" text-anchor="middle" class="label">
+25%
+</text>
+
+<text x="510" y="395" text-anchor="middle" class="label">
+50%
+</text>
+
+<text x="590" y="395" text-anchor="middle" class="label">
+75%
+</text>
+
+<text x="760" y="395" text-anchor="middle" class="label">
+100%
+</text>
+
+<!-- Arrow -->
+
+<line class="arrow" x1="260" y1="280" x2="260" y2="315"/>
+
+<text x="260" y="255" text-anchor="middle" class="caption">
+No tokens can be claimed
+</text>
+
+<line class="arrow" x1="510" y1="280" x2="510" y2="345"/>
+
+<text x="510" y="255" text-anchor="middle" class="caption">
+Regular unlocks begin
+</text>
+
+<text
+x="480"
+y="520"
+text-anchor="middle"
+class="caption">
+After the cliff period ends, recipients can progressively claim vested tokens until the full allocation has been released.
+</text>
+
+</svg>
