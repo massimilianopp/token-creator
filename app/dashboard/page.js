@@ -6,59 +6,7 @@ import { useRouter } from "next/navigation";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useDashboard } from "@/hooks/useDashboard";
 
-function SearchBar() {
-  const [query, setQuery] = useState("");
-  const router = useRouter();
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (!query.trim()) return;
-    router.push(`/explore?mint=${query.trim()}`);
-  };
-
-  return (
-    <form onSubmit={handleSearch} style={{ display: "flex", gap: 8, marginBottom: 32 }}>
-      <input
-        type="text"
-        value={query}
-        onChange={e => setQuery(e.target.value)}
-        placeholder="Search any Solana token by mint address..."
-        style={{
-          flex: 1,
-          background: "var(--surface)",
-          border: "1px solid var(--border)",
-          borderRadius: 8,
-          padding: "10px 14px",
-          fontSize: 13,
-          color: "var(--text)",
-          outline: "none",
-          fontFamily: "'Geist', sans-serif",
-        }}
-        onFocus={e => e.target.style.borderColor = "var(--border-focus)"}
-        onBlur={e => e.target.style.borderColor = "var(--border)"}
-      />
-      <button
-        type="submit"
-        disabled={!query.trim()}
-        style={{
-          padding: "10px 16px",
-          borderRadius: 8,
-          background: query.trim() ? "var(--text)" : "var(--surface)",
-          border: "1px solid var(--border)",
-          color: query.trim() ? "var(--bg)" : "var(--muted)",
-          fontSize: 13,
-          fontWeight: 500,
-          cursor: query.trim() ? "pointer" : "not-allowed",
-          fontFamily: "'Geist', sans-serif",
-          transition: "all 0.15s",
-          whiteSpace: "nowrap",
-        }}
-      >
-        Explore →
-      </button>
-    </form>
-  );
-}
 
 function TokenCard({ token, featured }) {
   const solscanUrl = `https://solscan.io/token/${token.mint}`;
@@ -147,8 +95,10 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* Search bar */}
-      <SearchBar />
+      <Link href="/explore" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", borderRadius: 8, background: "var(--surface)", border: "1px solid var(--border)", textDecoration: "none", marginBottom: 32 }}>
+  <span style={{ fontSize: 13, color: "var(--muted)" }}>Search any Solana token...</span>
+  <span style={{ fontSize: 13, color: "var(--dim)" }}>Explore →</span>
+</Link>
 
       {loading ? (
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
