@@ -346,6 +346,46 @@ const article = {
           },
 
           {
+            id: "verify",
+          
+            title: "Verify your vesting contract",
+          
+            blocks: [
+          
+              {
+                type: "paragraph",
+          
+                text:
+                  "After signing the transaction, your vesting contract is created on Streamflow. You can verify that the recipient, locked amount and unlock schedule are correct before sharing the link with your team or investors."
+              },
+          
+              {
+                type: "image",
+          
+                src: "/docs/streamflow-vesting.png",
+          
+                alt: "Streamflow vesting contract",
+          
+                caption:
+                  "Review the locked amount, unlock schedule and remaining balance on Streamflow."
+              },
+          
+              {
+                type: "callout",
+          
+                variant: "tip",
+          
+                title: "Transparency",
+          
+                text:
+                  "Sharing your public vesting contract allows anyone to verify when tokens become available."
+          
+              }
+          
+            ]
+          },
+
+          {
             id: "mistakes",
           
             title: "Common mistakes",
@@ -353,24 +393,95 @@ const article = {
             blocks: [
           
               {
+                type: "comparison",
+          
+                headers: [
+                  "Mistake",
+                  "Consequence"
+                ],
+          
+                rows: [
+          
+                  [
+                    "Wrong recipient",
+                    "Tokens are locked for the wrong wallet."
+                  ],
+          
+                  [
+                    "Too short vesting",
+                    "Investors may lose confidence."
+                  ],
+          
+                  [
+                    "No cliff",
+                    "Large allocations become available immediately."
+                  ],
+          
+                  [
+                    "Wrong unlock frequency",
+                    "Recipients may claim tokens more or less often than expected."
+                  ]
+          
+                ]
+          
+              },
+          
+              {
                 type: "callout",
           
                 variant: "warning",
           
-                title: "Double-check before signing",
+                title: "Always double-check",
           
                 text:
-                  "Always verify the recipient wallet, token amount and dates. Once the vesting contract is created, these parameters cannot easily be changed."
+                  "Review every parameter before signing. Vesting contracts are designed to be predictable and should not require changes after deployment."
           
               }
           
             ]
-          }
+          },
 
   
     ],
   
     faq: [
+
+
+        {
+          question: "Can I cancel a vesting contract?",
+      
+          answer:
+            "It depends on the vesting configuration. Review the contract settings carefully before creating it."
+        },
+      
+        {
+          question: "Can I change the vesting schedule later?",
+      
+          answer:
+            "Most vesting parameters should be considered permanent once the contract has been deployed."
+        },
+      
+        {
+          question: "Can recipients claim tokens before the cliff?",
+      
+          answer:
+            "No. During the cliff period, no vested tokens are available to claim."
+        },
+      
+        {
+          question: "Why do investors expect vesting?",
+      
+          answer:
+            "Vesting demonstrates long-term commitment and reduces the risk of large token holders selling immediately after launch."
+        },
+      
+        {
+          question: "Why does Token Creator use Streamflow?",
+      
+          answer:
+            "Streamflow is one of the most widely used vesting protocols on Solana and provides transparent on-chain vesting contracts."
+        }
+      
   
     ],
   
