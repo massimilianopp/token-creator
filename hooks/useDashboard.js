@@ -21,14 +21,13 @@ async function fetchOffchainMeta(uri) {
   if (uri.startsWith("ipfs://")) cid = uri.replace("ipfs://", "");
   else if (uri.includes("/ipfs/")) cid = uri.split("/ipfs/")[1];
   const urls = cid ? [
-    `https://cloudflare-ipfs.com/ipfs/${cid}`,
     `https://ipfs.io/ipfs/${cid}`,
     `https://gateway.pinata.cloud/ipfs/${cid}`,
   ] : [uri];
   for (const url of urls) {
     try {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 4000);
+      const timeout = setTimeout(() => controller.abort(), 2000);
       const res = await fetch(url, { signal: controller.signal });
       clearTimeout(timeout);
       if (res.ok) return await res.json();
@@ -111,7 +110,7 @@ export function useDashboard() {
 
       // 2. Fetch métadonnées par batch
       const rpcConnection = new Connection(rpcEndpoint, "confirmed");
-      const results = await processInBatches(mints, rpcConnection);
+      const results = await processInBatches(mints, rpcConnection, 5, 200);
 
       const tc = results.filter(t => t.isTokenCreator && t.name);
       const other = results.filter(t => !t.isTokenCreator && t.symbol);
