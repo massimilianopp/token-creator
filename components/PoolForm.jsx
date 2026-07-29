@@ -7,6 +7,7 @@ import { useWhirlpool } from "@/hooks/useWhirlpool";
 import { Card, SectionTitle, Input, Button, LogConsole, ErrorBox, Badge, Divider } from "@/components/ui/Card";
 import WalletButton from "@/components/WalletButton";
 import FeedbackModal from "./FeedbackModal";
+import { useSearchParams } from "next/navigation";
 
 export default function PoolForm() {
   const { createPool, status, logs, result, error } = useWhirlpool();
@@ -25,17 +26,21 @@ export default function PoolForm() {
   const set = (field) => (e) => setForm((p) => ({ ...p, [field]: e.target.value }));
   const isLoading = status === "loading";
   const MINIMUM_SOL_REQUIRED = 0.25;
+  const searchParams = useSearchParams();
 
-  // Auto-fill mint address from localStorage on component mount
   useEffect(() => {
-    if (!form.tokenMint) {
+    const urlMint = searchParams.get("mint");
+    if (urlMint) {
+      setForm(f => ({ ...f, tokenMint: urlMint }));
+      setIsAutoFilled(true);
+    } else if (!form.tokenMint) {
       const lastMint = localStorage.getItem("lastCreatedMint");
       if (lastMint) {
         setForm(f => ({ ...f, tokenMint: lastMint }));
         setIsAutoFilled(true);
       }
     }
-  }, [form.tokenMint]);
+  }, []);
 
   // Show feedback modal when pool creation is successful
   useEffect(() => {

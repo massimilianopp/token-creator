@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useVesting } from "../hooks/useVesting";
 import { Card, SectionTitle, Input, Button, ErrorBox, Badge, Divider } from "@/components/ui/Card";
 import FeedbackModal from "./FeedbackModal";
+import { useSearchParams } from "next/navigation";
 
 export default function VestingForm({ mintAddress, decimals, devTokens, symbol }) {
   const { publicKey } = useWallet();
@@ -30,17 +31,21 @@ export default function VestingForm({ mintAddress, decimals, devTokens, symbol }
   const [error, setError] = useState(null);
   const [isAutoFilled, setIsAutoFilled] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
+  const searchParams = useSearchParams();
 
-  // Auto-fill mint address from localStorage on component mount
   useEffect(() => {
-    if (!form.mintAddress) {
+    const urlMint = searchParams.get("mint");
+    if (urlMint) {
+      setForm(f => ({ ...f, mintAddress: urlMint }));
+      setIsAutoFilled(true);
+    } else if (!form.mintAddress) {
       const lastMint = localStorage.getItem("lastCreatedMint");
       if (lastMint) {
         setForm(f => ({ ...f, mintAddress: lastMint }));
         setIsAutoFilled(true);
       }
     }
-  }, [form.mintAddress]);
+  }, []);
 
   // Show feedback modal when vesting is done
   useEffect(() => {
