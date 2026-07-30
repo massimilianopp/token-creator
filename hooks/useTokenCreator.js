@@ -81,6 +81,12 @@ async function uploadToPinata(imageFile, { name, symbol, description }) {
       pinataContent: {
         name, symbol, description,
         image: imageUri,
+        external_url: website || undefined,
+        extensions: {
+          twitter: twitter || undefined,
+          telegram: telegram || undefined,
+          discord: discord || undefined,
+        },
         properties: {
           files: [{ uri: imageUri, type: imageFile.type }],
           category: "fungible",
@@ -105,6 +111,7 @@ export function useTokenCreator() {
     name, symbol, description, imageFile,
     totalSupply, decimals, devAllocation,
     revokeMint, revokeFreeze,
+    website, twitter, telegram, discord,
   }) => {
     if (!wallet.publicKey || !wallet.signTransaction) throw new Error("Wallet not connected");
 

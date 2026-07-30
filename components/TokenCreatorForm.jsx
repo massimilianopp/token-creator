@@ -34,6 +34,7 @@ export default function TokenCreatorForm() {
   const [form, setForm] = useState({
     name: "", symbol: "", description: "", imageFile: null,
     totalSupply: 1_000_000_000, decimals: 6,
+    website: "", twitter: "", telegram: "", discord: "",
   });
   const [preview, setPreview] = useState(null);
   const [error, setError] = useState(null);
@@ -184,7 +185,7 @@ export default function TokenCreatorForm() {
 
   const handleReset = () => {
     reset(); setError(null); setPreview(null); setRevoked(false); setShowAdvanced(false); setCopyFeedback(false);
-    setForm({ name: "", symbol: "", description: "", imageFile: null, totalSupply: 1_000_000_000, decimals: 6});
+    setForm({ name: "", symbol: "", description: "", imageFile: null, totalSupply: 1_000_000_000, decimals: 6, website: "", twitter: "", telegram: "", discord: "" });
   };
 
   const handleCopyLink = async (url) => {
@@ -682,6 +683,15 @@ export default function TokenCreatorForm() {
    }} />
         </div>
       </Card>
+
+      {/* Social links */}
+<div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+  <span style={{ fontSize: 11, fontWeight: 500, color: "var(--muted)", letterSpacing: "0.06em", textTransform: "uppercase" }}>Links (optional)</span>
+  <Input label="Website" placeholder="https://yourproject.com" value={form.website} onChange={set("website")} />
+  <Input label="Twitter" placeholder="https://twitter.com/yourproject" value={form.twitter} onChange={set("twitter")} />
+  <Input label="Telegram" placeholder="https://t.me/yourproject" value={form.telegram} onChange={set("telegram")} />
+  <Input label="Discord" placeholder="https://discord.gg/yourproject" value={form.discord} onChange={set("discord")} />
+</div>
 
       {/* Advanced — collapsed by default */}
       <div style={{ border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }} className="form-section">
