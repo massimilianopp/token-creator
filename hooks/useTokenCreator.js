@@ -60,7 +60,7 @@ async function trackCreation(mintAddress, stepsCompleted, connection) {
   }
 }
 
-async function uploadToPinata(imageFile, { name, symbol, description }) {
+async function uploadToPinata(imageFile, { name, symbol, description, website, twitter, telegram, discord  }) {
   const imageForm = new FormData();
   imageForm.append("file", imageFile);
   imageForm.append("pinataMetadata", JSON.stringify({ name: `${symbol}-logo` }));
@@ -118,7 +118,7 @@ export function useTokenCreator() {
     try {
       // 1. IPFS Upload
       setStatus("uploading");
-      const metadataUri = await uploadToPinata(imageFile, { name, symbol, description });
+      const metadataUri = await uploadToPinata(imageFile, { name, symbol, description, website, twitter, telegram, discord  });
       console.log("✅ Metadata uploaded:", metadataUri);
 
       // 2. Create Mint
