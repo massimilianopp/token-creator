@@ -69,19 +69,8 @@ const article = {
   
             text:
               "Unlike information displayed inside an application, data shown on Solscan comes directly from on-chain accounts. This makes it an independent way to verify that your token was created correctly."
-          },
-  
-          {
-            type: "diagram",
-  
-            src: "/docs/solscan-verification-diagram.svg",
-  
-            alt: "How Solscan reads blockchain data",
-  
-            caption:
-              "Solscan reads information directly from the Solana blockchain, allowing anyone to independently verify your token."
-  
           }
+  
   
         ]
       },

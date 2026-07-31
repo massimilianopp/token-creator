@@ -1,0 +1,154 @@
+<svg width="960" height="720" viewBox="0 0 960 720" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+<style>
+
+.title{
+font:700 30px Arial,sans-serif;
+fill:white;
+}
+
+.subtitle{
+font:15px Arial,sans-serif;
+fill:#A1A1AA;
+}
+
+.boxTitle{
+font:700 20px Arial,sans-serif;
+fill:#111827;
+}
+
+.text{
+font:15px Arial,sans-serif;
+fill:#374151;
+}
+
+.caption{
+font:14px Arial,sans-serif;
+fill:#9CA3AF;
+}
+
+.box{
+fill:white;
+stroke:#E5E7EB;
+stroke-width:2;
+rx:16;
+}
+
+.arrow{
+stroke:#7C3AED;
+stroke-width:4;
+fill:none;
+marker-end:url(#arrowhead);
+}
+
+.badge{
+fill:#F5F3FF;
+stroke:#DDD6FE;
+rx:8;
+}
+
+.badgeText{
+font:13px Arial,sans-serif;
+fill:#6D28D9;
+font-weight:bold;
+}
+
+</style>
+
+<marker
+id="arrowhead"
+markerWidth="12"
+markerHeight="12"
+refX="10"
+refY="6"
+orient="auto">
+
+<polygon points="0 0 12 6 0 12" fill="#7C3AED"/>
+
+</marker>
+
+</defs>
+
+<rect width="960" height="720" fill="#0B0B0F"/>
+
+<text x="480" y="48" text-anchor="middle" class="title">
+Verify Your Token After Launch
+</text>
+
+<text x="480" y="78" text-anchor="middle" class="subtitle">
+Different platforms let you verify different parts of your project.
+</text>
+
+<!-- Token Creator -->
+
+<rect class="box" x="330" y="120" width="300" height="120"/>
+
+<text x="480" y="160" text-anchor="middle" class="boxTitle">
+Token Creator
+</text>
+
+<rect class="badge" x="390" y="178" width="180" height="24"/>
+<text x="480" y="195" text-anchor="middle" class="badgeText">
+Project Created
+</text>
+
+<!-- Solscan -->
+
+<rect class="box" x="60" y="360" width="240" height="220"/>
+
+<text x="180" y="400" text-anchor="middle" class="boxTitle">
+Solscan
+</text>
+
+<text x="90" y="445" class="text">✓ Metadata</text>
+<text x="90" y="480" class="text">✓ Supply</text>
+<text x="90" y="515" class="text">✓ Authorities</text>
+<text x="90" y="550" class="text">✓ Transactions</text>
+
+<!-- Orca -->
+
+<rect class="box" x="360" y="360" width="240" height="220"/>
+
+<text x="480" y="400" text-anchor="middle" class="boxTitle">
+Orca
+</text>
+
+<text x="390" y="445" class="text">✓ Trading Pair</text>
+<text x="390" y="480" class="text">✓ Current Price</text>
+<text x="390" y="515" class="text">✓ Liquidity</text>
+<text x="390" y="550" class="text">✓ Trading Status</text>
+
+<!-- Streamflow -->
+
+<rect class="box" x="660" y="360" width="240" height="220"/>
+
+<text x="780" y="400" text-anchor="middle" class="boxTitle">
+Streamflow
+</text>
+
+<text x="690" y="445" class="text">✓ Locked Amount</text>
+<text x="690" y="480" class="text">✓ Recipient</text>
+<text x="690" y="515" class="text">✓ Cliff</text>
+<text x="690" y="550" class="text">✓ Unlock Schedule</text>
+
+<!-- Arrows -->
+
+<line class="arrow" x1="410" y1="240" x2="230" y2="360"/>
+
+<line class="arrow" x1="480" y1="240" x2="480" y2="360"/>
+
+<line class="arrow" x1="550" y1="240" x2="730" y2="360"/>
+
+<!-- Footer -->
+
+<text
+x="480"
+y="670"
+text-anchor="middle"
+class="caption">
+Together, Solscan, Orca and Streamflow allow anyone to independently verify every important part of your token launch.
+</text>
+
+</svg>
