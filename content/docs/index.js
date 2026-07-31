@@ -9,6 +9,7 @@ import memecoin from "./how-to-launch-a-memecoin-on-solana";
 import liquidityPool from "./how-to-create-a-liquidity-pool";
 import vesting from "./how-to-create-a-vesting-contract";
 import revoke from "./how-to-revoke-token-authorities";
+import verify from "./how-to-verify-your-solana-token-after-launch";
 
 export const articles = [
   splToken,
@@ -22,6 +23,7 @@ export const articles = [
   liquidityPool,
   vesting,
   revoke,
+  verify,
 ];
 
 const docs = Object.fromEntries(
