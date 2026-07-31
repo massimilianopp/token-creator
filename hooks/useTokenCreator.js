@@ -81,12 +81,14 @@ async function uploadToPinata(imageFile, { name, symbol, description, website, t
       pinataContent: {
         name, symbol, description,
         image: imageUri,
-        external_url: website || undefined,
-        extensions: {
-          twitter: twitter || undefined,
-          telegram: telegram || undefined,
-          discord: discord || undefined,
-        },
+        ...(website && { external_url: website }),
+        ...(twitter || telegram || discord ? {
+          extensions: {
+            ...(twitter && { twitter }),
+            ...(telegram && { telegram }),
+            ...(discord && { discord }),
+          }
+        } : {}),
         properties: {
           files: [{ uri: imageUri, type: imageFile.type }],
           category: "fungible",
