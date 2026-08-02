@@ -60,6 +60,13 @@ async function trackCreation(mintAddress, stepsCompleted, connection) {
   }
 }
 
+function normalizeUrl(url) {
+  if (!url || !url.trim()) return undefined;
+  const u = url.trim();
+  if (u.startsWith("http://") || u.startsWith("https://")) return u;
+  return `https://${u}`;
+}
+
 async function uploadToPinata(imageFile, { name, symbol, description, website, twitter, telegram, discord  }) {
   const imageForm = new FormData();
   imageForm.append("file", imageFile);
@@ -81,12 +88,12 @@ async function uploadToPinata(imageFile, { name, symbol, description, website, t
       pinataContent: {
         name, symbol, description,
         image: imageUri,
-        ...(website && { external_url: website }),
+        ...(website && { external_url: normalizeUrl(website) }),
         ...(twitter || telegram || discord ? {
           extensions: {
-            ...(twitter && { twitter }),
-            ...(telegram && { telegram }),
-            ...(discord && { discord }),
+            ...(twitter && { twitter: normalizeUrl(twitter) }),
+            ...(telegram && { telegram: normalizeUrl(telegram) }),
+            ...(discord && { discord: normalizeUrl(discord) }),
           }
         } : {}),
         properties: {
