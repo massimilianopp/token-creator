@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { articles } from "@/content/docs";
-import BackButton from "@/components/BackButton";
+
 
 export const metadata = {
   title: "Documentation — Token Creator",
@@ -25,7 +25,6 @@ const SECTIONS = [
 export default function DocsIndexPage() {
   return (
     <main style={{ padding: "48px 24px 80px" }}>
-    <BackButton fallbackHref="/learn" label="Learn" />
       <div style={{ marginBottom: 40 }}>
         <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 8, fontFamily: "'Geist Mono', monospace" }}>
           Documentation

@@ -16,6 +16,8 @@ import DocCTA from "@/components/docs/DocCTA";
 
 import RelatedArticles from "@/components/docs/RelatedArticles";
 
+import BackButton from "@/components/BackButton";
+
 export async function generateMetadata({ params }) {
 
   const { slug } = await params;
@@ -45,6 +47,7 @@ export default async function DocPage({ params }) {
 
   return (
     <main style={{ padding: "48px 24px 80px" }}>
+    <BackButton fallbackHref="/learn" label="Learn" />
 
       <Link
         href="/docs"
