@@ -2,6 +2,7 @@
 import { useEffect, useRef, Suspense } from "react";
 import PoolForm from "@/components/PoolForm";
 import { usePageTransition } from "@/hooks/useGSAP";
+import BackButton from "@/components/BackButton";
 
 export default function PoolPage() {
   const pageRef = useRef(null);
@@ -16,6 +17,7 @@ export default function PoolPage() {
   return (
     <div className="mobile-form">
       <main ref={pageRef} style={{ padding: "32px 24px 30px", paddingBottom: 120 }}>
+      <BackButton fallbackHref="/dashboard" label="Dashboard" />
         <div style={{ marginBottom: 32 }} className="page-header">
           <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 8 }}>
             Step 03 · Optional
