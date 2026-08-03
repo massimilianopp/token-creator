@@ -15,9 +15,8 @@ export default function Home() {
     return (
       <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 24px 80px" }}>
         <div style={{ maxWidth: 400, margin: "0 auto", width: "100%" }}>
-          
           {/* Header */}
-          <div style={{ marginBottom: 48 }}>
+          <div style={{ marginBottom: 32 }}>
             <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted)", fontFamily: "'Geist Mono', monospace", marginBottom: 16 }}>
               Token Creator
             </p>
@@ -25,7 +24,17 @@ export default function Home() {
               Create a Solana token.
             </h1>
             <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65 }}>
-              Create SPL and Token-2022 tokens without writing code. Configure supply, authorities, metadata, vesting and liquidity before signing the transaction.
+              One flow for SPL and Token-2022 creation, vesting, liquidity, and a public token page — instead of stitching together three or four separate tools.
+            </p>
+          </div>
+
+          {/* Positioning block */}
+          <div style={{ marginBottom: 32, paddingTop: 24, borderTop: "1px solid var(--border)" }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", marginBottom: 8, lineHeight: 1.5 }}>
+              Built for community launches, not speculation.
+            </p>
+            <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.6 }}>
+              Token, vesting, and liquidity that work together — verify every step on Solscan, no badges required.
             </p>
           </div>
 
