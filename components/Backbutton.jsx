@@ -1,26 +1,20 @@
 "use client";
 import { useRouter } from "next/navigation";
 
-export default function BackButton({
-  fallbackHref,
-  label,
-}: {
-  fallbackHref: string;
-  label: string;
-}) {
+export default function BackButton({ fallbackHref, label }) {
   const router = useRouter();
 
   const handleBack = () => {
-    const cameFromSameOrigin =
-      typeof document !== "undefined" &&
-      document.referrer &&
-      (() => {
-        try {
-          return new URL(document.referrer).origin === window.location.origin;
-        } catch {
-          return false;
-        }
-      })();
+    let cameFromSameOrigin = false;
+
+    if (typeof document !== "undefined" && document.referrer) {
+      try {
+        cameFromSameOrigin =
+          new URL(document.referrer).origin === window.location.origin;
+      } catch {
+        cameFromSameOrigin = false;
+      }
+    }
 
     if (cameFromSameOrigin && window.history.length > 1) {
       router.back();
