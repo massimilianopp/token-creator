@@ -17,6 +17,9 @@ export default function LearnPage() {
         padding: "80px 24px",
       }}
     >
+    <Link href="/help" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, color: "var(--muted)", textDecoration: "none", marginBottom: 32 }}>
+  ← Help
+</Link>
       <h1
         style={{
           fontSize: 42,
