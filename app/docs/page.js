@@ -25,6 +25,9 @@ const SECTIONS = [
 export default function DocsIndexPage() {
   return (
     <main style={{ padding: "48px 24px 80px" }}>
+    <Link href="/help" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, color: "var(--muted)", textDecoration: "none", marginBottom: 32 }}>
+  ← Help
+</Link>
       <div style={{ marginBottom: 40 }}>
         <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 8, fontFamily: "'Geist Mono', monospace" }}>
           Documentation
