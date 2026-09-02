@@ -20,7 +20,7 @@ export default function PrivacyPage() {
           {[
             {
               title: "1. Who we are",
-              content: "Token Creator is operated by Token Creator, based in France. Contact: admin@token-creator.space.",
+              content: "Token Creator is operated by Token Creator, based in France. Contact: contact.tokencreator@gmail.com.",
             },
             {
               title: "2. What data we collect",
@@ -44,7 +44,7 @@ export default function PrivacyPage() {
             },
             {
               title: "7. Your rights",
-              content: "Under applicable law (including GDPR for EU residents), you have the right to access, correct, or request deletion of any personal data we hold about you. To exercise these rights, contact us at admin@token-creator.space.",
+              content: "Under applicable law (including GDPR for EU residents), you have the right to access, correct, or request deletion of any personal data we hold about you. To exercise these rights, contact us at contact.tokencreator@gmail.com.",
             },
             {
               title: "8. Changes to this policy",
@@ -60,8 +60,8 @@ export default function PrivacyPage() {
           <div style={{ padding: "14px 16px", borderRadius: 8, background: "var(--surface)", border: "1px solid var(--border)" }}>
             <p style={{ fontSize: 13, color: "var(--muted)" }}>
               Questions? Contact us at{" "}
-              <a href="mailto:admin@token-creator.space" style={{ color: "var(--text)", textDecoration: "none", borderBottom: "1px solid var(--border)" }}>
-                admin@token-creator.space
+              <a href="mailto:contact.tokencreator@gmail.com" style={{ color: "var(--text)", textDecoration: "none", borderBottom: "1px solid var(--border)" }}>
+                contact.tokencreator@gmail.com
               </a>
             </p>
           </div>

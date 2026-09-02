@@ -9,9 +9,9 @@ const SECTIONS = [
       {
         label: "Contact support",
         desc: "Having an issue? Send us an email and we'll get back to you.",
-        href: "mailto:admin@token-creator.space",
+        href: "mailto:contact.tokencreator@gmail.com",
         external: false,
-        tag: "admin@token-creator.space",
+        tag: "contact.tokencreator@gmail.com",
       },
     ],
   },
