@@ -353,6 +353,9 @@ export default function ExplorePage() {
       color: "var(--text)",
       padding: "20px 16px 80px"
     }}>
+    <Link href="/dashboard" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, color: "var(--muted)", textDecoration: "none", marginBottom: 32 }}>
+  ← Dashboard
+</Link>
       <div style={{
         maxWidth: 480,
         margin: "0 auto"
